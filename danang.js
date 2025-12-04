@@ -226,45 +226,8 @@
         #maincontent .border.border-top-0 { border-color: #cc0000 !important; }
         #maincontent #withdraw-form h4 { text-align: center !important; color: #FFD700 !important; text-shadow: 0 0 8px rgba(255, 215, 0, 0.5); margin-bottom: 1.5rem !important; }
         #withdraw-form .form-label { padding-left: 0.5rem !important; }
-        /* --- UPDATE: FIX Ikon Mata Agar Sejajar Vertikal --- */
-
-/* 1. Wadah Input */
-.input-wrapper {
-    position: relative !important;
-    width: 100% !important;
-    display: flex !important; /* Menggunakan Flexbox agar tinggi konsisten */
-    align-items: stretch !important; /* Input mengisi tinggi penuh wrapper */
-    padding: 0 !important; /* Pastikan tidak ada padding internal */
-}
-
-/* 2. Ikon Mata */
-.password-toggle-icon {
-    position: absolute !important;
-    top: 50% !important;
-    right: 15px !important; /* Jarak dari kanan */
-    transform: translateY(-50%) !important; /* Kunci agar tepat di tengah vertikal */
-    cursor: pointer !important;
-    color: #bdc3c7 !important;
-    z-index: 100 !important;
-    font-size: 1.3rem !important; /* Ukuran icon sedikit diperbesar agar jelas */
-    line-height: 1 !important; /* Mencegah line-height mengganggu posisi */
-    display: flex !important; /* Memastikan icon sendiri di-render dengan benar */
-    align-items: center !important;
-    height: 100% !important; /* Mengisi tinggi wrapper untuk memastikan centering */
-    max-height: 38px !important; /* Batasi tinggi agar tidak terlalu besar */
-}
-
-.password-toggle-icon:hover {
-    color: #FFD700 !important; /* Warna emas saat di-hover */
-}
-
-/* 3. Padding Input Agar Text Tidak Menabrak Ikon */
-.input-wrapper input.form-control,
-.input-wrapper input.form-control:focus {
-    padding-right: 50px !important; /* Memberi ruang yang cukup untuk ikon */
-    height: auto !important; /* Membiarkan flexbox wrapper yang mengatur tinggi */
-    min-height: 38px !important; /* Tinggi minimum standard input Bootstrap */
-}
+        .input-wrapper { position: relative; }
+        .password-toggle-icon { position: absolute; top: 50%; right: 12px; transform: translateY(-50%); cursor: pointer; color: #bdc3c7; z-index: 100; }
         .invalid-feedback { display: none !important; }
         .form-control.is-invalid { background-image: none !important; padding-right: 0.75rem !important; }
         .balance-toggle-icon { margin-left: 8px; cursor: pointer; vertical-align: middle; }
@@ -944,54 +907,46 @@
             const label = group.querySelector('label');
             const input = group.querySelector('input, select');
             if (!label || !input) return;
-
             const icon = label.querySelector('i.bi');
-            // Bersihkan text label
             const placeholderText = label.textContent.replace(/\(.*\)/g, '').replace(/(\r\n|\n|\r)/gm, " ").trim();
-    
             let newElement;
-    
             if (icon) {
                 const inputGroup = document.createElement('div');
-                // REVISI: HAPUS 'mb-2' DARI SINI
-                inputGroup.className = 'input-group'; 
-        
+                inputGroup.className = 'input-group mb-2';
                 const iconSpan = document.createElement('span');
                 iconSpan.className = 'input-group-text';
                 iconSpan.appendChild(icon.cloneNode(true));
-        
                 inputGroup.appendChild(iconSpan);
                 inputGroup.appendChild(input);
                 newElement = inputGroup;
             } else {
                 const simpleDiv = document.createElement('div');
-                // REVISI: HAPUS 'mb-2' DARI SINI
-                simpleDiv.className = ''; 
+                simpleDiv.className = 'mb-2';
                 simpleDiv.appendChild(input);
                 newElement = simpleDiv;
-           }
-
-        // ... logic placeholder dan form-control tetap sama ...
-        if (input.tagName.toLowerCase() !== 'select') {
-            input.placeholder = placeholderText;
-        } else {
-            // ... logic select ...
-        }
-        input.classList.add('form-control');
-
-        // LOGIC PEMBUNGKUS (WRAPPER)
-        if (input.type === 'password') {
-            const wrapper = document.createElement('div');
-            // REVISI: PINDAHKAN MARGIN (mb-2 atau mb-3) KE WRAPPER INI
-            wrapper.className = 'input-wrapper mb-3'; 
-            wrapper.appendChild(newElement);
-            group.replaceWith(wrapper);
-        } else {
-            // Jika bukan password, tambahkan margin ke elemen container-nya
-            newElement.classList.add('mb-3'); 
-            group.replaceWith(newElement);
-        }
-    });
+            }
+            if (input.tagName.toLowerCase() !== 'select') {
+                input.placeholder = placeholderText;
+            } else {
+                if (!input.querySelector('option[value=""]')) {
+                    const defaultOption = document.createElement('option');
+                    defaultOption.value = "";
+                    defaultOption.textContent = placeholderText || "Pilih Opsi";
+                    defaultOption.disabled = true;
+                    defaultOption.selected = true;
+                    input.prepend(defaultOption);
+                }
+            }
+            input.classList.add('form-control');
+            if (input.type === 'password') {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'input-wrapper';
+                wrapper.appendChild(newElement);
+                group.replaceWith(wrapper);
+            } else {
+                group.replaceWith(newElement);
+            }
+        });
         const passwordInput = form.querySelector('#password');
         const confirmPasswordInput = form.querySelector('#confirmpassword');
         if (passwordInput && confirmPasswordInput) {
@@ -1610,5 +1565,3 @@
         }
     });
 })();
-
-

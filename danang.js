@@ -1564,60 +1564,8 @@
             toggleObserver.observe(sidebar, { attributes: true, attributeFilter: ['class'] });
         }
     });
-    function addPasswordToggle(passwordInput) {
-        // Cek validasi standar
-        if (!passwordInput || passwordInput.dataset.toggleAdded === 'true') return;
-
-        // Cari wrapper, kalau tidak ada kita buat baru
-        let wrapper = passwordInput.closest('.input-wrapper');
-        if (!wrapper) {
-            const parent = passwordInput.parentElement;
-            const newWrapper = document.createElement('div');
-            newWrapper.className = 'input-wrapper';
-            // Wajib relative agar icon bisa diatur posisinya
-            newWrapper.style.position = 'relative'; 
-            parent.replaceChild(newWrapper, passwordInput);
-            newWrapper.appendChild(passwordInput);
-            wrapper = newWrapper;
-        }
-
-        // Hapus icon lama jika ada (agar tidak dobel)
-        const oldIcon = wrapper.querySelector('.password-toggle-icon');
-        if (oldIcon) oldIcon.remove();
-
-        // Buat Icon Mata Baru
-        const toggleIcon = document.createElement('i');
-        toggleIcon.className = 'bi bi-eye-fill password-toggle-icon';
-
-        // --- PENGATURAN POSISI (EDIT DISINI) ---
-        toggleIcon.style.position = 'absolute';
-        toggleIcon.style.zIndex = '9999';
-        toggleIcon.style.cursor = 'pointer';
-        toggleIcon.style.color = '#bdc3c7'; // Warna abu-abu
-        
-        // POSISI NAIK TURUN
-        // 50% = Tengah. 
-        // Ubah ke 25% atau 30% agar NAIK KE ATAS.
-        toggleIcon.style.top = '30%'; 
-        
-        // POSISI KANAN KIRI
-        toggleIcon.style.right = '15px'; 
-        
-        // Matikan transform bawaan yang bikin posisi tidak akurat
-        toggleIcon.style.transform = 'none';
-        // ----------------------------------------
-
-        // Fungsi Klik (Show/Hide Password)
-        toggleIcon.addEventListener('click', () => {
-            const isPassword = passwordInput.type === 'password';
-            passwordInput.type = isPassword ? 'text' : 'password';
-            toggleIcon.className = isPassword ? 'bi bi-eye-slash-fill password-toggle-icon' : 'bi bi-eye-fill password-toggle-icon';
-        });
-
-        wrapper.appendChild(toggleIcon);
-        passwordInput.dataset.toggleAdded = 'true';
-    }
 })();
+
 
 
 

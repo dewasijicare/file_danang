@@ -226,8 +226,32 @@
         #maincontent .border.border-top-0 { border-color: #cc0000 !important; }
         #maincontent #withdraw-form h4 { text-align: center !important; color: #FFD700 !important; text-shadow: 0 0 8px rgba(255, 215, 0, 0.5); margin-bottom: 1.5rem !important; }
         #withdraw-form .form-label { padding-left: 0.5rem !important; }
-        .input-wrapper { position: relative; }
-        .password-toggle-icon { position: absolute; top: 50%; right: 12px; transform: translateY(-50%); cursor: pointer; color: #bdc3c7; z-index: 100; }
+        /* --- UPDATE: Perbaikan Posisi Icon Mata (Password) --- */
+        .input-wrapper { 
+            position: relative; 
+            margin-bottom: 0.5rem !important; /* Pindahkan jarak margin ke wrapper utama */
+        }
+        
+        /* Paksa input-group di dalam wrapper agar tidak punya margin, supaya centering icon akurat */
+        .input-wrapper .input-group { 
+            margin-bottom: 0 !important; 
+        }
+
+        /* Beri jarak padding kanan pada input agar teks password tidak menabrak icon mata */
+        .input-wrapper input.form-control { 
+            padding-right: 45px !important; 
+        }
+
+        .password-toggle-icon { 
+            position: absolute; 
+            top: 50%; 
+            right: 15px; 
+            transform: translateY(-50%); 
+            cursor: pointer; 
+            color: #bdc3c7; 
+            z-index: 100; 
+            font-size: 1.1rem; /* Opsional: sesuaikan ukuran icon */
+        }
         .invalid-feedback { display: none !important; }
         .form-control.is-invalid { background-image: none !important; padding-right: 0.75rem !important; }
         .balance-toggle-icon { margin-left: 8px; cursor: pointer; vertical-align: middle; }
@@ -1565,3 +1589,4 @@
         }
     });
 })();
+

@@ -835,32 +835,32 @@
         if (!form || form.dataset.styled === 'true') return;
         form.dataset.styled = 'true';
 
-        // --- 0. INJECT CSS KHUSUS VALIDASI ---
-        // Kita butuh warna error yang terang (karena background gelap) 
-        // dan logika CSS untuk menampilkan pesan error meskipun struktur berubah.
+        // --- 0. INJECT CSS KHUSUS VALIDASI (REVISI: TANPA BORDER TEBAL) ---
         const styleId = 'gavan-validation-style';
         if (!document.getElementById(styleId)) {
             const style = document.createElement('style');
             style.id = styleId;
             style.innerHTML = `
-                /* Paksa pesan error tampil jika parent memiliki class 'has-validation-error' */
+                /* 1. Tampilkan pesan error hanya teks merah kecil di bawah */
                 .has-validation-error .invalid-feedback {
                     display: block !important;
-                    color: #ff6b6b !important; /* Merah Terang */
-                    font-size: 0.85em;
-                    margin-top: 5px;
+                    color: #ff4444 !important; /* Merah cerah */
+                    font-size: 0.8em;
+                    margin-top: 4px;
                     text-align: left;
-                    font-weight: bold;
-                    text-shadow: 0 0 2px rgba(0,0,0,0.8);
+                    font-weight: normal;
                 }
-                /* Border merah untuk input group saat error */
-                .input-group.is-invalid-group {
-                    border: 1px solid #ff6b6b !important;
-                    box-shadow: 0 0 5px rgba(255, 107, 107, 0.5) !important;
-                }
-                /* Hilangkan icon error bawaan bootstrap di dalam input karena merusak layout */
+                
+                /* 2. Border Input saat Error: Tipis saja (1px), jangan tebal */
                 .form-control.is-invalid {
-                    background-image: none !important;
+                    border-color: #ff4444 !important;
+                    background-image: none !important; /* Hapus icon pentung bawaan bootstrap */
+                    box-shadow: none !important; /* Hapus shadow tebal */
+                }
+
+                /* 3. Pastikan Input Group Relative agar Icon Mata terkunci */
+                .input-group {
+                    position: relative;
                 }
             `;
             document.head.appendChild(style);
@@ -870,14 +870,12 @@
         const mainRow = card ? card.querySelector('.row.mb-3') : null;
         const buttonWrapper = card ? card.querySelector('.d-grid.gap-3.mb-3') : null;
 
-        // --- 1. PERBAIKAN STRUKTUR FORM (Merge Kolom Kiri & Kanan) ---
+        // --- 1. LAYOUT & MERGE KOLOM ---
         if (mainRow) {
-            // Ubah semua kolom menjadi full width
             mainRow.querySelectorAll('.col-lg-6').forEach(col => {
                 col.classList.remove('col-lg-6');
                 col.classList.add('col-12');
             });
-            // Hapus judul H3 yang mengganggu
             mainRow.querySelectorAll('h3').forEach(el => el.remove());
         }
 
@@ -901,7 +899,7 @@
             form.append(buttonWrapper);
         }
 
-        // --- 2. KONFIGURASI ICON & PLACEHOLDER ---
+        // --- 2. CONFIGURASI FIELD ---
         const fieldConfig = {
             'username': { icon: 'bi-person-fill', placeholder: 'User Name' },
             'password': { icon: 'bi-key-fill', placeholder: 'Password' },
@@ -921,12 +919,10 @@
 
             const config = fieldConfig[id];
             
-            // Cari container asli (div.form-group) yang membungkus input & invalid-feedback
-            // Kita HARUS mempertahankan container ini agar pesan error tidak hilang
+            // Container asli (penampung invalid-feedback)
             const originalContainer = input.closest('.form-group') || input.closest('.mb-3');
 
-            // SETUP INPUT
-            input.classList.add('form-control');
+            // Set Placeholder
             if (input.tagName === 'SELECT') {
                 input.classList.add('form-select');
                 let defaultOption = input.querySelector('option[value=""]');
@@ -942,126 +938,110 @@
                     input.value = "";
                 }
             } else {
+                input.classList.add('form-control');
                 input.placeholder = config.placeholder;
             }
 
-            // SETUP WRAPPER (INPUT GROUP)
-            // Cek apakah sudah terbungkus input-group sebelumnya
+            // --- LOGIKA PEMBUATAN INPUT GROUP ---
+            // Cek apakah sudah ada input-group
             let inputGroup = input.closest('.input-group');
             
             if (!inputGroup) {
                 // Buat wrapper baru
                 inputGroup = document.createElement('div');
-                inputGroup.className = 'input-group mb-1'; // mb-1 agar ada jarak dikit dgn error msg
+                inputGroup.className = 'input-group mb-0'; // mb-0 agar error msg nempel rapi
                 
                 const iconSpan = document.createElement('span');
                 iconSpan.className = 'input-group-text';
                 iconSpan.innerHTML = `<i class="bi ${config.icon}"></i>`;
                 
                 inputGroup.appendChild(iconSpan);
-                
-                // PENTING: Pindahkan input ke dalam group
-                // Jika input ada di dalam wrapper password (posisi relative), kita bungkus wrapper itu
-                // Jika tidak, kita bungkus input langsung
-                const passwordWrapper = input.parentElement.style.position === 'relative' ? input.parentElement : null;
-                
-                if (passwordWrapper) {
-                    // Masukkan group ke dalam password wrapper, lalu input ke dalam group
-                    // Ini agak tricky untuk password toggle.
-                    // Cara aman: Masukkan inputGroup ke originalContainer, lalu input masuk ke inputGroup
-                    // Icon mata (toggle) kita atur ulang nanti.
-                    inputGroup.appendChild(input); 
-                    if(originalContainer) {
-                        // Sembunyikan label
-                        const lbl = originalContainer.querySelector('label');
-                        if(lbl) lbl.style.display = 'none';
-                        
-                        // Insert inputGroup sebelum invalid-feedback
-                        const feedback = originalContainer.querySelector('.invalid-feedback');
-                        if(feedback) {
-                            originalContainer.insertBefore(inputGroup, feedback);
-                        } else {
-                            originalContainer.appendChild(inputGroup);
-                        }
-                    }
-                } else {
-                    // Input Biasa
-                    if(originalContainer) {
-                        const lbl = originalContainer.querySelector('label');
-                        if(lbl) lbl.style.display = 'none';
-                        originalContainer.insertBefore(inputGroup, input); // Pasang wrapper
-                        inputGroup.appendChild(input); // Masukkan input ke wrapper
+                inputGroup.appendChild(input);
+
+                // Masukkan kembali ke DOM
+                if (originalContainer) {
+                    const lbl = originalContainer.querySelector('label');
+                    if(lbl) lbl.style.display = 'none';
+
+                    // Insert sebelum invalid-feedback agar struktur: Group -> Error
+                    const feedback = originalContainer.querySelector('.invalid-feedback');
+                    if(feedback) {
+                        originalContainer.insertBefore(inputGroup, feedback);
+                    } else {
+                        originalContainer.appendChild(inputGroup);
                     }
                 }
             } else {
-                // Jika sudah ada (re-run), update icon saja
+                // Update icon saja jika re-run
                 const icon = inputGroup.querySelector('.input-group-text i');
                 if(icon) icon.className = `bi ${config.icon}`;
             }
         });
 
-        // --- 4. VALIDATION WATCHER (ANTI-GAGAL) ---
-        // Fungsi ini akan berjalan terus menerus untuk mengecek apakah ada input yang error
-        // Jika ada, dia akan memunculkan pesan error yang ada di bawahnya.
-        
+        // --- 4. FIX POSISI TOMBOL MATA (SOLUSI ABSOLUT KE INPUT GROUP) ---
+        const toggles = form.querySelectorAll('span[id^="toggle"]');
+        toggles.forEach(toggle => {
+            // Cari input password terkait tombol ini
+            // Biasanya toggle adalah sibling dari wrapper lama, atau input ada di dekatnya
+            // Kita cari input password di dalam form yang ID-nya mirip (password -> togglePass, confirm -> toggleConfirm)
+            let targetInput = null;
+            if (toggle.id.toLowerCase().includes('confirm')) {
+                targetInput = form.querySelector('#confirmPassword');
+            } else {
+                targetInput = form.querySelector('#password');
+            }
+
+            if (targetInput) {
+                const group = targetInput.closest('.input-group');
+                if (group) {
+                    // PINDAHKAN Toggle ke DALAM input-group
+                    group.appendChild(toggle);
+                    
+                    // Styling agar menumpuk di kanan input
+                    toggle.style.position = 'absolute';
+                    toggle.style.right = '15px';
+                    toggle.style.top = '50%';
+                    toggle.style.transform = 'translateY(-50%)';
+                    toggle.style.zIndex = '10'; // Di atas input
+                    toggle.style.cursor = 'pointer';
+                    toggle.style.display = 'block'; // Pastikan muncul
+
+                    // Perbaiki warna mata
+                    const eyeIcon = toggle.querySelector('i');
+                    if(eyeIcon) {
+                        eyeIcon.style.color = '#FFD700';
+                        eyeIcon.className = 'fas fa-eye'; // Reset icon class jika perlu
+                    }
+                }
+            }
+        });
+
+        // --- 5. VALIDATION WATCHER (Tanpa Border Tebal) ---
         setInterval(() => {
             const allInputs = form.querySelectorAll('input, select');
             allInputs.forEach(input => {
                 const container = input.closest('.form-group') || input.closest('.mb-3');
-                const inputGroup = input.closest('.input-group');
                 
                 if (!container) return;
 
-                // Cek apakah input dianggap invalid oleh bootstrap (class is-invalid)
-                // ATAU cek validitas native HTML5
                 const isInvalid = input.classList.contains('is-invalid');
-
+                
                 if (isInvalid) {
-                    // 1. Tambah class penanda ke container agar CSS kita bekerja
+                    // Trigger text error muncul
                     container.classList.add('has-validation-error');
-                    // 2. Tambah efek border merah ke kotak input group
-                    if(inputGroup) inputGroup.classList.add('is-invalid-group');
+                    // KITA HAPUS logic penambahan border tebal di sini
                 } else {
-                    // Hapus class jika sudah valid
                     container.classList.remove('has-validation-error');
-                    if(inputGroup) inputGroup.classList.remove('is-invalid-group');
                 }
             });
-        }, 500); // Cek setiap 0.5 detik (ringan)
+        }, 500);
 
-        // --- 5. FIX POSISI TOMBOL MATA (PASSWORD) ---
-        // Karena struktur berubah, posisi absolute tombol mata harus disesuaikan
-        const toggles = form.querySelectorAll('span[id^="toggle"]');
-        toggles.forEach(toggle => {
-            // Pindahkan toggle agar menjadi sibling dari input-group, tapi di dalam relative container
-            const inputPass = toggle.previousElementSibling?.querySelector('input') || toggle.parentElement.querySelector('input');
-            if(inputPass) {
-                const group = inputPass.closest('.input-group');
-                if(group) {
-                    // Pastikan parent dari group memiliki posisi relative
-                    group.parentElement.style.position = 'relative';
-                    group.parentElement.appendChild(toggle); // Pindahkan toggle sejajar group
-                    
-                    toggle.style.position = 'absolute';
-                    toggle.style.top = '50%';
-                    toggle.style.transform = 'translateY(-50%)';
-                    toggle.style.right = '15px';
-                    toggle.style.zIndex = '100';
-                    toggle.style.cursor = 'pointer';
-                    // Warna mata biar terlihat di background gelap
-                    const eyeIcon = toggle.querySelector('i');
-                    if(eyeIcon) eyeIcon.style.color = '#FFD700'; 
-                }
-            }
-        });
-        
-        // Re-order Layout Akhir (Urutkan field sesuai config)
+        // Re-order Layout Akhir
         const fieldOrder = Object.keys(fieldConfig);
         fieldOrder.forEach(id => {
             const el = form.querySelector(`#${id}`);
             if(el) {
                 const group = el.closest('.form-group') || el.closest('.mb-3');
-                // Pindahkan group ke posisi atas form (sebelum tombol submit)
                 const btnContainer = form.querySelector('.d-grid');
                 if(group && btnContainer) {
                     form.insertBefore(group, btnContainer);
@@ -1660,6 +1640,7 @@
         }
     });
 })();
+
 
 
 

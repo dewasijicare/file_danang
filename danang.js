@@ -226,32 +226,45 @@
         #maincontent .border.border-top-0 { border-color: #cc0000 !important; }
         #maincontent #withdraw-form h4 { text-align: center !important; color: #FFD700 !important; text-shadow: 0 0 8px rgba(255, 215, 0, 0.5); margin-bottom: 1.5rem !important; }
         #withdraw-form .form-label { padding-left: 0.5rem !important; }
-        /* --- UPDATE: FIX POSISI ICON MATA & PADDING INPUT --- */
-        .input-wrapper {
-            position: relative;
-            width: 100%;
-        }
+        /* --- UPDATE: FIX Ikon Mata Agar Sejajar Vertikal --- */
 
-        .password-toggle-icon {
-            position: absolute;
-            top: 50%;
-            right: 15px; /* Jarak dari kanan diperbaiki */
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #bdc3c7; /* Warna default abu-abu */
-            z-index: 100;
-            font-size: 1.2rem; /* Ukuran icon diperjelas */
-            transition: color 0.3s ease;
-        }
+/* 1. Wadah Input */
+.input-wrapper {
+    position: relative !important;
+    width: 100% !important;
+    display: flex !important; /* Menggunakan Flexbox agar tinggi konsisten */
+    align-items: stretch !important; /* Input mengisi tinggi penuh wrapper */
+    padding: 0 !important; /* Pastikan tidak ada padding internal */
+}
 
-        .password-toggle-icon:hover {
-            color: #FFD700; /* Berubah jadi emas saat di-hover (opsional) */
-        }
+/* 2. Ikon Mata */
+.password-toggle-icon {
+    position: absolute !important;
+    top: 50% !important;
+    right: 15px !important; /* Jarak dari kanan */
+    transform: translateY(-50%) !important; /* Kunci agar tepat di tengah vertikal */
+    cursor: pointer !important;
+    color: #bdc3c7 !important;
+    z-index: 100 !important;
+    font-size: 1.3rem !important; /* Ukuran icon sedikit diperbesar agar jelas */
+    line-height: 1 !important; /* Mencegah line-height mengganggu posisi */
+    display: flex !important; /* Memastikan icon sendiri di-render dengan benar */
+    align-items: center !important;
+    height: 100% !important; /* Mengisi tinggi wrapper untuk memastikan centering */
+    max-height: 38px !important; /* Batasi tinggi agar tidak terlalu besar */
+}
 
-        /* Penting: Memberi jarak dalam input agar text tidak menabrak icon mata */
-        .input-wrapper input.form-control {
-            padding-right: 45px !important; 
-        }
+.password-toggle-icon:hover {
+    color: #FFD700 !important; /* Warna emas saat di-hover */
+}
+
+/* 3. Padding Input Agar Text Tidak Menabrak Ikon */
+.input-wrapper input.form-control,
+.input-wrapper input.form-control:focus {
+    padding-right: 50px !important; /* Memberi ruang yang cukup untuk ikon */
+    height: auto !important; /* Membiarkan flexbox wrapper yang mengatur tinggi */
+    min-height: 38px !important; /* Tinggi minimum standard input Bootstrap */
+}
         .invalid-feedback { display: none !important; }
         .form-control.is-invalid { background-image: none !important; padding-right: 0.75rem !important; }
         .balance-toggle-icon { margin-left: 8px; cursor: pointer; vertical-align: middle; }
@@ -1597,4 +1610,5 @@
         }
     });
 })();
+
 

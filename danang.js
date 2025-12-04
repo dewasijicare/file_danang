@@ -839,7 +839,48 @@
         const mainRow = card ? card.querySelector('.row.mb-3') : null;
         const buttonWrapper = card ? card.querySelector('.d-grid.gap-3.mb-3') : null;
 
-        // --- 1. PERBAIKAN LAYOUT (Agar Rapi 1 Kolom) ---
+        // --- 1. CONFIGURASI LENGKAP (KAMUS ICON & TEKS) ---
+        // Di sini kita atur Icon APA dan Tulisannya APA untuk setiap ID
+        const fieldConfig = {
+            'username': { 
+                icon: 'bi-person-fill', 
+                placeholder: 'User Name' 
+            },
+            'password': { 
+                icon: 'bi-key-fill', 
+                placeholder: 'Password' 
+            },
+            'confirmPassword': { 
+                icon: 'bi-shield-check', 
+                placeholder: 'Konfirmasi Password' 
+            },
+            'email': { 
+                icon: 'bi-envelope-fill', 
+                placeholder: 'Email' 
+            },
+            'phone': { 
+                icon: 'bi-phone-fill', 
+                placeholder: 'Nomor HP' 
+            },
+            'agentbankid': { 
+                icon: 'bi-bank', 
+                placeholder: 'Pilih Bank' 
+            },
+            'bankAccountNumber': { 
+                icon: 'bi-credit-card-2-front-fill', 
+                placeholder: 'Nomor Rekening' 
+            },
+            'bankAccountName': { 
+                icon: 'bi-person-vcard-fill', 
+                placeholder: 'Nama di Rekening' 
+            },
+            'referralcode': { 
+                icon: 'bi-people-fill', 
+                placeholder: 'Kode Referral / Afiliasi' 
+            }
+        };
+
+        // --- 2. PERBAIKAN LAYOUT ---
         try {
             // Paksa semua kolom menjadi lebar penuh (col-12)
             if (mainRow) {
@@ -849,8 +890,7 @@
                 });
             }
 
-            // Ubah urutan: Username -> Password -> Confirm -> Email -> dst
-            // Kita cari elemen berdasarkan ID inputnya
+            // Atur Urutan: Username -> Password -> Confirm -> Lainnya
             const findWrapper = (id) => {
                 const el = form.querySelector(`#${id}`);
                 return el ? el.closest('.mb-2, .input-wrapper, .input-group')?.parentElement : null;
@@ -859,12 +899,12 @@
             const targetCol = mainRow ? (mainRow.querySelector('.col-12:has(#email)') || mainRow.querySelector('.col-12')) : null;
             const uWrap = findWrapper('username');
             const pWrap = findWrapper('password');
-            const cWrap = findWrapper('confirmPassword'); // ID dari HTML kamu
+            const cWrap = findWrapper('confirmPassword'); 
 
             if (targetCol && uWrap && pWrap && cWrap) {
-                targetCol.prepend(cWrap); // Confirm paling bawah dari grup atas
-                targetCol.prepend(pWrap); // Password tengah
-                targetCol.prepend(uWrap); // Username paling atas
+                targetCol.prepend(cWrap); 
+                targetCol.prepend(pWrap); 
+                targetCol.prepend(uWrap); 
             }
 
             // Center Card Layout
@@ -889,102 +929,95 @@
         }
         form.querySelectorAll('h3').forEach(h3 => h3.remove());
 
-
-        // --- 2. MASTER MAPPING ICON (SEMUA KOLOM) ---
-        // Ini kuncinya: Kita daftar SEMUA ID agar semuanya kena styling
-        const allFieldIcons = {
-            'username': 'bi-person-fill',
-            'password': 'bi-key-fill',
-            'confirmPassword': 'bi-shield-check',       // Target Baru
-            'email': 'bi-envelope-fill',
-            'phone': 'bi-phone-fill',
-            'agentbankid': 'bi-bank',
-            'bankAccountNumber': 'bi-credit-card-2-front-fill',
-            'bankaccountname': 'bi-person-vcard-fill',
-            'referralcode': 'bi-people-fill'            // Target Baru
-        };
-
-        // --- 3. EKSEKUSI STYLING ---
-        Object.keys(allFieldIcons).forEach(id => {
+        // --- 3. EKSEKUSI STYLING & PLACEHOLDER ---
+        Object.keys(fieldConfig).forEach(id => {
             const input = form.querySelector(`#${id}`);
             if (!input) return;
 
-            // Pastikan class form-control/form-select ada (untuk warna background gelap)
+            const config = fieldConfig[id];
+
+            // A. UPDATE PLACEHOLDER (TEKS SAMAR)
+            // Ini yang memperbaiki masalah "hilang informasi"
             if (input.tagName === 'SELECT') {
                 input.classList.add('form-select', 'form-control');
+                // Untuk Select (Bank), placeholder adalah option pertama
+                const firstOption = input.querySelector('option:first-child');
+                if (firstOption) {
+                    firstOption.textContent = config.placeholder;
+                } else {
+                    const opt = document.createElement('option');
+                    opt.value = "";
+                    opt.textContent = config.placeholder;
+                    opt.disabled = true;
+                    opt.selected = true;
+                    input.prepend(opt);
+                }
             } else {
                 input.classList.add('form-control');
+                // Paksa placeholder sesuai config kita
+                input.placeholder = config.placeholder;
+                input.setAttribute('placeholder', config.placeholder);
             }
 
-            // Cek parent langsung untuk melihat apakah sudah ada styling
+            // B. UPDATE ICON & WADAH INPUT
             const directParent = input.parentElement;
             
-            // Jika parentnya SUDAH input-group, berarti sudah aman (misal dari HTML asli), skip.
-            // TAPI, kita cek apakah icon-nya sudah benar.
+            // Jika parentnya SUDAH input-group (dari HTML atau script sebelumnya)
             if (directParent.classList.contains('input-group')) {
-                // Cek apakah iconnya sesuai keinginan kita (untuk kasus Confirm & Referral yg mungkin kosong)
-                const existingIcon = directParent.querySelector('i.bi');
+                // Cek icon, jika belum ada atau salah, ganti/tambah
+                let existingIcon = directParent.querySelector('.input-group-text i');
                 if (!existingIcon) {
                     const span = document.createElement('span');
                     span.className = 'input-group-text';
-                    span.innerHTML = `<i class="bi ${allFieldIcons[id]}"></i>`;
+                    span.innerHTML = `<i class="bi ${config.icon}"></i>`;
                     directParent.prepend(span);
+                } else {
+                    // Update class icon biar sesuai config (biar seragam)
+                    existingIcon.className = `bi ${config.icon}`;
                 }
                 return; 
             }
 
-            // --- Jika BELUM input-group (Masih default / mb-2 biasa) ---
-            
-            // 1. Buat Wrapper Group Baru
+            // Jika BELUM input-group (Masih default / mb-2 biasa)
             const groupDiv = document.createElement('div');
-            groupDiv.className = 'input-group mb-2'; // Class ini memicu CSS kotak merah
+            groupDiv.className = 'input-group mb-2'; 
             
-            // 2. Buat Icon
             const iconSpan = document.createElement('span');
             iconSpan.className = 'input-group-text';
-            iconSpan.innerHTML = `<i class="bi ${allFieldIcons[id]}"></i>`;
+            iconSpan.innerHTML = `<i class="bi ${config.icon}"></i>`;
 
-            // 3. Bersihkan Label Lama (Penyebab tampilan berantakan di gambar 1)
-            // Cari label yang mungkin ada di dekat input (sebelum input atau parent input)
-            // HTML kamu: <div class="mb-2"><input...></div>. Label mungkin di luarnya.
+            // C. BERSIHKAN LABEL LAMA
             const wrapperDiv = input.closest('.mb-2') || input.closest('.form-group');
             if (wrapperDiv) {
-                // Sembunyikan semua label di dalam wrapper ini
+                // Sembunyikan label lama karena teksnya sudah kita pindah ke Placeholder
                 wrapperDiv.querySelectorAll('label').forEach(l => l.style.display = 'none');
                 
-                // Jika wrapperDiv ini BUKAN input-wrapper (khusus password), kita bisa replace isinya
                 if (!wrapperDiv.classList.contains('input-wrapper')) {
-                    // Pindahkan input ke group baru
                     groupDiv.appendChild(iconSpan);
                     groupDiv.appendChild(input);
-                    // Kosongkan wrapper lama dan isi dengan group baru
                     wrapperDiv.innerHTML = ''; 
                     wrapperDiv.appendChild(groupDiv);
                 } else {
-                    // KHUSUS PASSWORD (di dalam .input-wrapper)
-                    // Kita tidak boleh hapus wrapperDiv karena ada tombol mata (eye toggle)
-                    // Jadi kita taruh groupDiv DI DALAM wrapperDiv
+                    // Khusus Password Wrapper
                     groupDiv.appendChild(iconSpan);
                     groupDiv.appendChild(input);
                     wrapperDiv.prepend(groupDiv); 
-                    // Pastikan input lama yang tercecer (jika ada) dihapus/dipindah
                 }
             } else {
-                // Fallback jika struktur HTML sangat berbeda
+                // Fallback
                 groupDiv.appendChild(iconSpan);
                 input.parentNode.insertBefore(groupDiv, input);
                 groupDiv.appendChild(input);
             }
         });
 
-        // --- 4. CLEANUP LABEL NAKAL ---
-        // Kadang ada label "Bank" atau "Nomor Rekening" yang berdiri sendiri di luar div input
+        // --- 4. CLEANUP TERAKHIR ---
+        // Sembunyikan semua label yang tersisa agar tampilan bersih
         form.querySelectorAll('label').forEach(label => {
-            // Sembunyikan label karena kita pakai placeholder + icon
             label.style.display = 'none';
         });
 
-        // Fix Z-Index Toggle Password agar tidak tertutup background input-group
+        // Fix Z-Index Toggle Password
         setTimeout(() => {
             const toggles = form.querySelectorAll('span[id^="toggle"]');
             toggles.forEach(t => t.style.zIndex = "100");
@@ -1581,6 +1614,7 @@
         }
     });
 })();
+
 
 
 

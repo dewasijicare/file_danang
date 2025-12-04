@@ -227,7 +227,7 @@
         #maincontent #withdraw-form h4 { text-align: center !important; color: #FFD700 !important; text-shadow: 0 0 8px rgba(255, 215, 0, 0.5); margin-bottom: 1.5rem !important; }
         #withdraw-form .form-label { padding-left: 0.5rem !important; }
         .input-wrapper { position: relative; }
-        .password-toggle-icon { position: absolute !important; top: 10px !important; right: 12px !important; transform: none !important; cursor: pointer; color: #bdc3c7; z-index: 9999 !important; background-color: blue !important;}
+        .password-toggle-icon { position: absolute !important; top: 10px !important; right: 12px !important; transform: none !important; cursor: pointer; color: #bdc3c7; z-index: 9999 !important; }
         .invalid-feedback { display: none !important; }
         .form-control.is-invalid { background-image: none !important; padding-right: 0.75rem !important; }
         .balance-toggle-icon { margin-left: 8px; cursor: pointer; vertical-align: middle; }
@@ -1565,3 +1565,4 @@
         }
     });
 })();
+

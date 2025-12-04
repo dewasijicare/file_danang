@@ -1,16 +1,68 @@
 (function() {
-    // BLOK CSS LENGKAP - TEMA DANANG (MERAH & KUNING)
+    // BLOK CSS LENGKAP - TEMA DANANG (REVISI: BOX DARKER, RESULT KUNING, TIMER PUTIH)
     const danangThemeStyles = `
         @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
         
-        /* Base Colors Replaced: Blue/Cyan -> Red, Dark Blue BG -> Dark Red/Black BG */
-        
+        /* --- UPDATE: Base Colors --- */
         .input-group-text { background-color: #3e2c2c; border-color: #5e3434; color: #ff0000; }
+        
+        /* --- UPDATE: Box Togel Background (Jauh Lebih Gelap) --- */
+        #carousel-togel .card, .row.g-3 .card {
+            /* Gradasi dari Merah Sangat Gelap (#1f0a0a) ke Hitam (#000000) */
+            background: linear-gradient(160deg, #1f0a0a, #000000) !important;
+            border: 1px solid #800000 !important; /* Border merah marun agar tidak terlalu mencolok */
+            border-radius: 15px !important;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3) !important; /* Shadow merah halus */
+            transition: transform .3s ease, box-shadow .3s ease;
+            width: 100%!important;
+            font-family: 'Exo 2', sans-serif !important;
+            animation: fadeIn .6s ease-out forwards;
+        }
+        #carousel-togel .card:hover, .row.g-3 .card:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 5px 25px rgba(255, 0, 0, 0.6) !important;
+            border-color: #ff0000 !important; /* Saat hover border jadi merah terang */
+        }
+
+        /* --- UPDATE: Result Togel (Angka Besar) -> Kuning Glowing --- */
+        #carousel-togel .card h2, .row.g-3 .card h2 {
+            background: 0 0!important;
+            margin: 8px 0!important;
+            font-size: 2.2em!important;
+        }
+        #carousel-togel .card h2 a, .row.g-3 .card h2 a {
+            color: #FFD700 !important; /* Warna Emas */
+            text-shadow: 0 0 10px #FFD700, 0 0 20px rgba(255, 215, 0, 0.6) !important; /* Glowing Emas */
+            letter-spacing: 2px;
+            text-decoration: none !important;
+        }
+
+        /* --- UPDATE: Countdown Timer -> Putih --- */
+        #carousel-togel .card .togel-countdown-timer, .row.g-3 .card .togel-countdown-timer {
+            color: #ffffff !important; /* Putih Polos */
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.4); /* Glow putih tipis */
+            opacity: 1;
+            font-weight: 500;
+        }
+        
+        /* Logika 'SEGERA TUTUP' (Tetap Ada & Berwarna Kuning agar kontras) */
+        .togel-countdown-timer.show-warning-text { position: relative; font-size: 0 !important; user-select: none; }
+        .togel-countdown-timer.show-warning-text::before { 
+            content: "SEGERA TUTUP"; 
+            position: absolute; inset: 0; 
+            color: #FFD700 !important; /* Teks Peringatan Tetap Kuning */
+            text-shadow: 0 0 10px #FFD700; 
+            font-weight: bold; 
+            white-space: nowrap; 
+            font-size: 0.75rem; 
+            display: flex; align-items: center; justify-content: center; 
+            transform: translateY(-5px); 
+        }
+
+        /* --- SISA CSS LAINNYA (SAMA SEPERTI SEBELUMNYA) --- */
         .alert.themed-alert-danger { background: linear-gradient(145deg, #a73c2e, #c0392b) !important; border: 1px solid #ff0000 !important; color: #fff !important; box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); border-radius: 8px; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
         .alert.themed-alert-danger strong { color: #fff !important; }
         .alert.themed-alert-danger a { color: #ffd700 !important; font-weight: bold; }
-        .togel-countdown-timer.show-warning-text { position: relative; font-size: 0 !important; -webkit-user-select: none; -ms-user-select: none; user-select: none; }
-        .togel-countdown-timer.show-warning-text::before { content: "SEGERA TUTUP"; position: absolute; inset: 0; color: #FFD700 !important; text-shadow: 0 0 5px #FFD700; font-weight: bold; white-space: nowrap; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; transform: translateY(-5px); }
         .custom-header-wrapper { display: flex; align-items: center; width: 100%; }
         .home-link-fixed { flex-shrink: 0; margin-right: 20px; }
         .scrollable-menu-container { flex-grow: 1; overflow: hidden; min-width: 0; }
@@ -35,22 +87,18 @@
         #maincontent .nav-tabs .nav-link{background-color:transparent!important;border:1px solid transparent!important;border-bottom:none!important;color:#bdc3c7!important}
         #maincontent .nav-tabs .nav-link.active{background-color:#2f1a1a!important;border-color:#cc0000!important;color:#fff!important}
         
-        /* Main Body Background Change to Dark Reddish Tone */
         body{background-color:#1a0505!important;font-family:'Exo 2',sans-serif!important}
         
         .form-label{color:#ecf0f1!important;text-shadow:0 0 5px #ff0000}
         .form-control,.form-select{background-color:#2f1a1a!important;border:1px solid #5e3434!important;color:#fff!important;border-radius:5px;transition:all .3s ease}
         .form-control:focus,.form-select:focus{border-color:#bdc3c7!important;box-shadow:0 0 10px rgba(189,195,199,.8)!important}
         
-        /* Primary Button: Red Gradient */
         .btn-primary{background:linear-gradient(45deg,#8b0000,#ff0000)!important;border:none!important;color:#fff!important;font-weight:700;text-transform:uppercase;box-shadow:0 0 10px #ff0000,inset 0 0 5px rgba(255,255,255,.4);transition:all .3s ease}
         .btn-primary:hover{transform:scale(1.05);box-shadow:0 0 20px #ff0000,0 0 30px #8b0000,inset 0 0 5px rgba(255,255,255,.4)}
         
-        /* Secondary Button: Gold/Yellow (Kept Same) */
         .btn-secondary{background:linear-gradient(45deg,#ffd700,#ffa500)!important;border-color:#ffd700!important;color:#3e2c2c!important;font-weight:700;text-transform:uppercase;box-shadow:0 0 10px #ffd700,inset 0 0 5px rgba(255,255,255,.7);transition:all .3s ease}
         .btn-secondary:hover{transform:scale(1.05);background:linear-gradient(45deg,#ffdf33,#ffb01a)!important;box-shadow:0 0 20px #ffd700,0 0 30px #ffa500,inset 0 0 5px rgba(255,255,255,.8)}
         
-        /* Danger Button */
         .btn-danger{background:linear-gradient(45deg,#e74c3c,#c0392b)!important;border:none!important;color:#fff!important;font-weight:700;text-transform:uppercase;box-shadow:0 0 10px #e74c3c,inset 0 0 5px rgba(255,255,255,.4);transition:all .3s ease}
         .btn-danger:hover{transform:scale(1.05);box-shadow:0 0 20px #e74c3c,0 0 30px #c0392b,inset 0 0 5px rgba(255,255,255,.4)}
         
@@ -91,7 +139,6 @@
         #maincontent .card.shadow a:hover{color:#fff!important;text-shadow:0 0 10px #ff0000}
         .form-label i.bi{margin-right:8px;vertical-align:-2px}
         
-        /* Promo Button Red Gradient */
         .btn-custom-promo{display:flex!important;align-items:center!important;justify-content:center!important;padding:10px 15px!important;font-size:1em!important;font-weight:700!important;text-transform:uppercase!important;color:#fff!important;border:none!important;border-radius:8px!important;background:linear-gradient(90deg,#8b0000,#b22222)!important;box-shadow:0 0 15px rgba(139, 0, 0,.5),inset 0 0 5px rgba(255,255,255,.3);transition:all .3s ease;text-decoration:none}
         .btn-custom-promo:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 5px 25px rgba(139, 0, 0,.7),0 0 30px rgba(255, 0, 0,.5),inset 0 0 8px rgba(255,255,255,.5);color:#fff!important;background:linear-gradient(90deg,#b22222,#ff0000)!important}
         .btn-custom-promo i.bi{margin-right:10px;font-size:1.1em}
@@ -102,7 +149,6 @@
         #row-togel h3 a:hover,h3.my-2 a:hover{color:#ff0000!important}.d-flex.justify-content-between > a{display:none!important}
         h3.my-2 i.bi,.my_5 > h3.text-center i.bi{margin-right:10px;vertical-align:-1px}
         
-        /* Alert Primary to Red */
         #maincontent .alert.alert-primary,.modal-body .alert.alert-warning{background:linear-gradient(160deg,#3e2c2c,#2f1a1a)!important;border:1px solid #cc0000!important;border-radius:10px!important;color:#ecf0f1!important;box-shadow:0 0 15px rgba(255, 0, 0,.5)}
         #maincontent .alert.alert-primary h4,#maincontent .alert.alert-primary span,.modal-body .alert.alert-warning small,.modal-body .alert.alert-warning strong{color:#ecf0f1!important}
         #maincontent .alert.alert-primary .fw-bold{color:#fff!important}
@@ -117,15 +163,8 @@
         #carousel-togel .owl-stage{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:15px;transform:none!important;width:100%!important}
         #carousel-togel .owl-item{width:auto!important;margin-right:0!important}
         
-        /* Card Gradients Red */
-        #carousel-togel .card,.row.g-3 .card{background:linear-gradient(160deg,#3e2c2c,#2f1a1a)!important;border:1px solid #cc0000!important;border-radius:15px!important;box-shadow:0 0 15px rgba(255, 0, 0,.5)!important;transition:transform .3s ease,box-shadow .3s ease;width:100%!important;font-family:'Exo 2',sans-serif!important}
-        #carousel-togel .card:hover,.row.g-3 .card:hover{transform:translateY(-5px) scale(1.03);box-shadow:0 5px 25px rgba(255, 0, 0,.7)!important}
         @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-        #carousel-togel .card,.row.g-3 .card{animation:fadeIn .6s ease-out forwards}
         #carousel-togel .card-body > .text-center > div:first-child,.row.g-3 .card-body > .text-center > div:first-child{color:#bdc3c7;font-size:.8em!important}
-        #carousel-togel .card h2,.row.g-3 .card h2{background:0 0!important;margin:8px 0!important;font-size:2.2em!important}
-        #carousel-togel .card h2 a,.row.g-3 .card h2 a{color:#fff!important;text-shadow:0 0 6px #fff,0 0 18px rgba(255,255,255,.7);letter-spacing:2px}
-        #carousel-togel .card .togel-countdown-timer,.row.g-3 .card .togel-countdown-timer{color:#ff0000;opacity:.8}
         
         .owl-nav,.owl-dots{display:none!important}
         
@@ -147,7 +186,6 @@
         .modal-title{color:#ecf0f1!important;text-shadow:0 0 8px rgba(255, 0, 0,.7)!important;font-size:1rem!important;padding-right:1rem;text-transform:uppercase}
         .modal-title i.bi{margin-right:8px;vertical-align:-2px;color:#ff0000;text-shadow:0 0 5px #ff0000}
         
-        /* Updated Close Button Icon Color (Encoded SVG) to Red */
         .modal-header .btn-close{background:transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ff0000'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat!important;opacity:.8!important;transition:all .3s ease}
         .modal-header .btn-close:hover{opacity:1!important;transform:scale(1.2) rotate(90deg)}
         
@@ -169,7 +207,6 @@
         .progress-bar-rtp.bg-success{background-image:linear-gradient(90deg,#2ecc71 25%,#27ae60 50%,#2ecc71 75%)!important;box-shadow:0 0 10px #2ecc71}
         .progress-bar-rtp.bg-warning{background-image:linear-gradient(90deg,#f1c40f 25%,#f39c12 50%,#f1c40f 75%)!important;box-shadow:0 0 10px #f1c40f}
         .progress-bar-rtp.bg-danger{background-image:linear-gradient(90deg,#e74c3c 25%,#c0392b 50%,#e74c3c 75%)!important;box-shadow:0 0 10px #e74c3c}
-        /* Changed Primary Progress to Red */
         .progress-bar-rtp.bg-primary{background-image:linear-gradient(90deg,#ff4444 25%,#cc0000 50%,#ff4444 75%)!important;box-shadow:0 0 10px #ff0000}
         
         .pagination{justify-content:center}
@@ -215,7 +252,6 @@
         #panel-closed.panel-closed-themed { background: linear-gradient(45deg, #c0392b, #e74c3c) !important; border: 1px solid #e74c3c !important; box-shadow: 0 0 20px rgba(231, 76, 60, 0.6) !important; border-radius: 15px !important; padding: 5rem 1rem !important; }
         #panel-closed.panel-closed-themed strong { font-size: 1.5rem; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
         
-        /* CSS KHUSUS UNTUK TABEL BETTING */
         #betting-page-container .card-body { padding: 1.25rem; padding-top: 0 !important; }
         #betting-page-container .info-description, #betting-page-container .bet-type-toggle { margin-bottom: 0 !important; }
         #betting-page-container .table-input { margin-left: -1.25rem !important; margin-right: -1.25rem !important; width: calc(100% + 2.5rem) !important; margin-bottom: 1rem !important; }
@@ -227,7 +263,6 @@
         #betting-page-container select#select-market { border-color: #ffd700 !important; }
         #betting-page-container select#select-market:focus { border-color: #ffd700 !important; box-shadow: 0 0 10px rgba(255, 215, 0, 0.6) !important; }
 
-        /* CSS KHUSUS UNTUK HALAMAN PROFIL */
         #profile-page-container .profile-row { display: flex; align-items: center; background-color: #2f1a1a; padding: 12px 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #5e3434; }
         #profile-page-container .profile-row-stacked { flex-direction: column; align-items: flex-start; }
         #profile-page-container .profile-label { display: flex; align-items: center; color: #bdc3c7; flex-basis: 35%; flex-shrink: 0; font-weight: 500; }
@@ -236,7 +271,6 @@
         #profile-page-container .profile-value { color: #fff; font-weight: 700; word-break: break-all; text-align: right; flex-grow: 1; }
         #profile-page-container .profile-row-stacked .profile-value { text-align: left; background-color: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 5px; width: 100%; }
 
-        /* STYLE UNTUK MODAL KONFIRMASI */
         #confirmModal .modal-header .modal-title { color: #ff0000 !important; text-shadow: 0 0 5px #ff0000; }
         #confirmModal #invoice-content .text-center .display-6,
         #confirmModal #invoice-content .text-center small { color: #ffd700 !important; }
@@ -263,7 +297,7 @@
              box-shadow: 0 0 20px #ff0000, 0 0 30px #8b0000, inset 0 0 5px rgba(255,255,255,.4) !important;
              transform: scale(1.05);
         }
-        /* CSS UNTUK TOMBOL CLEAR PROMO */
+        
         .promo-input-wrapper {
             position: relative;
         }
@@ -414,7 +448,6 @@
             font-weight: 600;
         }
         
-        /* Changed Primary Badge to Red */
         #maincontent .badge.bg-primary {
             background: linear-gradient(45deg, #8b0000, #ff0000) !important;
             color: #fff !important;
@@ -446,7 +479,7 @@
     document.head.appendChild(styleElement);
     styleElement.innerHTML = danangThemeStyles;
 
-    // --- KUMPULAN FUNGSI (TIDAK ADA LOGIKA YANG DIUBAH, HANYA WARNA PADA INJEKSI JS) ---
+    // --- KUMPULAN FUNGSI ---
     let intervalsInitialized = false;
 
     function formatNumberWithCommas(val) {

@@ -226,31 +226,51 @@
         #maincontent .border.border-top-0 { border-color: #cc0000 !important; }
         #maincontent #withdraw-form h4 { text-align: center !important; color: #FFD700 !important; text-shadow: 0 0 8px rgba(255, 215, 0, 0.5); margin-bottom: 1.5rem !important; }
         #withdraw-form .form-label { padding-left: 0.5rem !important; }
-        /* --- UPDATE: Perbaikan Posisi Icon Mata (Password) --- */
-        .input-wrapper { 
-            position: relative; 
-            margin-bottom: 0.5rem !important; /* Pindahkan jarak margin ke wrapper utama */
+        /* --- UPDATE: Perbaikan Posisi Icon Mata (Final Fix) --- */
+        .input-wrapper {
+            position: relative !important;
+            width: 100%;
+            /* Gunakan Flexbox untuk memastikan wrapper memeluk konten dengan erat */
+            display: flex !important; 
+            align-items: center !important;
+            /* Pindahkan jarak antar form ke wrapper ini */
+            margin-bottom: 1rem !important; 
+        }
+
+        /* MATIKAN margin pada input-group agar tinggi wrapper = tinggi input asli */
+        .input-wrapper .input-group {
+            margin-bottom: 0 !important;
+            flex-grow: 1;
+            z-index: 1;
+        }
+
+        /* Pastikan input text tidak menabrak icon mata */
+        .input-wrapper input.form-control {
+            padding-right: 45px !important;
+            border-top-right-radius: 5px !important; /* Opsional: perapihan sudut */
+            border-bottom-right-radius: 5px !important;
+        }
+
+        /* Setting Posisi Icon */
+        .password-toggle-icon {
+            position: absolute !important;
+            right: 15px !important;
+            /* Kalkulasi tengah yang akurat sekarang karena margin anak sudah 0 */
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            z-index: 100 !important;
+            cursor: pointer !important;
+            font-size: 1.2rem !important;
+            color: #FFD700 !important; /* Warna Emas sesuai gambar Anda */
+            display: flex !important;
+            align-items: center !important;
+            height: 100% !important; /* Bantu centering vertikal */
         }
         
-        /* Paksa input-group di dalam wrapper agar tidak punya margin, supaya centering icon akurat */
-        .input-wrapper .input-group { 
-            margin-bottom: 0 !important; 
-        }
-
-        /* Beri jarak padding kanan pada input agar teks password tidak menabrak icon mata */
-        .input-wrapper input.form-control { 
-            padding-right: 45px !important; 
-        }
-
-        .password-toggle-icon { 
-            position: absolute; 
-            top: 50%; 
-            right: 15px; 
-            transform: translateY(-50%); 
-            cursor: pointer; 
-            color: #bdc3c7; 
-            z-index: 100; 
-            font-size: 1.1rem; /* Opsional: sesuaikan ukuran icon */
+        /* Efek Hover */
+        .password-toggle-icon:hover {
+            color: #fff !important;
+            text-shadow: 0 0 10px #FFD700;
         }
         .invalid-feedback { display: none !important; }
         .form-control.is-invalid { background-image: none !important; padding-right: 0.75rem !important; }
@@ -1589,4 +1609,5 @@
         }
     });
 })();
+
 

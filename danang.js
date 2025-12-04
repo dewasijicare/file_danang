@@ -226,48 +226,58 @@
         #maincontent .border.border-top-0 { border-color: #cc0000 !important; }
         #maincontent #withdraw-form h4 { text-align: center !important; color: #FFD700 !important; text-shadow: 0 0 8px rgba(255, 215, 0, 0.5); margin-bottom: 1.5rem !important; }
         #withdraw-form .form-label { padding-left: 0.5rem !important; }
+        
+        /* --- UPDATE FINAL: FIX LAYOUT INPUT GROUP & POSISI ICON MATA --- */
+        
         .input-wrapper { 
             position: relative; 
             width: 100%; 
             display: block;
+            margin-bottom: 1rem; /* Jarak antar form */
         }
 
-        /* Pastikan Input Group tidak menimpa icon mata */
+        /* 1. PAKSA SEJAJAR HORIZONTAL (Flexbox) */
         .input-wrapper .input-group {
+            display: flex !important;       /* Wajib Flex agar sejajar */
+            flex-wrap: nowrap !important;   /* Jangan biarkan turun ke bawah */
+            align-items: stretch !important;
+            width: 100% !important;
             position: relative;
-            z-index: 1; /* Layer dasar */
+            z-index: 1; 
+            margin-bottom: 0 !important;
         }
 
-        .input-wrapper input.form-control {
+        /* 2. Atur Icon Kiri (User/Email/dll) agar rapi */
+        .input-wrapper .input-group .input-group-text {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        /* 3. Atur Input Field agar memenuhi sisa ruang */
+        .input-wrapper .input-group .form-control {
+            position: relative;
+            flex: 1 1 auto;        /* Ambil sisa lebar yang ada */
+            width: 1% !important;  /* Trik CSS agar input tidak melebarkan container */
+            min-width: 0;
+            margin-bottom: 0;
             padding-right: 45px !important; /* Ruang untuk icon mata */
-            position: relative;
-            z-index: 2; /* Input di atas group */
-            background-color: #2f1a1a !important; /* Pastikan background tidak transparan aneh */
-        }
-        
-        /* Saat input difokuskan, tetap di z-index 2, jangan lebih tinggi dari icon mata */
-        .input-wrapper input.form-control:focus {
-            z-index: 2; 
+            z-index: 2;
+            background-color: #2f1a1a !important; 
         }
 
+        /* 4. POSISI ICON MATA (Overlay di atas segalanya) */
         .password-toggle-icon { 
             position: absolute !important; 
             top: 50% !important; 
             right: 15px !important; 
             transform: translateY(-50%) !important; 
             cursor: pointer; 
-            color: #FFD700; /* Warna Emas */
+            color: #FFD700; 
             font-size: 1.3rem; 
             line-height: 1;
-            
-            /* KUNCI PERBAIKAN DI SINI: */
-            z-index: 9999 !important; /* Layer paling atas, di atas input */
-            pointer-events: auto; /* Pastikan bisa diklik */
-        }
-
-        /* Padding kanan agar teks tidak nabrak icon */
-        .input-wrapper input.form-control {
-            padding-right: 45px !important; 
+            z-index: 9999 !important; /* Wajib paling atas */
+            pointer-events: auto; 
         }
         .invalid-feedback { display: none !important; }
         .form-control.is-invalid { background-image: none !important; padding-right: 0.75rem !important; }
@@ -1590,6 +1600,7 @@
         }
     });
 })();
+
 
 
 

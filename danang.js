@@ -226,8 +226,24 @@
         #maincontent .border.border-top-0 { border-color: #cc0000 !important; }
         #maincontent #withdraw-form h4 { text-align: center !important; color: #FFD700 !important; text-shadow: 0 0 8px rgba(255, 215, 0, 0.5); margin-bottom: 1.5rem !important; }
         #withdraw-form .form-label { padding-left: 0.5rem !important; }
-        .input-wrapper { position: relative; }
-        .password-toggle-icon { position: absolute; top: 50%; right: 12px; transform: translateY(-50%); cursor: pointer; color: #bdc3c7; z-index: 100; }
+        .input-wrapper { 
+            position: relative; 
+            width: 100%; /* Pastikan wrapper mengambil lebar penuh */
+        }
+        .password-toggle-icon { 
+            position: absolute; 
+            top: 50%; 
+            right: 15px; /* Jarak dari sisi kanan diperbesar agar tidak mepet garis */
+            transform: translateY(-50%); /* Trik jitu agar icon persis di tengah vertikal */
+            cursor: pointer; 
+            color: #FFD700; /* Ubah ke Emas agar sesuai tema, atau #bdc3c7 untuk abu-abu */
+            z-index: 100; 
+            font-size: 1.2rem; /* Ukuran icon diperbesar sedikit agar pas */
+            line-height: 1;
+        }
+        .input-wrapper input.form-control {
+            padding-right: 45px !important; 
+        }
         .invalid-feedback { display: none !important; }
         .form-control.is-invalid { background-image: none !important; padding-right: 0.75rem !important; }
         .balance-toggle-icon { margin-left: 8px; cursor: pointer; vertical-align: middle; }
@@ -1565,3 +1581,4 @@
         }
     });
 })();
+

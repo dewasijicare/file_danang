@@ -760,7 +760,72 @@
         });
     }
 
-    function styleQuickLogin() { document.querySelectorAll('#row-quicklogin:not([data-styled="true"])').forEach(card => { card.dataset.styled = 'true'; const form = card.querySelector('form'); if (!form) return; const usernameDiv = form.querySelector('label[for="username"]')?.parentElement; const passwordDiv = form.querySelector('label[for="password"]')?.parentElement; const buttonDiv = form.querySelector('.d-flex.gap-1.my-3'); if (!usernameDiv || !passwordDiv || !buttonDiv) return; const newInputsHTML = ` <div class="row g-2 mb-3"> <div class="col-md-6"> <div class="input-group"> <span class="input-group-text"><i class="bi bi-person-fill"></i></span> <input type="text" name="userName" id="username" class="form-control" placeholder="Username"> </div> </div> <div class="col-md-6"> <div class="input-wrapper"> <div class="input-group"> <span class="input-group-text"><i class="bi bi-key-fill"></i></span> <input type="password" name="password" id="password" class="form-control" placeholder="Password"> </div> </div> </div> </div> `; buttonDiv.insertAdjacentHTML('beforebegin', newInputsHTML); usernameDiv.remove(); passwordDiv.remove(); const newPasswordInput = card.querySelector('#password'); }); }
+    function styleQuickLogin() {
+        // Cari container Quick Login
+        const card = document.getElementById('row-quicklogin');
+        if (!card) return;
+
+        // --- BAGIAN 1: USERNAME (Sudah oke di HTML Anda, tapi kita pastikan placeholder ada) ---
+        const usernameInput = card.querySelector('#username');
+        if (usernameInput && !usernameInput.placeholder) {
+            usernameInput.placeholder = 'User Name';
+        }
+
+        // --- BAGIAN 2: PASSWORD FIX (Logika Baru) ---
+        const passInput = card.querySelector('#pass');
+        const toggleBtn = card.querySelector('#togglePass');
+
+        // Cek apakah password input ada, tapi BELUM dibungkus input-group (artinya belum ter-style)
+        if (passInput && !passInput.closest('.input-group')) {
+            
+            // Cari pembungkus terluar yang memiliki style "position: relative" 
+            // Sesuai struktur HTML Anda: <div style="position: relative; width:100%;">...</div>
+            const oldContainer = passInput.closest('div[style*="position: relative"]');
+
+            if (oldContainer) {
+                // 1. Buat Struktur Baru (Input Group)
+                const newGroup = document.createElement('div');
+                newGroup.className = 'input-group mb-3';
+                newGroup.style.position = 'relative'; // Penting untuk posisi tombol mata
+
+                // 2. Buat Icon Kunci di Kiri
+                const iconSpan = document.createElement('span');
+                iconSpan.className = 'input-group-text';
+                iconSpan.innerHTML = '<i class="bi bi-key-fill"></i>';
+
+                // 3. Setup Input Password
+                passInput.classList.add('form-control');
+                passInput.placeholder = 'Password'; // Tambah placeholder
+                
+                // 4. Susun Elemen (Icon + Input)
+                newGroup.appendChild(iconSpan);
+                newGroup.appendChild(passInput);
+
+                // 5. Pindahkan Tombol Mata (Toggle) ke dalam Group
+                if (toggleBtn) {
+                    // Reset style lama dan terapkan style baru agar rapi di kanan
+                    toggleBtn.style.position = 'absolute';
+                    toggleBtn.style.top = '50%';
+                    toggleBtn.style.right = '15px';
+                    toggleBtn.style.transform = 'translateY(-50%)';
+                    toggleBtn.style.zIndex = '10';
+                    toggleBtn.style.cursor = 'pointer';
+                    toggleBtn.style.display = 'block';
+
+                    // Ubah warna icon mata jadi Emas
+                    const eyeIcon = toggleBtn.querySelector('i');
+                    if(eyeIcon) eyeIcon.style.color = '#FFD700';
+
+                    newGroup.appendChild(toggleBtn);
+                }
+
+                // 6. Terapkan Perubahan: Ganti container lama dengan Group Baru
+                oldContainer.replaceWith(newGroup);
+            }
+        }
+        
+        card.dataset.styled = 'true';
+    }
 
     function styleLoginPage() {
         // 1. Cari Form Login
@@ -1664,6 +1729,7 @@
         }
     });
 })();
+
 
 
 

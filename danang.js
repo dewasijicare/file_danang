@@ -573,7 +573,7 @@
 
     function addMainBalanceToggle(forceUpdate = false) { const panel = document.querySelector('#member-status-panel'); if (!panel) return; const balanceSpan = panel.querySelector('.text-gradient'); const link = panel.querySelector('a'); if (!balanceSpan || !link) return; if (panel.dataset.toggleAdded === 'true' && !forceUpdate) return; const originalValue = (forceUpdate && link.dataset.originalBalance) ? link.dataset.originalBalance : balanceSpan.textContent.trim(); if(!link.dataset.originalBalance) link.dataset.originalBalance = originalValue; const updateView = (state) => { if (state === 'hidden') { balanceSpan.textContent = '•••••'; if (link.querySelector('.balance-toggle-icon')) link.querySelector('.balance-toggle-icon').className = 'bi bi-eye-slash-fill balance-toggle-icon'; } else { balanceSpan.textContent = originalValue; if (link.querySelector('.balance-toggle-icon')) link.querySelector('.balance-toggle-icon').className = 'bi bi-eye-fill balance-toggle-icon'; } }; if (panel.dataset.toggleAdded !== 'true') { const toggleIcon = document.createElement('i'); toggleIcon.className = 'bi bi-eye-fill balance-toggle-icon'; toggleIcon.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); const newState = (localStorage.getItem('balanceVisibility') || 'visible') === 'visible' ? 'hidden' : 'visible'; localStorage.setItem('balanceVisibility', newState); updateView(newState); addSidebarBalanceToggle(); }); link.appendChild(toggleIcon); panel.dataset.toggleAdded = 'true'; } const savedState = localStorage.getItem('balanceVisibility'); if (savedState) updateView(savedState); }
 
-    function addPasswordToggle(passwordInput) { if (!passwordInput || passwordInput.dataset.toggleAdded === 'true') return; const wrapper = passwordInput.closest('.input-wrapper'); if (!wrapper) { const parent = passwordInput.parentElement; const newWrapper = document.createElement('div'); newWrapper.className = 'input-wrapper'; parent.replaceChild(newWrapper, passwordInput); newWrapper.appendChild(passwordInput); } const finalWrapper = passwordInput.closest('.input-wrapper'); if (!finalWrapper || finalWrapper.querySelector('.password-toggle-icon')) return; const toggleIcon = document.createElement('i'); toggleIcon.className = 'bi bi-eye-fill password-toggle-icon'; toggleIcon.addEventListener('click', () => { const isPassword = passwordInput.type === 'password'; passwordInput.type = isPassword ? 'text' : 'password'; toggleIcon.className = isPassword ? 'bi bi-eye-slash-fill password-toggle-icon' : 'bi bi-eye-fill password-toggle-icon'; }); finalWrapper.appendChild(toggleIcon); passwordInput.dataset.toggleAdded = 'true'; }
+    (passwordInput) { if (!passwordInput || passwordInput.dataset.toggleAdded === 'true') return; const wrapper = passwordInput.closest('.input-wrapper'); if (!wrapper) { const parent = passwordInput.parentElement; const newWrapper = document.createElement('div'); newWrapper.className = 'input-wrapper'; parent.replaceChild(newWrapper, passwordInput); newWrapper.appendChild(passwordInput); } const finalWrapper = passwordInput.closest('.input-wrapper'); if (!finalWrapper || finalWrapper.querySelector('.password-toggle-icon')) return; const toggleIcon = document.createElement('i'); toggleIcon.className = 'bi bi-eye-fill password-toggle-icon'; toggleIcon.addEventListener('click', () => { const isPassword = passwordInput.type === 'password'; passwordInput.type = isPassword ? 'text' : 'password'; toggleIcon.className = isPassword ? 'bi bi-eye-slash-fill password-toggle-icon' : 'bi bi-eye-fill password-toggle-icon'; }); finalWrapper.appendChild(toggleIcon); passwordInput.dataset.toggleAdded = 'true'; }
 
     function fetchRtpWithIframe() { return new Promise((e,t)=>{const o=document.createElement("iframe");o.src="/rtp",o.style.display="none",o.onload=function(){try{const a=o.contentDocument||o.contentWindow.document,n=a.querySelectorAll('.row.mb-3.g-1 > div[class*="col-"]');if(0===n.length)return t(new Error("No games found"));const l=Array.from(n).filter(e=>{const t=e.querySelector(".progress-bar-rtp");return t&&parseInt(t.textContent)>=75});if(0===l.length)return t(new Error("No games with RTP >= 75%"));const c=l.map(e=>{const t=e.querySelector("a"),o=e.querySelector(".progress-bar-rtp");return{link:t.dataset.playurl,image:t.querySelector("img").src,name:t.dataset.gamename,percentage:parseInt(o.textContent),colorClass:Array.from(o.classList).find(e=>e.startsWith("bg-"))}});e(c)}catch(e){t(e)}finally{document.body.removeChild(o)}},o.onerror=function(){t(new Error("Failed to load RTP iframe")),document.body.removeChild(o)},document.body.appendChild(o)})}
 
@@ -1564,7 +1564,61 @@
             toggleObserver.observe(sidebar, { attributes: true, attributeFilter: ['class'] });
         }
     });
+    function addPasswordToggle(passwordInput) {
+        // Cek validasi standar
+        if (!passwordInput || passwordInput.dataset.toggleAdded === 'true') return;
+
+        // Cari wrapper, kalau tidak ada kita buat baru
+        let wrapper = passwordInput.closest('.input-wrapper');
+        if (!wrapper) {
+            const parent = passwordInput.parentElement;
+            const newWrapper = document.createElement('div');
+            newWrapper.className = 'input-wrapper';
+            // Wajib relative agar icon bisa diatur posisinya
+            newWrapper.style.position = 'relative'; 
+            parent.replaceChild(newWrapper, passwordInput);
+            newWrapper.appendChild(passwordInput);
+            wrapper = newWrapper;
+        }
+
+        // Hapus icon lama jika ada (agar tidak dobel)
+        const oldIcon = wrapper.querySelector('.password-toggle-icon');
+        if (oldIcon) oldIcon.remove();
+
+        // Buat Icon Mata Baru
+        const toggleIcon = document.createElement('i');
+        toggleIcon.className = 'bi bi-eye-fill password-toggle-icon';
+
+        // --- PENGATURAN POSISI (EDIT DISINI) ---
+        toggleIcon.style.position = 'absolute';
+        toggleIcon.style.zIndex = '9999';
+        toggleIcon.style.cursor = 'pointer';
+        toggleIcon.style.color = '#bdc3c7'; // Warna abu-abu
+        
+        // POSISI NAIK TURUN
+        // 50% = Tengah. 
+        // Ubah ke 25% atau 30% agar NAIK KE ATAS.
+        toggleIcon.style.top = '30%'; 
+        
+        // POSISI KANAN KIRI
+        toggleIcon.style.right = '15px'; 
+        
+        // Matikan transform bawaan yang bikin posisi tidak akurat
+        toggleIcon.style.transform = 'none';
+        // ----------------------------------------
+
+        // Fungsi Klik (Show/Hide Password)
+        toggleIcon.addEventListener('click', () => {
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type = isPassword ? 'text' : 'password';
+            toggleIcon.className = isPassword ? 'bi bi-eye-slash-fill password-toggle-icon' : 'bi bi-eye-fill password-toggle-icon';
+        });
+
+        wrapper.appendChild(toggleIcon);
+        passwordInput.dataset.toggleAdded = 'true';
+    }
 })();
+
 
 
 

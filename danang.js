@@ -232,7 +232,7 @@
         }
         .password-toggle-icon { 
             position: absolute; 
-            top: 50%; 
+            top: 36%; 
             right: 15px; /* Jarak dari sisi kanan diperbesar agar tidak mepet garis */
             transform: translateY(-50%); /* Trik jitu agar icon persis di tengah vertikal */
             cursor: pointer; 
@@ -1581,4 +1581,5 @@
         }
     });
 })();
+
 

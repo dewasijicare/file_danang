@@ -763,71 +763,95 @@
     function styleQuickLogin() { document.querySelectorAll('#row-quicklogin:not([data-styled="true"])').forEach(card => { card.dataset.styled = 'true'; const form = card.querySelector('form'); if (!form) return; const usernameDiv = form.querySelector('label[for="username"]')?.parentElement; const passwordDiv = form.querySelector('label[for="password"]')?.parentElement; const buttonDiv = form.querySelector('.d-flex.gap-1.my-3'); if (!usernameDiv || !passwordDiv || !buttonDiv) return; const newInputsHTML = ` <div class="row g-2 mb-3"> <div class="col-md-6"> <div class="input-group"> <span class="input-group-text"><i class="bi bi-person-fill"></i></span> <input type="text" name="userName" id="username" class="form-control" placeholder="Username"> </div> </div> <div class="col-md-6"> <div class="input-wrapper"> <div class="input-group"> <span class="input-group-text"><i class="bi bi-key-fill"></i></span> <input type="password" name="password" id="password" class="form-control" placeholder="Password"> </div> </div> </div> </div> `; buttonDiv.insertAdjacentHTML('beforebegin', newInputsHTML); usernameDiv.remove(); passwordDiv.remove(); const newPasswordInput = card.querySelector('#password'); }); }
 
     function styleLoginPage() {
-        const loginForm = document.querySelector('#maincontent form[action="/login"]');
+        // 1. Cari Form Login
+        const loginForm = document.querySelector('form[action="/login"]');
         if (!loginForm) return;
-        const loginCard = loginForm.closest('.card.shadow');
-        if (!loginCard || loginCard.dataset.layoutStyled === 'true') return;
-        loginCard.dataset.layoutStyled = 'true';
 
-        try {
-            if (!loginCard.parentElement.classList.contains('col-lg-6')) { 
-                const cardParent = loginCard.parentElement;
-                const newRow = document.createElement('div');
-                newRow.className = 'row';
-                const newCol = document.createElement('div');
-                newCol.className = 'col-lg-6 offset-lg-3';
-                cardParent.replaceChild(newRow, loginCard);
-                newRow.appendChild(newCol);
-                newCol.appendChild(loginCard);
+        // Cek flag agar tidak dijalankan berulang kali pada elemen yang sama
+        if (loginForm.dataset.customStyled === 'true') return;
+
+        // --- A. STYLING USERNAME ---
+        const usernameInput = loginForm.querySelector('#username');
+        if (usernameInput) {
+            // Cari parent container (form-group) untuk digantikan
+            const oldGroup = usernameInput.closest('.form-group');
+            
+            if (oldGroup) {
+                // Buat Wrapper Input Group Baru
+                const newGroup = document.createElement('div');
+                newGroup.className = 'input-group mb-3';
+                
+                // Buat Icon Kiri
+                const iconSpan = document.createElement('span');
+                iconSpan.className = 'input-group-text';
+                iconSpan.innerHTML = '<i class="bi bi-person-fill"></i>';
+                
+                // Setup Input
+                usernameInput.classList.add('form-control');
+                usernameInput.placeholder = 'User Name'; // Set Placeholder
+                
+                // Susun Elemen
+                newGroup.appendChild(iconSpan);
+                newGroup.appendChild(usernameInput); // Pindahkan input ke group baru
+                
+                // Ganti form-group lama dengan input-group baru
+                oldGroup.replaceWith(newGroup);
             }
-        } catch (e) {
-            console.error("GavanTheme Error (Centering Login):", e);
         }
 
-        const usernameLabel = loginForm.querySelector('label[for="username"]');
-        const passwordLabel = loginForm.querySelector('label[for="password"]');
-        
-        const usernameGroup = usernameLabel ? usernameLabel.parentElement : null;
-        const passwordGroup = passwordLabel ? passwordLabel.parentElement : null;
-        
-        const usernameInput = loginForm.querySelector('input[name="userName"]');
-        const passwordInput = loginForm.querySelector('input[name="password"]');
-        
-        const buttonContainer = loginForm.querySelector('button[type="submit"]')?.parentElement;
+        // --- B. STYLING PASSWORD ---
+        // Struktur baru menggunakan ID "pass" dan dibungkus ".password-wrapper"
+        const passwordInput = loginForm.querySelector('#pass');
+        const passwordWrapper = loginForm.querySelector('.password-wrapper');
+        const toggleBtn = loginForm.querySelector('#togglePass');
 
-        if (usernameGroup && passwordGroup && buttonContainer && usernameInput && passwordInput) {
-            const newRow = document.createElement('div');
-            newRow.className = 'row g-2 mb-3';
+        if (passwordInput && passwordWrapper) {
+            // Buat Wrapper Input Group Baru
+            const newGroup = document.createElement('div');
+            newGroup.className = 'input-group mb-3';
+            newGroup.style.position = 'relative'; // Agar toggle button bisa absolute
             
-            const usernameCol = document.createElement('div');
-            usernameCol.className = 'col-12';
-            const usernameInputGroup = document.createElement('div');
-            usernameInputGroup.className = 'input-group';
-            usernameInputGroup.innerHTML = '<span class="input-group-text"><i class="bi bi-person-fill"></i></span>';
-            usernameInput.placeholder = "User Name";
-            usernameInputGroup.appendChild(usernameInput); 
-            usernameCol.appendChild(usernameInputGroup);
-            newRow.appendChild(usernameCol);
+            // Buat Icon Kiri
+            const iconSpan = document.createElement('span');
+            iconSpan.className = 'input-group-text';
+            iconSpan.innerHTML = '<i class="bi bi-key-fill"></i>';
+            
+            // Setup Input
+            passwordInput.classList.add('form-control');
+            passwordInput.placeholder = 'Password';
+            
+            // Susun Elemen Input
+            newGroup.appendChild(iconSpan);
+            newGroup.appendChild(passwordInput);
 
-            const passwordCol = document.createElement('div');
-            passwordCol.className = 'col-12';
-            const passwordWrapper = document.createElement('div');
-            passwordWrapper.className = 'input-wrapper';
-            const passwordInputGroup = document.createElement('div');
-            passwordInputGroup.className = 'input-group';
-            passwordInputGroup.innerHTML = '<span class="input-group-text"><i class="bi bi-key-fill"></i></span>';
-            passwordInput.placeholder = "Password";
-            
-            passwordInputGroup.appendChild(passwordInput); 
-            passwordWrapper.appendChild(passwordInputGroup);
-            passwordCol.appendChild(passwordWrapper);
-            newRow.appendChild(passwordCol);
+            // --- C. PINDAHKAN TOMBOL MATA ---
+            if (toggleBtn) {
+                // Styling ulang tombol mata agar pas di dalam input group
+                toggleBtn.style.position = 'absolute';
+                toggleBtn.style.top = '50%';
+                toggleBtn.style.right = '15px';
+                toggleBtn.style.transform = 'translateY(-50%)';
+                toggleBtn.style.zIndex = '10';
+                toggleBtn.style.cursor = 'pointer';
+                toggleBtn.style.display = 'block';
+                
+                // Pastikan icon mata berwarna Emas (sesuai tema)
+                const eyeIcon = toggleBtn.querySelector('i');
+                if (eyeIcon) {
+                    eyeIcon.style.color = '#FFD700'; 
+                }
 
-            buttonContainer.before(newRow);
-            
-            usernameGroup.remove();
-            passwordGroup.remove();
+                // Masukkan tombol ke dalam group baru
+                newGroup.appendChild(toggleBtn);
+            }
+
+            // Ganti TOTAL wrapper (.password-wrapper) dengan group baru
+            // Ini akan otomatis menghapus label lama dan div pembungkus yang tidak perlu
+            passwordWrapper.replaceWith(newGroup);
         }
+
+        // Tandai form sudah di-style agar tidak loop
+        loginForm.dataset.customStyled = 'true';
     }
 
     function styleRegisterPage() {
@@ -1640,6 +1664,7 @@
         }
     });
 })();
+
 
 
 

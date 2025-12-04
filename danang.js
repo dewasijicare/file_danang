@@ -839,6 +839,20 @@
         const buttonWrapper = card ? card.querySelector('.d-grid.gap-3.mb-3') : null;
         if (!card || !mainRow || !buttonWrapper) return;
 
+        // --- TAMBAHAN: MAPPING ICON KHUSUS REGISTER ---
+        // Ini memastikan icon selalu muncul meskipun belum ada di label
+        const registerIcons = {
+            'username': 'bi-person-fill',
+            'password': 'bi-key-fill',
+            'confirmpassword': 'bi-shield-check', // Icon Konfirmasi Password
+            'email': 'bi-envelope-fill',
+            'phone': 'bi-phone-fill',
+            'bank': 'bi-bank',
+            'accountnumber': 'bi-credit-card-2-front',
+            'accountname': 'bi-person-vcard',
+            'referral': 'bi-people-fill' // Icon Kode Referral
+        };
+
         try {
             const targetColumn = mainRow.querySelector('.col-lg-6:has(label[for="email"])') || mainRow.querySelector('.col-lg-6:nth-child(2)');
             const usernameGroup = form.querySelector('label[for="username"]')?.closest('.form-group');
@@ -866,21 +880,6 @@
                 newCol.appendChild(card); 
             }
 
-            const emptyColumn = mainRow.querySelector('.col-lg-6:first-child');
-            const contentColumn = mainRow.querySelector('.col-lg-6:last-child');
-            
-            if (emptyColumn && contentColumn && !emptyColumn.querySelector('input, select')) { 
-                emptyColumn.remove(); 
-                contentColumn.classList.remove('col-lg-6', 'offset-lg-3'); 
-                contentColumn.classList.add('col-12'); 
-            } else if (mainRow.children.length === 1 && mainRow.firstElementChild.classList.contains('col-lg-12')) {
-            } else if (mainRow.children.length === 1 && mainRow.firstElementChild.classList.contains('col-lg-6')) {
-                mainRow.firstElementChild.classList.remove('col-lg-6', 'offset-lg-3');
-                mainRow.firstElementChild.classList.add('col-12');
-            }
-            
-            /* --- REVISI: PAKSA MENJADI SATU KOLOM AGAR SAMA PANJANG --- */
-            // Mengubah semua col-lg-6 menjadi col-12 agar semua input memanjang penuh
             const splitColumns = mainRow.querySelectorAll('.col-lg-6');
             splitColumns.forEach(col => {
                 col.classList.remove('col-lg-6');
@@ -895,19 +894,44 @@
         form.append(mainRow);
         form.append(buttonWrapper);
         form.querySelectorAll('h3').forEach(h3 => h3.remove());
+
+        // LOGIKA UTAMA PEMBUATAN ICON
         form.querySelectorAll('.form-group').forEach(group => {
             const label = group.querySelector('label');
             const input = group.querySelector('input, select');
             if (!label || !input) return;
-            const icon = label.querySelector('i.bi');
+            
+            // Cek apakah label sudah punya icon
+            let icon = label.querySelector('i.bi');
+
+            // --- PERBAIKAN: JIKA TIDAK ADA ICON, CARI DARI MAPPING ---
+            if (!icon) {
+                const inputId = input.id || input.name;
+                // Cek mapping, jika ada ID yang cocok, buat icon baru
+                if (registerIcons[inputId]) {
+                    icon = document.createElement('i');
+                    icon.className = `bi ${registerIcons[inputId]}`;
+                } 
+                // Fallback khusus untuk referral jika ID-nya berbeda tapi placeholder mengandung kata Referral
+                else if (input.placeholder && input.placeholder.toLowerCase().includes('referral')) {
+                    icon = document.createElement('i');
+                    icon.className = 'bi bi-people-fill';
+                }
+            }
+            // ---------------------------------------------------------
+
             const placeholderText = label.textContent.replace(/\(.*\)/g, '').replace(/(\r\n|\n|\r)/gm, " ").trim();
             let newElement;
+            
             if (icon) {
                 const inputGroup = document.createElement('div');
                 inputGroup.className = 'input-group mb-2';
                 const iconSpan = document.createElement('span');
                 iconSpan.className = 'input-group-text';
+                
+                // Pastikan yang diappend adalah clone dari icon (agar aman)
                 iconSpan.appendChild(icon.cloneNode(true));
+                
                 inputGroup.appendChild(iconSpan);
                 inputGroup.appendChild(input);
                 newElement = inputGroup;
@@ -917,6 +941,7 @@
                 simpleDiv.appendChild(input);
                 newElement = simpleDiv;
             }
+
             if (input.tagName.toLowerCase() !== 'select') {
                 input.placeholder = placeholderText;
             } else {
@@ -930,6 +955,8 @@
                 }
             }
             input.classList.add('form-control');
+            
+            // Bungkus input password agar icon mata tetap jalan (jika ada script lain)
             if (input.type === 'password') {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'input-wrapper';
@@ -939,12 +966,13 @@
                 group.replaceWith(newElement);
             }
         });
+
+        // Hapus toggle icon bawaan yang mungkin double
         const passwordInput = form.querySelector('#password');
         const confirmPasswordInput = form.querySelector('#confirmpassword');
         if (passwordInput && confirmPasswordInput) {
-            const passwordWrapper = passwordInput.closest('.input-wrapper');
             confirmPasswordInput.closest('.input-wrapper')?.querySelector('.password-toggle-icon')?.remove();
-            }
+        }
     }
     
     function styleProfilePage() {
@@ -1537,6 +1565,7 @@
         }
     });
 })();
+
 
 
 

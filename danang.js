@@ -760,7 +760,7 @@
         });
     }
 
-    function styleQuickLogin() { document.querySelectorAll('#row-quicklogin:not([data-styled="true"])').forEach(card => { card.dataset.styled = 'true'; const form = card.querySelector('form'); if (!form) return; const usernameDiv = form.querySelector('label[for="username"]')?.parentElement; const passwordDiv = form.querySelector('label[for="password"]')?.parentElement; const buttonDiv = form.querySelector('.d-flex.gap-1.my-3'); if (!usernameDiv || !passwordDiv || !buttonDiv) return; const newInputsHTML = ` <div class="row g-2 mb-3"> <div class="col-md-6"> <div class="input-group"> <span class="input-group-text"><i class="bi bi-person-fill"></i></span> <input type="text" name="userName" id="username" class="form-control" placeholder="Username"> </div> </div> <div class="col-md-6"> <div class="input-wrapper"> <div class="input-group"> <span class="input-group-text"><i class="bi bi-key-fill"></i></span> <input type="password" name="password" id="password" class="form-control" placeholder="Password"> </div> </div> </div> </div> `; buttonDiv.insertAdjacentHTML('beforebegin', newInputsHTML); usernameDiv.remove(); passwordDiv.remove(); const newPasswordInput = card.querySelector('#password'); if (newPasswordInput) { addPasswordToggle(newPasswordInput); } }); }
+    function styleQuickLogin() { document.querySelectorAll('#row-quicklogin:not([data-styled="true"])').forEach(card => { card.dataset.styled = 'true'; const form = card.querySelector('form'); if (!form) return; const usernameDiv = form.querySelector('label[for="username"]')?.parentElement; const passwordDiv = form.querySelector('label[for="password"]')?.parentElement; const buttonDiv = form.querySelector('.d-flex.gap-1.my-3'); if (!usernameDiv || !passwordDiv || !buttonDiv) return; const newInputsHTML = ` <div class="row g-2 mb-3"> <div class="col-md-6"> <div class="input-group"> <span class="input-group-text"><i class="bi bi-person-fill"></i></span> <input type="text" name="userName" id="username" class="form-control" placeholder="Username"> </div> </div> <div class="col-md-6"> <div class="input-wrapper"> <div class="input-group"> <span class="input-group-text"><i class="bi bi-key-fill"></i></span> <input type="password" name="password" id="password" class="form-control" placeholder="Password"> </div> </div> </div> </div> `; buttonDiv.insertAdjacentHTML('beforebegin', newInputsHTML); usernameDiv.remove(); passwordDiv.remove(); const newPasswordInput = card.querySelector('#password'); }); }
 
     function styleLoginPage() {
         const loginForm = document.querySelector('#maincontent form[action="/login"]');
@@ -818,10 +818,6 @@
             passwordInputGroup.innerHTML = '<span class="input-group-text"><i class="bi bi-key-fill"></i></span>';
             passwordInput.placeholder = "Password";
             
-            if (passwordInput.dataset.toggleAdded) {
-                delete passwordInput.dataset.toggleAdded;
-            }
-
             passwordInputGroup.appendChild(passwordInput); 
             passwordWrapper.appendChild(passwordInputGroup);
             passwordCol.appendChild(passwordWrapper);
@@ -948,21 +944,7 @@
         if (passwordInput && confirmPasswordInput) {
             const passwordWrapper = passwordInput.closest('.input-wrapper');
             confirmPasswordInput.closest('.input-wrapper')?.querySelector('.password-toggle-icon')?.remove();
-            if (passwordWrapper && !passwordWrapper.querySelector('.password-toggle-icon')) {
-                const toggleIcon = document.createElement('i');
-                toggleIcon.className = 'bi bi-eye-fill password-toggle-icon';
-                toggleIcon.addEventListener('click', () => {
-                    const isPassword = passwordInput.type === 'password';
-                    const newType = isPassword ? 'text' : 'password';
-                    passwordInput.type = newType;
-                    confirmPasswordInput.type = newType;
-                    toggleIcon.className = isPassword ? 'bi bi-eye-slash-fill password-toggle-icon' : 'bi bi-eye-fill password-toggle-icon';
-                });
-                passwordWrapper.appendChild(toggleIcon);
-                passwordInput.dataset.toggleAdded = 'true';
-                confirmPasswordInput.dataset.toggleAdded = 'true';
             }
-        }
     }
     
     function styleProfilePage() {
@@ -1049,8 +1031,6 @@
 
             group.replaceWith(wrapper);
             
-            const newPasswordInput = wrapper.querySelector('input');
-            addPasswordToggle(newPasswordInput);
         });
     }
     function stylePagePadding() {
@@ -1520,10 +1500,6 @@
         styleConfirmationModal(); 
         initializeBetFormatting(); 
         
-        document.querySelectorAll('input[type="password"]:not([data-toggle-added="true"])').forEach(input => {
-            addPasswordToggle(input);
-        });
-
         styleBettingPage(); 
         styleQuickLogin();
         styleLoginPage();
@@ -1561,5 +1537,6 @@
         }
     });
 })();
+
 
 

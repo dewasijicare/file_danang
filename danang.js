@@ -226,54 +226,8 @@
         #maincontent .border.border-top-0 { border-color: #cc0000 !important; }
         #maincontent #withdraw-form h4 { text-align: center !important; color: #FFD700 !important; text-shadow: 0 0 8px rgba(255, 215, 0, 0.5); margin-bottom: 1.5rem !important; }
         #withdraw-form .form-label { padding-left: 0.5rem !important; }
-        /* --- UPDATE FINAL: FIX TOTAL POSISI ICON MATA & LEBAR FORM --- */
-        
-        /* 1. Wrapper Utama: Paksa menjadi flex container yang memenuhi lebar */
-        .input-wrapper {
-            position: relative !important;
-            display: flex !important;
-            width: 100% !important;
-            align-items: stretch !important; /* Pastikan tinggi anak mengikuti induk */
-            margin-bottom: 1rem !important; /* Jarak antar form dipindah ke sini */
-        }
-
-        /* 2. Target SEMUA elemen anak di dalam wrapper (baik input-group maupun div biasa) */
-        .input-wrapper > .input-group,
-        .input-wrapper > div {
-            width: 100% !important;       /* Paksa lebar penuh */
-            margin-bottom: 0 !important;  /* Hapus margin bawah agar tinggi wrapper akurat */
-            flex-grow: 1 !important;
-        }
-
-        /* 3. Pastikan Input Field di dalamnya juga lebar penuh & punya ruang untuk icon mata */
-        .input-wrapper input.form-control {
-            width: 100% !important;
-            padding-right: 40px !important; /* Beri jarak teks agar tidak nabrak icon mata */
-            border-radius: 5px !important;
-            height: auto !important;      /* Pastikan tinggi otomatis mengikuti font */
-            min-height: 38px;             /* Tinggi minimal standar bootstrap */
-        }
-
-        /* 4. Setting Posisi Icon Mata agar benar-benar di tengah */
-        .password-toggle-icon {
-            position: absolute !important;
-            right: 12px !important;       /* Jarak dari kanan */
-            top: 50% !important;          /* Posisi vertikal 50% */
-            transform: translateY(-50%) !important; /* Tarik mundur 50% dari tinggi icon sendiri */
-            z-index: 105 !important;      /* Pastikan di atas layer input */
-            cursor: pointer !important;
-            color: #FFD700 !important;    /* Warna Emas */
-            font-size: 1.2rem !important; /* Ukuran Icon */
-            line-height: 1 !important;    /* Reset baris agar tidak mempengaruhi posisi */
-            display: flex !important;
-            align-items: center;
-        }
-
-        /* Efek Hover untuk Icon Mata */
-        .password-toggle-icon:hover {
-            color: #fff !important;
-            text-shadow: 0 0 10px #FFD700;
-        }
+        .input-wrapper { position: relative; }
+        .password-toggle-icon { position: absolute; top: 50%; right: 12px; transform: translateY(-50%); cursor: pointer; color: #bdc3c7; z-index: 100; }
         .invalid-feedback { display: none !important; }
         .form-control.is-invalid { background-image: none !important; padding-right: 0.75rem !important; }
         .balance-toggle-icon { margin-left: 8px; cursor: pointer; vertical-align: middle; }
@@ -1611,6 +1565,3 @@
         }
     });
 })();
-
-
-

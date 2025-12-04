@@ -226,48 +226,50 @@
         #maincontent .border.border-top-0 { border-color: #cc0000 !important; }
         #maincontent #withdraw-form h4 { text-align: center !important; color: #FFD700 !important; text-shadow: 0 0 8px rgba(255, 215, 0, 0.5); margin-bottom: 1.5rem !important; }
         #withdraw-form .form-label { padding-left: 0.5rem !important; }
-        /* --- UPDATE: Perbaikan Posisi Icon Mata (Final Fix) --- */
+        /* --- UPDATE FINAL: FIX TOTAL POSISI ICON MATA & LEBAR FORM --- */
+        
+        /* 1. Wrapper Utama: Paksa menjadi flex container yang memenuhi lebar */
         .input-wrapper {
             position: relative !important;
-            width: 100%;
-            /* Gunakan Flexbox untuk memastikan wrapper memeluk konten dengan erat */
-            display: flex !important; 
-            align-items: center !important;
-            /* Pindahkan jarak antar form ke wrapper ini */
-            margin-bottom: 1rem !important; 
+            display: flex !important;
+            width: 100% !important;
+            align-items: stretch !important; /* Pastikan tinggi anak mengikuti induk */
+            margin-bottom: 1rem !important; /* Jarak antar form dipindah ke sini */
         }
 
-        /* MATIKAN margin pada input-group agar tinggi wrapper = tinggi input asli */
-        .input-wrapper .input-group {
-            margin-bottom: 0 !important;
-            flex-grow: 1;
-            z-index: 1;
+        /* 2. Target SEMUA elemen anak di dalam wrapper (baik input-group maupun div biasa) */
+        .input-wrapper > .input-group,
+        .input-wrapper > div {
+            width: 100% !important;       /* Paksa lebar penuh */
+            margin-bottom: 0 !important;  /* Hapus margin bawah agar tinggi wrapper akurat */
+            flex-grow: 1 !important;
         }
 
-        /* Pastikan input text tidak menabrak icon mata */
+        /* 3. Pastikan Input Field di dalamnya juga lebar penuh & punya ruang untuk icon mata */
         .input-wrapper input.form-control {
-            padding-right: 45px !important;
-            border-top-right-radius: 5px !important; /* Opsional: perapihan sudut */
-            border-bottom-right-radius: 5px !important;
+            width: 100% !important;
+            padding-right: 40px !important; /* Beri jarak teks agar tidak nabrak icon mata */
+            border-radius: 5px !important;
+            height: auto !important;      /* Pastikan tinggi otomatis mengikuti font */
+            min-height: 38px;             /* Tinggi minimal standar bootstrap */
         }
 
-        /* Setting Posisi Icon */
+        /* 4. Setting Posisi Icon Mata agar benar-benar di tengah */
         .password-toggle-icon {
             position: absolute !important;
-            right: 15px !important;
-            /* Kalkulasi tengah yang akurat sekarang karena margin anak sudah 0 */
-            top: 50% !important;
-            transform: translateY(-50%) !important;
-            z-index: 100 !important;
+            right: 12px !important;       /* Jarak dari kanan */
+            top: 50% !important;          /* Posisi vertikal 50% */
+            transform: translateY(-50%) !important; /* Tarik mundur 50% dari tinggi icon sendiri */
+            z-index: 105 !important;      /* Pastikan di atas layer input */
             cursor: pointer !important;
-            font-size: 1.2rem !important;
-            color: #FFD700 !important; /* Warna Emas sesuai gambar Anda */
+            color: #FFD700 !important;    /* Warna Emas */
+            font-size: 1.2rem !important; /* Ukuran Icon */
+            line-height: 1 !important;    /* Reset baris agar tidak mempengaruhi posisi */
             display: flex !important;
-            align-items: center !important;
-            height: 100% !important; /* Bantu centering vertikal */
+            align-items: center;
         }
-        
-        /* Efek Hover */
+
+        /* Efek Hover untuk Icon Mata */
         .password-toggle-icon:hover {
             color: #fff !important;
             text-shadow: 0 0 10px #FFD700;
@@ -1609,5 +1611,6 @@
         }
     });
 })();
+
 
 

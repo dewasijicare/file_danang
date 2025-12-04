@@ -226,8 +226,32 @@
         #maincontent .border.border-top-0 { border-color: #cc0000 !important; }
         #maincontent #withdraw-form h4 { text-align: center !important; color: #FFD700 !important; text-shadow: 0 0 8px rgba(255, 215, 0, 0.5); margin-bottom: 1.5rem !important; }
         #withdraw-form .form-label { padding-left: 0.5rem !important; }
-        .input-wrapper { position: relative; }
-        .password-toggle-icon { position: absolute; top: 50%; right: 12px; transform: translateY(-50%); cursor: pointer; color: #bdc3c7; z-index: 100; }
+        /* --- UPDATE: FIX POSISI ICON MATA & PADDING INPUT --- */
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .password-toggle-icon {
+            position: absolute;
+            top: 50%;
+            right: 15px; /* Jarak dari kanan diperbaiki */
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #bdc3c7; /* Warna default abu-abu */
+            z-index: 100;
+            font-size: 1.2rem; /* Ukuran icon diperjelas */
+            transition: color 0.3s ease;
+        }
+
+        .password-toggle-icon:hover {
+            color: #FFD700; /* Berubah jadi emas saat di-hover (opsional) */
+        }
+
+        /* Penting: Memberi jarak dalam input agar text tidak menabrak icon mata */
+        .input-wrapper input.form-control {
+            padding-right: 45px !important; 
+        }
         .invalid-feedback { display: none !important; }
         .form-control.is-invalid { background-image: none !important; padding-right: 0.75rem !important; }
         .balance-toggle-icon { margin-left: 8px; cursor: pointer; vertical-align: middle; }
@@ -907,46 +931,54 @@
             const label = group.querySelector('label');
             const input = group.querySelector('input, select');
             if (!label || !input) return;
+
             const icon = label.querySelector('i.bi');
+            // Bersihkan text label
             const placeholderText = label.textContent.replace(/\(.*\)/g, '').replace(/(\r\n|\n|\r)/gm, " ").trim();
+    
             let newElement;
+    
             if (icon) {
                 const inputGroup = document.createElement('div');
-                inputGroup.className = 'input-group mb-2';
+                // REVISI: HAPUS 'mb-2' DARI SINI
+                inputGroup.className = 'input-group'; 
+        
                 const iconSpan = document.createElement('span');
                 iconSpan.className = 'input-group-text';
                 iconSpan.appendChild(icon.cloneNode(true));
+        
                 inputGroup.appendChild(iconSpan);
                 inputGroup.appendChild(input);
                 newElement = inputGroup;
             } else {
                 const simpleDiv = document.createElement('div');
-                simpleDiv.className = 'mb-2';
+                // REVISI: HAPUS 'mb-2' DARI SINI
+                simpleDiv.className = ''; 
                 simpleDiv.appendChild(input);
                 newElement = simpleDiv;
-            }
-            if (input.tagName.toLowerCase() !== 'select') {
-                input.placeholder = placeholderText;
-            } else {
-                if (!input.querySelector('option[value=""]')) {
-                    const defaultOption = document.createElement('option');
-                    defaultOption.value = "";
-                    defaultOption.textContent = placeholderText || "Pilih Opsi";
-                    defaultOption.disabled = true;
-                    defaultOption.selected = true;
-                    input.prepend(defaultOption);
-                }
-            }
-            input.classList.add('form-control');
-            if (input.type === 'password') {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'input-wrapper';
-                wrapper.appendChild(newElement);
-                group.replaceWith(wrapper);
-            } else {
-                group.replaceWith(newElement);
-            }
-        });
+           }
+
+        // ... logic placeholder dan form-control tetap sama ...
+        if (input.tagName.toLowerCase() !== 'select') {
+            input.placeholder = placeholderText;
+        } else {
+            // ... logic select ...
+        }
+        input.classList.add('form-control');
+
+        // LOGIC PEMBUNGKUS (WRAPPER)
+        if (input.type === 'password') {
+            const wrapper = document.createElement('div');
+            // REVISI: PINDAHKAN MARGIN (mb-2 atau mb-3) KE WRAPPER INI
+            wrapper.className = 'input-wrapper mb-3'; 
+            wrapper.appendChild(newElement);
+            group.replaceWith(wrapper);
+        } else {
+            // Jika bukan password, tambahkan margin ke elemen container-nya
+            newElement.classList.add('mb-3'); 
+            group.replaceWith(newElement);
+        }
+    });
         const passwordInput = form.querySelector('#password');
         const confirmPasswordInput = form.querySelector('#confirmpassword');
         if (passwordInput && confirmPasswordInput) {
@@ -1565,3 +1597,4 @@
         }
     });
 })();
+

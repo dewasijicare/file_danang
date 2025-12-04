@@ -226,34 +226,26 @@
         #maincontent .border.border-top-0 { border-color: #cc0000 !important; }
         #maincontent #withdraw-form h4 { text-align: center !important; color: #FFD700 !important; text-shadow: 0 0 8px rgba(255, 215, 0, 0.5); margin-bottom: 1.5rem !important; }
         #withdraw-form .form-label { padding-left: 0.5rem !important; }
-        /* 1. Reset margin pada input-group di dalam wrapper agar tingginya pas */
-        .input-wrapper .input-group {
-            margin-bottom: 0 !important; /* Hilangkan margin anak */
-        }
-
-        /* 2. Pindahkan margin ke wrapper (induk) agar jarak antar kolom tetap ada */
         .input-wrapper { 
             position: relative; 
             width: 100%; 
-            margin-bottom: 1rem; /* Jarak antar kolom dipindah ke sini */
+            /* Margin sudah diatur lewat JS, tapi kita pastikan di sini */
+            display: block;
         }
 
-        /* 3. Posisi Icon Mata: Gunakan teknik centering absolut */
         .password-toggle-icon { 
             position: absolute !important; 
             top: 50% !important; 
             right: 15px !important; 
-            transform: translateY(-50%) !important; /* Pastikan icon naik 50% dari ukurannya sendiri */
-            bottom: auto !important; /* Reset bottom jika ada gangguan */
+            transform: translateY(-50%) !important; /* Sekarang ini akan bekerja sempurna */
             cursor: pointer; 
-            color: #FFD700; 
-            z-index: 99; 
+            color: #FFD700; /* Warna Emas */
+            z-index: 100; 
             font-size: 1.2rem; 
             line-height: 1;
-            display: block;
         }
 
-        /* 4. Padding kanan pada input agar teks panjang tidak menabrak icon */
+        /* Padding kanan agar teks tidak nabrak icon */
         .input-wrapper input.form-control {
             padding-right: 45px !important; 
         }
@@ -903,21 +895,6 @@
                 newCol.appendChild(card); 
             }
 
-            const emptyColumn = mainRow.querySelector('.col-lg-6:first-child');
-            const contentColumn = mainRow.querySelector('.col-lg-6:last-child');
-            
-            if (emptyColumn && contentColumn && !emptyColumn.querySelector('input, select')) { 
-                emptyColumn.remove(); 
-                contentColumn.classList.remove('col-lg-6', 'offset-lg-3'); 
-                contentColumn.classList.add('col-12'); 
-            } else if (mainRow.children.length === 1 && mainRow.firstElementChild.classList.contains('col-lg-12')) {
-            } else if (mainRow.children.length === 1 && mainRow.firstElementChild.classList.contains('col-lg-6')) {
-                mainRow.firstElementChild.classList.remove('col-lg-6', 'offset-lg-3');
-                mainRow.firstElementChild.classList.add('col-12');
-            }
-            
-            /* --- REVISI: PAKSA MENJADI SATU KOLOM AGAR SAMA PANJANG --- */
-            // Mengubah semua col-lg-6 menjadi col-12 agar semua input memanjang penuh
             const splitColumns = mainRow.querySelectorAll('.col-lg-6');
             splitColumns.forEach(col => {
                 col.classList.remove('col-lg-6');
@@ -932,6 +909,8 @@
         form.append(mainRow);
         form.append(buttonWrapper);
         form.querySelectorAll('h3').forEach(h3 => h3.remove());
+        
+        // --- LOGIKA PERBAIKAN STRUKTUR INPUT ---
         form.querySelectorAll('.form-group').forEach(group => {
             const label = group.querySelector('label');
             const input = group.querySelector('input, select');
@@ -939,9 +918,11 @@
             const icon = label.querySelector('i.bi');
             const placeholderText = label.textContent.replace(/\(.*\)/g, '').replace(/(\r\n|\n|\r)/gm, " ").trim();
             let newElement;
+            
+            // HAPUS margin-bottom (mb-2) dari input-group di sini
             if (icon) {
                 const inputGroup = document.createElement('div');
-                inputGroup.className = 'input-group mb-2';
+                inputGroup.className = 'input-group'; // HANYA 'input-group', JANGAN ADA 'mb-2'
                 const iconSpan = document.createElement('span');
                 iconSpan.className = 'input-group-text';
                 iconSpan.appendChild(icon.cloneNode(true));
@@ -950,10 +931,10 @@
                 newElement = inputGroup;
             } else {
                 const simpleDiv = document.createElement('div');
-                simpleDiv.className = 'mb-2';
                 simpleDiv.appendChild(input);
                 newElement = simpleDiv;
             }
+
             if (input.tagName.toLowerCase() !== 'select') {
                 input.placeholder = placeholderText;
             } else {
@@ -967,15 +948,19 @@
                 }
             }
             input.classList.add('form-control');
+            
+            // Tambahkan margin pada wrapper atau element pengganti
             if (input.type === 'password') {
                 const wrapper = document.createElement('div');
-                wrapper.className = 'input-wrapper';
+                wrapper.className = 'input-wrapper mb-3'; // PINDAHKAN MARGIN KE SINI
                 wrapper.appendChild(newElement);
                 group.replaceWith(wrapper);
             } else {
+                newElement.classList.add('mb-3'); // Tambahkan margin jika bukan password
                 group.replaceWith(newElement);
             }
         });
+        
         const passwordInput = form.querySelector('#password');
         const confirmPasswordInput = form.querySelector('#confirmpassword');
         if (passwordInput && confirmPasswordInput) {
@@ -1594,6 +1579,7 @@
         }
     });
 })();
+
 
 
 

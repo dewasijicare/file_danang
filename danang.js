@@ -232,9 +232,8 @@
         }
         .password-toggle-icon { 
             position: absolute; 
-            top: 36%; 
+            top: 13px !important; 
             right: 15px; /* Jarak dari sisi kanan diperbesar agar tidak mepet garis */
-            transform: translateY(-50%); /* Trik jitu agar icon persis di tengah vertikal */
             cursor: pointer; 
             color: #FFD700; /* Ubah ke Emas agar sesuai tema, atau #bdc3c7 untuk abu-abu */
             z-index: 100; 
@@ -1581,5 +1580,6 @@
         }
     });
 })();
+
 
 

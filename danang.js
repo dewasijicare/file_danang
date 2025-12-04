@@ -839,8 +839,7 @@
         const mainRow = card ? card.querySelector('.row.mb-3') : null;
         const buttonWrapper = card ? card.querySelector('.d-grid.gap-3.mb-3') : null;
 
-        // --- 1. CONFIGURASI LENGKAP (KAMUS ICON & TEKS) ---
-        // Di sini kita atur Icon APA dan Tulisannya APA untuk setiap ID
+        // --- 1. CONFIGURASI ID & TEXT (Disesuaikan Persis dengan HTML Anda) ---
         const fieldConfig = {
             'username': { 
                 icon: 'bi-person-fill', 
@@ -850,7 +849,7 @@
                 icon: 'bi-key-fill', 
                 placeholder: 'Password' 
             },
-            'confirmPassword': { 
+            'confirmPassword': {  // Sesuai HTML: id="confirmPassword"
                 icon: 'bi-shield-check', 
                 placeholder: 'Konfirmasi Password' 
             },
@@ -866,15 +865,15 @@
                 icon: 'bi-bank', 
                 placeholder: 'Pilih Bank' 
             },
-            'bankAccountNumber': { 
+            'bankAccountNumber': { // Sesuai HTML: id="bankAccountNumber"
                 icon: 'bi-credit-card-2-front-fill', 
                 placeholder: 'Nomor Rekening' 
             },
-            'bankAccountName': { 
+            'bankaccountname': { // PERBAIKAN: Sesuai HTML id="bankaccountname" (huruf kecil)
                 icon: 'bi-person-vcard-fill', 
                 placeholder: 'Nama di Rekening' 
             },
-            'referralcode': { 
+            'referralcode': { // Sesuai HTML: id="referralcode"
                 icon: 'bi-people-fill', 
                 placeholder: 'Kode Referral / Afiliasi' 
             }
@@ -882,7 +881,7 @@
 
         // --- 2. PERBAIKAN LAYOUT ---
         try {
-            // Paksa semua kolom menjadi lebar penuh (col-12)
+            // Paksa full width col-12
             if (mainRow) {
                 mainRow.querySelectorAll('.col-lg-6').forEach(col => {
                     col.classList.remove('col-lg-6');
@@ -890,7 +889,7 @@
                 });
             }
 
-            // Atur Urutan: Username -> Password -> Confirm -> Lainnya
+            // Atur Urutan Layout
             const findWrapper = (id) => {
                 const el = form.querySelector(`#${id}`);
                 return el ? el.closest('.mb-2, .input-wrapper, .input-group')?.parentElement : null;
@@ -907,7 +906,7 @@
                 targetCol.prepend(uWrap); 
             }
 
-            // Center Card Layout
+            // Center Layout
             if (card && !card.parentElement.classList.contains('col-lg-6')) {
                 const cardParent = card.parentElement;
                 const newRow = document.createElement('div');
@@ -918,9 +917,7 @@
                 newRow.appendChild(newCol);
                 newCol.appendChild(card);
             }
-        } catch (e) {
-            console.error("Layout Error:", e);
-        }
+        } catch (e) { console.error(e); }
 
         if (mainRow && buttonWrapper) {
             mainRow.before(form);
@@ -929,42 +926,50 @@
         }
         form.querySelectorAll('h3').forEach(h3 => h3.remove());
 
-        // --- 3. EKSEKUSI STYLING & PLACEHOLDER ---
+        // --- 3. EKSEKUSI STYLING ---
         Object.keys(fieldConfig).forEach(id => {
             const input = form.querySelector(`#${id}`);
             if (!input) return;
 
             const config = fieldConfig[id];
-
-            // A. UPDATE PLACEHOLDER (TEKS SAMAR)
-            // Ini yang memperbaiki masalah "hilang informasi"
+            
+            // --- BAGIAN KHUSUS SELECT (BANK) ---
             if (input.tagName === 'SELECT') {
                 input.classList.add('form-select', 'form-control');
-                // Untuk Select (Bank), placeholder adalah option pertama
-                const firstOption = input.querySelector('option:first-child');
-                if (firstOption) {
-                    firstOption.textContent = config.placeholder;
+                
+                // Cari apakah sudah ada opsi default (value kosong)
+                let defaultOption = input.querySelector('option[value=""]');
+                
+                if (defaultOption) {
+                    // Jika ada (misal tulisan "Bank"), ubah jadi "Pilih Bank"
+                    defaultOption.textContent = config.placeholder;
                 } else {
-                    const opt = document.createElement('option');
-                    opt.value = "";
-                    opt.textContent = config.placeholder;
-                    opt.disabled = true;
-                    opt.selected = true;
-                    input.prepend(opt);
+                    // Jika TIDAK ada, buat opsi baru di paling atas
+                    // Ini mencegah BCA/Bank pertama tertimpa
+                    defaultOption = document.createElement('option');
+                    defaultOption.value = "";
+                    defaultOption.textContent = config.placeholder;
+                    defaultOption.disabled = true;
+                    defaultOption.selected = true;
+                    input.prepend(defaultOption);
+                    
+                    // Pastikan ke-select
+                    input.value = "";
                 }
-            } else {
+            } 
+            // --- BAGIAN INPUT BIASA ---
+            else {
                 input.classList.add('form-control');
-                // Paksa placeholder sesuai config kita
+                // Paksa placeholder muncul
                 input.placeholder = config.placeholder;
                 input.setAttribute('placeholder', config.placeholder);
             }
 
-            // B. UPDATE ICON & WADAH INPUT
+            // --- BAGIAN ICON & WRAPPER ---
             const directParent = input.parentElement;
             
-            // Jika parentnya SUDAH input-group (dari HTML atau script sebelumnya)
+            // Jika sudah ada wrapper input-group
             if (directParent.classList.contains('input-group')) {
-                // Cek icon, jika belum ada atau salah, ganti/tambah
                 let existingIcon = directParent.querySelector('.input-group-text i');
                 if (!existingIcon) {
                     const span = document.createElement('span');
@@ -972,13 +977,12 @@
                     span.innerHTML = `<i class="bi ${config.icon}"></i>`;
                     directParent.prepend(span);
                 } else {
-                    // Update class icon biar sesuai config (biar seragam)
                     existingIcon.className = `bi ${config.icon}`;
                 }
                 return; 
             }
 
-            // Jika BELUM input-group (Masih default / mb-2 biasa)
+            // Jika belum ada wrapper (buat baru)
             const groupDiv = document.createElement('div');
             groupDiv.className = 'input-group mb-2'; 
             
@@ -986,10 +990,9 @@
             iconSpan.className = 'input-group-text';
             iconSpan.innerHTML = `<i class="bi ${config.icon}"></i>`;
 
-            // C. BERSIHKAN LABEL LAMA
             const wrapperDiv = input.closest('.mb-2') || input.closest('.form-group');
             if (wrapperDiv) {
-                // Sembunyikan label lama karena teksnya sudah kita pindah ke Placeholder
+                // Sembunyikan label lama
                 wrapperDiv.querySelectorAll('label').forEach(l => l.style.display = 'none');
                 
                 if (!wrapperDiv.classList.contains('input-wrapper')) {
@@ -998,26 +1001,24 @@
                     wrapperDiv.innerHTML = ''; 
                     wrapperDiv.appendChild(groupDiv);
                 } else {
-                    // Khusus Password Wrapper
+                    // Khusus Password (agar mata toggle aman)
                     groupDiv.appendChild(iconSpan);
                     groupDiv.appendChild(input);
                     wrapperDiv.prepend(groupDiv); 
                 }
             } else {
-                // Fallback
                 groupDiv.appendChild(iconSpan);
                 input.parentNode.insertBefore(groupDiv, input);
                 groupDiv.appendChild(input);
             }
         });
 
-        // --- 4. CLEANUP TERAKHIR ---
-        // Sembunyikan semua label yang tersisa agar tampilan bersih
+        // Cleanup Label
         form.querySelectorAll('label').forEach(label => {
             label.style.display = 'none';
         });
 
-        // Fix Z-Index Toggle Password
+        // Z-Index Fix
         setTimeout(() => {
             const toggles = form.querySelectorAll('span[id^="toggle"]');
             toggles.forEach(t => t.style.zIndex = "100");
@@ -1614,6 +1615,7 @@
         }
     });
 })();
+
 
 
 

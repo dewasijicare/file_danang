@@ -835,194 +835,185 @@
         if (!form || form.dataset.styled === 'true') return;
         form.dataset.styled = 'true';
 
+        // Pindahkan form ke level atas jika struktur HTML terpisah (col-lg-6 kiri & kanan)
+        // Kita satukan semua input ke dalam satu form container agar rapi
         const card = form.closest('.card.shadow');
-        const mainRow = card ? card.querySelector('.row.mb-3') : null;
-        const buttonWrapper = card ? card.querySelector('.d-grid.gap-3.mb-3') : null;
+        const rightCol = card ? card.querySelector('.col-lg-6:last-child') : null;
+        
+        // Jika ada kolom kanan (Detil Kontak) yang terpisah dari form, pindahkan inputnya ke dalam form
+        if (rightCol && !form.contains(rightCol)) {
+            // Ambil semua form-group dari kolom kanan dan masukkan ke form
+            const contactGroups = rightCol.querySelectorAll('.form-group');
+            contactGroups.forEach(group => form.appendChild(group));
+            // Hapus kolom kanan kosong & judul h3
+            rightCol.remove();
+            card.querySelectorAll('h3').forEach(h3 => h3.remove());
+        }
 
-        // --- 1. CONFIGURASI ID & TEXT (Disesuaikan Persis dengan HTML Anda) ---
+        // --- KONFIGURASI ICON & PLACEHOLDER ---
         const fieldConfig = {
-            'username': { 
-                icon: 'bi-person-fill', 
-                placeholder: 'User Name' 
-            },
-            'password': { 
-                icon: 'bi-key-fill', 
-                placeholder: 'Password' 
-            },
-            'confirmPassword': {  // Sesuai HTML: id="confirmPassword"
-                icon: 'bi-shield-check', 
-                placeholder: 'Konfirmasi Password' 
-            },
-            'email': { 
-                icon: 'bi-envelope-fill', 
-                placeholder: 'Email' 
-            },
-            'phone': { 
-                icon: 'bi-phone-fill', 
-                placeholder: 'Nomor HP' 
-            },
-            'agentbankid': { 
-                icon: 'bi-bank', 
-                placeholder: 'Pilih Bank' 
-            },
-            'bankAccountNumber': { // Sesuai HTML: id="bankAccountNumber"
-                icon: 'bi-credit-card-2-front-fill', 
-                placeholder: 'Nomor Rekening' 
-            },
-            'bankaccountname': { // PERBAIKAN: Sesuai HTML id="bankaccountname" (huruf kecil)
-                icon: 'bi-person-vcard-fill', 
-                placeholder: 'Nama di Rekening' 
-            },
-            'referralcode': { // Sesuai HTML: id="referralcode"
-                icon: 'bi-people-fill', 
-                placeholder: 'Kode Referral / Afiliasi' 
-            }
+            'username': { icon: 'bi-person-fill', placeholder: 'User Name' },
+            'password': { icon: 'bi-key-fill', placeholder: 'Password' },
+            'confirmPassword': { icon: 'bi-shield-check', placeholder: 'Konfirmasi Password' },
+            'email': { icon: 'bi-envelope-fill', placeholder: 'Email' },
+            'phone': { icon: 'bi-phone-fill', placeholder: 'Nomor HP' },
+            'agentbankid': { icon: 'bi-bank', placeholder: 'Pilih Bank' },
+            'bankAccountNumber': { icon: 'bi-credit-card-2-front-fill', placeholder: 'Nomor Rekening' },
+            'bankaccountname': { icon: 'bi-person-vcard-fill', placeholder: 'Nama di Rekening' },
+            'referralcode': { icon: 'bi-people-fill', placeholder: 'Kode Referral / Afiliasi' }
         };
 
-        // --- 2. PERBAIKAN LAYOUT ---
-        try {
-            // Paksa full width col-12
-            if (mainRow) {
-                mainRow.querySelectorAll('.col-lg-6').forEach(col => {
-                    col.classList.remove('col-lg-6');
-                    col.classList.add('col-12');
-                });
-            }
-
-            // Atur Urutan Layout
-            const findWrapper = (id) => {
-                const el = form.querySelector(`#${id}`);
-                return el ? el.closest('.mb-2, .input-wrapper, .input-group')?.parentElement : null;
-            };
-
-            const targetCol = mainRow ? (mainRow.querySelector('.col-12:has(#email)') || mainRow.querySelector('.col-12')) : null;
-            const uWrap = findWrapper('username');
-            const pWrap = findWrapper('password');
-            const cWrap = findWrapper('confirmPassword'); 
-
-            if (targetCol && uWrap && pWrap && cWrap) {
-                targetCol.prepend(cWrap); 
-                targetCol.prepend(pWrap); 
-                targetCol.prepend(uWrap); 
-            }
-
-            // Center Layout
-            if (card && !card.parentElement.classList.contains('col-lg-6')) {
-                const cardParent = card.parentElement;
-                const newRow = document.createElement('div');
-                newRow.className = 'row';
-                const newCol = document.createElement('div');
-                newCol.className = 'col-lg-6 offset-lg-3';
-                cardParent.replaceChild(newRow, card);
-                newRow.appendChild(newCol);
-                newCol.appendChild(card);
-            }
-        } catch (e) { console.error(e); }
-
-        if (mainRow && buttonWrapper) {
-            mainRow.before(form);
-            form.append(mainRow);
-            form.append(buttonWrapper);
-        }
-        form.querySelectorAll('h3').forEach(h3 => h3.remove());
-
-        // --- 3. EKSEKUSI STYLING ---
+        // --- EKSEKUSI STYLING ---
         Object.keys(fieldConfig).forEach(id => {
             const input = form.querySelector(`#${id}`);
             if (!input) return;
 
             const config = fieldConfig[id];
+            const originalGroup = input.closest('.form-group') || input.closest('.mb-3'); // Parent asli (pembungkus feedback)
             
-            // --- BAGIAN KHUSUS SELECT (BANK) ---
+            // 1. ATUR PLACEHOLDER
             if (input.tagName === 'SELECT') {
                 input.classList.add('form-select', 'form-control');
-                
-                // Cari apakah sudah ada opsi default (value kosong)
                 let defaultOption = input.querySelector('option[value=""]');
-                
                 if (defaultOption) {
-                    // Jika ada (misal tulisan "Bank"), ubah jadi "Pilih Bank"
                     defaultOption.textContent = config.placeholder;
                 } else {
-                    // Jika TIDAK ada, buat opsi baru di paling atas
-                    // Ini mencegah BCA/Bank pertama tertimpa
                     defaultOption = document.createElement('option');
                     defaultOption.value = "";
                     defaultOption.textContent = config.placeholder;
                     defaultOption.disabled = true;
                     defaultOption.selected = true;
                     input.prepend(defaultOption);
-                    
-                    // Pastikan ke-select
                     input.value = "";
                 }
-            } 
-            // --- BAGIAN INPUT BIASA ---
-            else {
+            } else {
                 input.classList.add('form-control');
-                // Paksa placeholder muncul
                 input.placeholder = config.placeholder;
-                input.setAttribute('placeholder', config.placeholder);
             }
 
-            // --- BAGIAN ICON & WRAPPER ---
-            const directParent = input.parentElement;
+            // 2. ATUR STRUKTUR (JANGAN HAPUS PARENT ASLI)
+            // Kita hanya akan memodifikasi area INPUT, tapi membiarkan invalid-feedback tetap di tempatnya
             
-            // Jika sudah ada wrapper input-group
-            if (directParent.classList.contains('input-group')) {
-                let existingIcon = directParent.querySelector('.input-group-text i');
-                if (!existingIcon) {
-                    const span = document.createElement('span');
-                    span.className = 'input-group-text';
-                    span.innerHTML = `<i class="bi ${config.icon}"></i>`;
-                    directParent.prepend(span);
-                } else {
-                    existingIcon.className = `bi ${config.icon}`;
-                }
-                return; 
+            // Cek apakah input sudah ada di dalam input-group
+            if (input.parentElement.classList.contains('input-group')) {
+                // Update icon saja
+                const icon = input.parentElement.querySelector('.input-group-text i');
+                if (icon) icon.className = `bi ${config.icon}`;
+                return;
             }
 
-            // Jika belum ada wrapper (buat baru)
-            const groupDiv = document.createElement('div');
-            groupDiv.className = 'input-group mb-2'; 
+            // Buat Wrapper Input Group Baru
+            const inputGroup = document.createElement('div');
+            inputGroup.className = 'input-group'; // Tanpa mb-2/mb-3 di sini, biarkan parent yg atur margin
             
             const iconSpan = document.createElement('span');
             iconSpan.className = 'input-group-text';
             iconSpan.innerHTML = `<i class="bi ${config.icon}"></i>`;
+            
+            inputGroup.appendChild(iconSpan);
+            
+            // PINDAHKAN INPUT KE DALAM GROUP
+            // Penting: input dipindah (appendChild), bukan diclone, jadi event listener & validasi tetap nempel
+            inputGroup.appendChild(input);
 
-            const wrapperDiv = input.closest('.mb-2') || input.closest('.form-group');
-            if (wrapperDiv) {
-                // Sembunyikan label lama
-                wrapperDiv.querySelectorAll('label').forEach(l => l.style.display = 'none');
-                
-                if (!wrapperDiv.classList.contains('input-wrapper')) {
-                    groupDiv.appendChild(iconSpan);
-                    groupDiv.appendChild(input);
-                    wrapperDiv.innerHTML = ''; 
-                    wrapperDiv.appendChild(groupDiv);
+            // PENEMPATAN KEMBALI KE DOM
+            // Struktur target: 
+            // <div class="form-group ..."> (originalGroup)
+            //    <label>...</label> (Hidden)
+            //    <div class="input-group"> ...input... </div> (New)
+            //    <div class="invalid-feedback">...</div> (Tetap di sini)
+            // </div>
+
+            if (originalGroup) {
+                // Sembunyikan label
+                const label = originalGroup.querySelector('label');
+                if (label) label.style.display = 'none';
+
+                // Masukkan inputGroup tepat setelah label (atau di awal jika label gak ada)
+                // Hati-hati jangan menimpa invalid-feedback
+                if (label) {
+                    label.after(inputGroup);
                 } else {
-                    // Khusus Password (agar mata toggle aman)
-                    groupDiv.appendChild(iconSpan);
-                    groupDiv.appendChild(input);
-                    wrapperDiv.prepend(groupDiv); 
+                    originalGroup.prepend(inputGroup);
                 }
             } else {
-                groupDiv.appendChild(iconSpan);
-                input.parentNode.insertBefore(groupDiv, input);
-                groupDiv.appendChild(input);
+                // Fallback untuk kasus aneh (misal password wrapper khusus)
+                const wrapper = input.closest('div'); 
+                if (wrapper) {
+                    wrapper.prepend(inputGroup);
+                    // Pindahkan invalid-feedback agar di bawah input-group (jika ada)
+                    const feedback = wrapper.querySelector('.invalid-feedback');
+                    if (feedback) wrapper.appendChild(feedback);
+                }
             }
         });
 
-        // Cleanup Label
-        form.querySelectorAll('label').forEach(label => {
-            label.style.display = 'none';
+        // --- PERBAIKAN TAMPILAN KHUSUS ---
+        
+        // 1. Layout 1 Kolom Rapi
+        const cardBody = card; // Card itu sendiri
+        const row = card.querySelector('.row');
+        if (row) {
+            // Hancurkan row/col bawaan, jadikan stack vertikal langsung di card
+            // Pindahkan semua children row ke card, lalu hapus row
+            while (row.firstChild) {
+                card.insertBefore(row.firstChild, row);
+            }
+            row.remove();
+            
+            // Hapus div col-lg-6 kosong bekas pemindahan
+            card.querySelectorAll('.col-lg-6').forEach(col => col.replaceWith(...col.childNodes));
+        }
+
+        // 2. Fix Posisi Tombol Mata (Password Toggle)
+        // Karena input sekarang dibungkus input-group, posisi absolute tombol mata mungkin bergeser
+        form.querySelectorAll('span[id^="toggle"]').forEach(toggle => {
+            toggle.style.top = '50%';
+            toggle.style.transform = 'translateY(-50%)';
+            toggle.style.zIndex = '10';
+            toggle.style.right = '45px'; // Geser sedikit ke kiri agar tidak menabrak border kanan
         });
 
-        // Z-Index Fix
-        setTimeout(() => {
-            const toggles = form.querySelectorAll('span[id^="toggle"]');
-            toggles.forEach(t => t.style.zIndex = "100");
-        }, 500);
+        // 3. Pastikan Invalid Feedback Tampil Benar (CSS Patch)
+        // Kadang bootstrap menyembunyikan feedback jika tidak ada class 'was-validated'
+        // Kita paksa style display block jika input punya class is-invalid
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .form-control.is-invalid ~ .invalid-feedback {
+                display: block !important;
+                margin-top: 5px;
+                font-size: 0.85em;
+                color: #ff6b6b; /* Warna merah terang agar terbaca di background gelap */
+            }
+            .input-group > .form-control.is-invalid {
+                border-color: #ff6b6b !important;
+                background-image: none !important; /* Hapus icon pentung bawaan bootstrap yg jelek */
+            }
+            /* Fix border radius input group */
+            .input-group .input-group-text { border-radius: 5px 0 0 5px !important; }
+            .input-group .form-control { border-radius: 0 5px 5px 0 !important; }
+        `;
+        document.head.appendChild(style);
+        
+        // 4. Re-order fields (Username -> Pass -> Confirm -> Email -> Phone -> Bank -> Rek -> Name -> Ref)
+        // Logika sorting sederhana: pindahkan elemen form-group berdasarkan urutan ID config
+        const fieldOrder = Object.keys(fieldConfig);
+        fieldOrder.forEach(id => {
+            const input = form.querySelector(`#${id}`);
+            if (input) {
+                const group = input.closest('.form-group') || input.closest('.mb-3');
+                // Khusus password wrapper yang mungkin punya parent lagi
+                const finalEl = group ? (group.parentElement.style.position === 'relative' ? group.parentElement : group) : null;
+                
+                if (finalEl) {
+                    form.insertBefore(finalEl, form.querySelector('.d-grid') || null); // Insert sebelum tombol daftar
+                }
+            }
+        });
+        
+        // Pastikan tombol daftar ada di paling bawah
+        const btnContainer = card.querySelector('.d-grid');
+        if(btnContainer) form.appendChild(btnContainer);
     }
     
     function styleProfilePage() {
@@ -1615,6 +1606,7 @@
         }
     });
 })();
+
 
 
 

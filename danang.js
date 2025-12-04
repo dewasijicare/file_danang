@@ -834,145 +834,119 @@
         const form = document.querySelector('form[action="/register"]');
         if (!form || form.dataset.styled === 'true') return;
         form.dataset.styled = 'true';
+
         const card = form.closest('.card.shadow');
         const mainRow = card ? card.querySelector('.row.mb-3') : null;
         const buttonWrapper = card ? card.querySelector('.d-grid.gap-3.mb-3') : null;
-        if (!card || !mainRow || !buttonWrapper) return;
 
-        // --- TAMBAHAN: MAPPING ICON KHUSUS REGISTER ---
-        // Ini memastikan icon selalu muncul meskipun belum ada di label
-        const registerIcons = {
-            'username': 'bi-person-fill',
-            'password': 'bi-key-fill',
-            'confirmpassword': 'bi-shield-check', // Icon Konfirmasi Password
-            'email': 'bi-envelope-fill',
-            'phone': 'bi-phone-fill',
-            'bank': 'bi-bank',
-            'accountnumber': 'bi-credit-card-2-front',
-            'accountname': 'bi-person-vcard',
-            'referral': 'bi-people-fill' // Icon Kode Referral
-        };
-
+        // --- BAGIAN 1: PERBAIKAN LAYOUT (Agar Rapi 1 Kolom) ---
         try {
-            const targetColumn = mainRow.querySelector('.col-lg-6:has(label[for="email"])') || mainRow.querySelector('.col-lg-6:nth-child(2)');
-            const usernameGroup = form.querySelector('label[for="username"]')?.closest('.form-group');
-            const passwordGroup = form.querySelector('label[for="password"]')?.closest('.form-group');
-            const confirmGroup = form.querySelector('label[for="confirmpassword"]')?.closest('.form-group');
+            // Kita ubah agar urutannya: Username -> Password -> Confirm Password
+            const targetColumn = mainRow ? (mainRow.querySelector('.col-lg-6:has(label[for="email"])') || mainRow.querySelector('.col-lg-6:nth-child(2)')) : null;
+            
+            // Cari elemen pembungkus form-group (atau div mb-2) berdasarkan input di dalamnya
+            const getParentGroup = (id) => {
+                const el = form.querySelector(`#${id}`);
+                // Kita cari parent terdekat yang merupakan container baris (biasanya input-wrapper atau mb-2)
+                return el ? el.closest('.input-wrapper, .input-group, .mb-2').parentElement : null;
+            };
+
+            const usernameGroup = getParentGroup('username');
+            const passwordGroup = getParentGroup('password');
+            const confirmGroup = getParentGroup('confirmPassword'); // ID dari HTML kamu
+
+            // Jika elemen ditemukan, kita pindahkan ke kolom target agar urut
             if (targetColumn && usernameGroup && passwordGroup && confirmGroup) {
                 targetColumn.prepend(confirmGroup);
                 targetColumn.prepend(passwordGroup);
                 targetColumn.prepend(usernameGroup);
             }
-        } catch (e) {
-            console.error("GavanTheme Error (Layouting Register):", e);
-        }
-        
-        try {
-            if (!card.parentElement.classList.contains('col-lg-6')) { 
-                const cardParent = card.parentElement; 
+
+            // Memaksa layout menjadi 1 kolom penuh
+            if (card && !card.parentElement.classList.contains('col-lg-6')) {
+                const cardParent = card.parentElement;
                 const newRow = document.createElement('div');
                 newRow.className = 'row';
                 const newCol = document.createElement('div');
-                newCol.className = 'col-lg-6 offset-lg-3'; 
-                
-                cardParent.replaceChild(newRow, card); 
-                newRow.appendChild(newCol); 
-                newCol.appendChild(card); 
+                newCol.className = 'col-lg-6 offset-lg-3';
+                cardParent.replaceChild(newRow, card);
+                newRow.appendChild(newCol);
+                newCol.appendChild(card);
             }
-
-            const splitColumns = mainRow.querySelectorAll('.col-lg-6');
-            splitColumns.forEach(col => {
-                col.classList.remove('col-lg-6');
-                col.classList.add('col-12');
-            });
-
+            if (mainRow) {
+                mainRow.querySelectorAll('.col-lg-6').forEach(col => {
+                    col.classList.remove('col-lg-6');
+                    col.classList.add('col-12');
+                });
+            }
         } catch (e) {
-            console.error("GavanTheme Error (Centering Register):", e);
+            console.error("GavanTheme Error (Layout):", e);
         }
 
-        mainRow.before(form);
-        form.append(mainRow);
-        form.append(buttonWrapper);
+        if (mainRow && buttonWrapper) {
+            mainRow.before(form);
+            form.append(mainRow);
+            form.append(buttonWrapper);
+        }
         form.querySelectorAll('h3').forEach(h3 => h3.remove());
 
-        // LOGIKA UTAMA PEMBUATAN ICON
-        form.querySelectorAll('.form-group').forEach(group => {
-            const label = group.querySelector('label');
-            const input = group.querySelector('input, select');
-            if (!label || !input) return;
+
+        // --- BAGIAN 2: SUNTIK ICON (LOGIKA BARU BERDASARKAN HTML) ---
+
+        // Daftar target yang BELUM punya icon berdasarkan ID HTML kamu
+        const missingIcons = {
+            'confirmPassword': 'bi-shield-check',  // ID dari HTML
+            'referralcode': 'bi-people-fill'       // ID dari HTML
+        };
+
+        for (const [id, iconClass] of Object.entries(missingIcons)) {
+            const input = form.querySelector(`#${id}`);
+            if (!input) continue;
+
+            // Cek parent langsung (div.mb-2)
+            const directParent = input.parentElement;
+
+            // Pastikan kita belum memodifikasinya (cek apakah sudah jadi input-group)
+            if (directParent.classList.contains('input-group')) continue;
+
+            // 1. Buat elemen Icon
+            const iconSpan = document.createElement('span');
+            iconSpan.className = 'input-group-text';
+            iconSpan.innerHTML = `<i class="bi ${iconClass}"></i>`;
+
+            // 2. Modifikasi Parent
+            // HTML kamu: <div class="mb-2"><input ...></div>
+            // Kita ubah class parentnya dari "mb-2" menjadi "input-group mb-2"
+            // Lalu kita selipkan icon di depannya.
             
-            // Cek apakah label sudah punya icon
-            let icon = label.querySelector('i.bi');
-
-            // --- PERBAIKAN: JIKA TIDAK ADA ICON, CARI DARI MAPPING ---
-            if (!icon) {
-                const inputId = input.id || input.name;
-                // Cek mapping, jika ada ID yang cocok, buat icon baru
-                if (registerIcons[inputId]) {
-                    icon = document.createElement('i');
-                    icon.className = `bi ${registerIcons[inputId]}`;
-                } 
-                // Fallback khusus untuk referral jika ID-nya berbeda tapi placeholder mengandung kata Referral
-                else if (input.placeholder && input.placeholder.toLowerCase().includes('referral')) {
-                    icon = document.createElement('i');
-                    icon.className = 'bi bi-people-fill';
-                }
+            if (directParent.classList.contains('mb-2')) {
+                directParent.classList.add('input-group'); // Tambah class input-group
+                directParent.insertBefore(iconSpan, input); // Masukkan icon SEBELUM input
+            } else {
+                // Fallback jika strukturnya berbeda (jaga-jaga)
+                const newGroup = document.createElement('div');
+                newGroup.className = 'input-group mb-2';
+                newGroup.appendChild(iconSpan);
+                directParent.replaceChild(newGroup, input);
+                newGroup.appendChild(input);
             }
-            // ---------------------------------------------------------
-
-            const placeholderText = label.textContent.replace(/\(.*\)/g, '').replace(/(\r\n|\n|\r)/gm, " ").trim();
-            let newElement;
             
-            if (icon) {
-                const inputGroup = document.createElement('div');
-                inputGroup.className = 'input-group mb-2';
-                const iconSpan = document.createElement('span');
-                iconSpan.className = 'input-group-text';
-                
-                // Pastikan yang diappend adalah clone dari icon (agar aman)
-                iconSpan.appendChild(icon.cloneNode(true));
-                
-                inputGroup.appendChild(iconSpan);
-                inputGroup.appendChild(input);
-                newElement = inputGroup;
-            } else {
-                const simpleDiv = document.createElement('div');
-                simpleDiv.className = 'mb-2';
-                simpleDiv.appendChild(input);
-                newElement = simpleDiv;
-            }
-
-            if (input.tagName.toLowerCase() !== 'select') {
-                input.placeholder = placeholderText;
-            } else {
-                if (!input.querySelector('option[value=""]')) {
-                    const defaultOption = document.createElement('option');
-                    defaultOption.value = "";
-                    defaultOption.textContent = placeholderText || "Pilih Opsi";
-                    defaultOption.disabled = true;
-                    defaultOption.selected = true;
-                    input.prepend(defaultOption);
-                }
-            }
+            // Tambahkan class form-control jika belum ada (meskipun di HTML kamu sudah ada)
             input.classList.add('form-control');
-            
-            // Bungkus input password agar icon mata tetap jalan (jika ada script lain)
-            if (input.type === 'password') {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'input-wrapper';
-                wrapper.appendChild(newElement);
-                group.replaceWith(wrapper);
-            } else {
-                group.replaceWith(newElement);
-            }
-        });
-
-        // Hapus toggle icon bawaan yang mungkin double
-        const passwordInput = form.querySelector('#password');
-        const confirmPasswordInput = form.querySelector('#confirmpassword');
-        if (passwordInput && confirmPasswordInput) {
-            confirmPasswordInput.closest('.input-wrapper')?.querySelector('.password-toggle-icon')?.remove();
         }
+
+        // --- BAGIAN 3: BERSIHKAN TOGGLE MATA GANDA (OPSIONAL) ---
+        // Kadang script toggle bawaan konflik saat kita ubah struktur DOM
+        setTimeout(() => {
+            const wrappers = form.querySelectorAll('.input-wrapper');
+            wrappers.forEach(wrap => {
+                const toggles = wrap.parentElement.querySelectorAll('span[id^="toggle"]');
+                // Pastikan posisi toggle pas
+                toggles.forEach(t => {
+                    t.style.zIndex = "10"; // Agar icon mata selalu di atas
+                });
+            });
+        }, 500);
     }
     
     function styleProfilePage() {
@@ -1565,6 +1539,7 @@
         }
     });
 })();
+
 
 
 

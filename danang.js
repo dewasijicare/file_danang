@@ -226,59 +226,8 @@
         #maincontent .border.border-top-0 { border-color: #cc0000 !important; }
         #maincontent #withdraw-form h4 { text-align: center !important; color: #FFD700 !important; text-shadow: 0 0 8px rgba(255, 215, 0, 0.5); margin-bottom: 1.5rem !important; }
         #withdraw-form .form-label { padding-left: 0.5rem !important; }
-        
-        /* --- UPDATE FINAL: FIX LAYOUT INPUT GROUP & POSISI ICON MATA --- */
-        
-        .input-wrapper { 
-            position: relative; 
-            width: 100%; 
-            display: block;
-            margin-bottom: 1rem; /* Jarak antar form */
-        }
-
-        /* 1. PAKSA SEJAJAR HORIZONTAL (Flexbox) */
-        .input-wrapper .input-group {
-            display: flex !important;       /* Wajib Flex agar sejajar */
-            flex-wrap: nowrap !important;   /* Jangan biarkan turun ke bawah */
-            align-items: stretch !important;
-            width: 100% !important;
-            position: relative;
-            z-index: 1; 
-            margin-bottom: 0 !important;
-        }
-
-        /* 2. Atur Icon Kiri (User/Email/dll) agar rapi */
-        .input-wrapper .input-group .input-group-text {
-            display: flex;
-            align-items: center;
-            white-space: nowrap;
-        }
-
-        /* 3. Atur Input Field agar memenuhi sisa ruang */
-        .input-wrapper .input-group .form-control {
-            position: relative;
-            flex: 1 1 auto;        /* Ambil sisa lebar yang ada */
-            width: 1% !important;  /* Trik CSS agar input tidak melebarkan container */
-            min-width: 0;
-            margin-bottom: 0;
-            padding-right: 45px !important; /* Ruang untuk icon mata */
-            z-index: 2;
-            background-color: #2f1a1a !important; 
-        }
-
-        /* 4. POSISI ICON MATA (Overlay di atas segalanya) */
-        .password-toggle-icon { 
-            position: absolute !important; 
-            top: 50% !important; 
-            right: 15px !important; 
-            transform: translateY(-50%) !important; 
-            cursor: pointer; 
-            color: #FFD700; 
-            font-size: 1.3rem; 
-            line-height: 1;
-            z-index: 9999 !important; /* Wajib paling atas */
-            pointer-events: auto; 
-        }
+        .input-wrapper { position: relative; }
+        .password-toggle-icon { position: absolute; top: 50%; right: 12px; transform: translateY(-50%); cursor: pointer; color: #bdc3c7; z-index: 100; }
         .invalid-feedback { display: none !important; }
         .form-control.is-invalid { background-image: none !important; padding-right: 0.75rem !important; }
         .balance-toggle-icon { margin-left: 8px; cursor: pointer; vertical-align: middle; }
@@ -893,72 +842,92 @@
         const form = document.querySelector('form[action="/register"]');
         if (!form || form.dataset.styled === 'true') return;
         form.dataset.styled = 'true';
-        
         const card = form.closest('.card.shadow');
         const mainRow = card ? card.querySelector('.row.mb-3') : null;
         const buttonWrapper = card ? card.querySelector('.d-grid.gap-3.mb-3') : null;
+        if (!card || !mainRow || !buttonWrapper) return;
 
-        // --- 1. PERBAIKAN LAYOUT (SATU KOLOM KE BAWAH) ---
-        if (mainRow) {
-            try {
-                // Pindahkan elemen ke kolom yang benar jika terpisah
-                const targetColumn = mainRow.querySelector('.col-lg-6:has(label[for="email"])') || mainRow.querySelector('.col-lg-6:nth-child(2)');
-                const usernameGroup = form.querySelector('label[for="username"]')?.closest('.form-group');
-                const passwordGroup = form.querySelector('label[for="password"]')?.closest('.form-group');
-                const confirmGroup = form.querySelector('label[for="confirmpassword"]')?.closest('.form-group');
-
-                if (targetColumn && usernameGroup && passwordGroup && confirmGroup) {
-                    targetColumn.prepend(confirmGroup);
-                    targetColumn.prepend(passwordGroup);
-                    targetColumn.prepend(usernameGroup);
-                }
-
-                // Hapus kolom kosong dan ubah menjadi col-12 (Full Width)
-                const emptyColumn = mainRow.querySelector('.col-lg-6:first-child');
-                const contentColumn = mainRow.querySelector('.col-lg-6:last-child');
+        try {
+            const targetColumn = mainRow.querySelector('.col-lg-6:has(label[for="email"])') || mainRow.querySelector('.col-lg-6:nth-child(2)');
+            const usernameGroup = form.querySelector('label[for="username"]')?.closest('.form-group');
+            const passwordGroup = form.querySelector('label[for="password"]')?.closest('.form-group');
+            const confirmGroup = form.querySelector('label[for="confirmpassword"]')?.closest('.form-group');
+            if (targetColumn && usernameGroup && passwordGroup && confirmGroup) {
+                targetColumn.prepend(confirmGroup);
+                targetColumn.prepend(passwordGroup);
+                targetColumn.prepend(usernameGroup);
+            }
+        } catch (e) {
+            console.error("GavanTheme Error (Layouting Register):", e);
+        }
+        
+        try {
+            if (!card.parentElement.classList.contains('col-lg-6')) { 
+                const cardParent = card.parentElement; 
+                const newRow = document.createElement('div');
+                newRow.className = 'row';
+                const newCol = document.createElement('div');
+                newCol.className = 'col-lg-6 offset-lg-3'; 
                 
-                if (emptyColumn && contentColumn && !emptyColumn.querySelector('input, select')) { 
-                    emptyColumn.remove(); 
-                }
+                cardParent.replaceChild(newRow, card); 
+                newRow.appendChild(newCol); 
+                newCol.appendChild(card); 
+            }
 
-                // Paksa semua kolom menjadi lebar penuh
-                mainRow.querySelectorAll('[class*="col-lg-"]').forEach(col => {
-                    col.className = 'col-12';
-                });
+            const emptyColumn = mainRow.querySelector('.col-lg-6:first-child');
+            const contentColumn = mainRow.querySelector('.col-lg-6:last-child');
+            
+            if (emptyColumn && contentColumn && !emptyColumn.querySelector('input, select')) { 
+                emptyColumn.remove(); 
+                contentColumn.classList.remove('col-lg-6', 'offset-lg-3'); 
+                contentColumn.classList.add('col-12'); 
+            } else if (mainRow.children.length === 1 && mainRow.firstElementChild.classList.contains('col-lg-12')) {
+            } else if (mainRow.children.length === 1 && mainRow.firstElementChild.classList.contains('col-lg-6')) {
+                mainRow.firstElementChild.classList.remove('col-lg-6', 'offset-lg-3');
+                mainRow.firstElementChild.classList.add('col-12');
+            }
+            
+            /* --- REVISI: PAKSA MENJADI SATU KOLOM AGAR SAMA PANJANG --- */
+            // Mengubah semua col-lg-6 menjadi col-12 agar semua input memanjang penuh
+            const splitColumns = mainRow.querySelectorAll('.col-lg-6');
+            splitColumns.forEach(col => {
+                col.classList.remove('col-lg-6');
+                col.classList.add('col-12');
+            });
 
-            } catch (e) { console.error("Layout Error:", e); }
-
-            // Pindahkan elemen ke dalam form agar rapi
-            form.prepend(mainRow);
-            if (buttonWrapper) form.append(buttonWrapper);
-            form.querySelectorAll('h3').forEach(h3 => h3.remove());
+        } catch (e) {
+            console.error("GavanTheme Error (Centering Register):", e);
         }
 
-        // --- 2. PERBAIKAN INPUT FIELD & ICON MATA ---
+        mainRow.before(form);
+        form.append(mainRow);
+        form.append(buttonWrapper);
+        form.querySelectorAll('h3').forEach(h3 => h3.remove());
         form.querySelectorAll('.form-group').forEach(group => {
             const label = group.querySelector('label');
             const input = group.querySelector('input, select');
-            
             if (!label || !input) return;
-            
             const icon = label.querySelector('i.bi');
             const placeholderText = label.textContent.replace(/\(.*\)/g, '').replace(/(\r\n|\n|\r)/gm, " ").trim();
-            
-            // Buat Input Group
-            const inputGroup = document.createElement('div');
-            inputGroup.className = 'input-group'; // Tanpa margin di sini
-            
-            // Tambahkan Icon Kiri (User, Email, dll)
+            let newElement;
             if (icon) {
+                const inputGroup = document.createElement('div');
+                inputGroup.className = 'input-group mb-2';
                 const iconSpan = document.createElement('span');
                 iconSpan.className = 'input-group-text';
                 iconSpan.appendChild(icon.cloneNode(true));
                 inputGroup.appendChild(iconSpan);
+                inputGroup.appendChild(input);
+                newElement = inputGroup;
+            } else {
+                const simpleDiv = document.createElement('div');
+                simpleDiv.className = 'mb-2';
+                simpleDiv.appendChild(input);
+                newElement = simpleDiv;
             }
-            
-            // Setup Input
-            input.classList.add('form-control');
-            if (input.tagName.toLowerCase() === 'select') {
+            if (input.tagName.toLowerCase() !== 'select') {
+                input.placeholder = placeholderText;
+            } else {
                 if (!input.querySelector('option[value=""]')) {
                     const defaultOption = document.createElement('option');
                     defaultOption.value = "";
@@ -967,41 +936,37 @@
                     defaultOption.selected = true;
                     input.prepend(defaultOption);
                 }
-            } else {
-                input.placeholder = placeholderText;
             }
-            inputGroup.appendChild(input);
-
-            // Buat Wrapper Utama (Untuk menampung Input Group + Icon Mata)
-            const masterWrapper = document.createElement('div');
-            masterWrapper.className = 'input-wrapper mb-3'; // Margin pindah ke sini
-            masterWrapper.appendChild(inputGroup);
-
-            // LOGIKA KHUSUS PASSWORD
-            if (input.type === 'password' || input.id.includes('password')) {
-                // Pastikan tipe awal password
-                input.type = 'password'; 
-                
-                // Buat Icon Mata
+            input.classList.add('form-control');
+            if (input.type === 'password') {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'input-wrapper';
+                wrapper.appendChild(newElement);
+                group.replaceWith(wrapper);
+            } else {
+                group.replaceWith(newElement);
+            }
+        });
+        const passwordInput = form.querySelector('#password');
+        const confirmPasswordInput = form.querySelector('#confirmpassword');
+        if (passwordInput && confirmPasswordInput) {
+            const passwordWrapper = passwordInput.closest('.input-wrapper');
+            confirmPasswordInput.closest('.input-wrapper')?.querySelector('.password-toggle-icon')?.remove();
+            if (passwordWrapper && !passwordWrapper.querySelector('.password-toggle-icon')) {
                 const toggleIcon = document.createElement('i');
                 toggleIcon.className = 'bi bi-eye-fill password-toggle-icon';
-                
-                // Event Listener Klik Mata
-                toggleIcon.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation(); // Mencegah event bubbling
-                    const isPassword = input.type === 'password';
-                    input.type = isPassword ? 'text' : 'password';
+                toggleIcon.addEventListener('click', () => {
+                    const isPassword = passwordInput.type === 'password';
+                    const newType = isPassword ? 'text' : 'password';
+                    passwordInput.type = newType;
+                    confirmPasswordInput.type = newType;
                     toggleIcon.className = isPassword ? 'bi bi-eye-slash-fill password-toggle-icon' : 'bi bi-eye-fill password-toggle-icon';
                 });
-
-                masterWrapper.appendChild(toggleIcon);
-                input.dataset.toggleAdded = 'true';
+                passwordWrapper.appendChild(toggleIcon);
+                passwordInput.dataset.toggleAdded = 'true';
+                confirmPasswordInput.dataset.toggleAdded = 'true';
             }
-
-            // Ganti elemen lama dengan yang baru
-            group.replaceWith(masterWrapper);
-        });
+        }
     }
     
     function styleProfilePage() {
@@ -1600,11 +1565,3 @@
         }
     });
 })();
-
-
-
-
-
-
-
-

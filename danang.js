@@ -226,20 +226,34 @@
         #maincontent .border.border-top-0 { border-color: #cc0000 !important; }
         #maincontent #withdraw-form h4 { text-align: center !important; color: #FFD700 !important; text-shadow: 0 0 8px rgba(255, 215, 0, 0.5); margin-bottom: 1.5rem !important; }
         #withdraw-form .form-label { padding-left: 0.5rem !important; }
+        /* 1. Reset margin pada input-group di dalam wrapper agar tingginya pas */
+        .input-wrapper .input-group {
+            margin-bottom: 0 !important; /* Hilangkan margin anak */
+        }
+
+        /* 2. Pindahkan margin ke wrapper (induk) agar jarak antar kolom tetap ada */
         .input-wrapper { 
             position: relative; 
-            width: 100%; /* Pastikan wrapper mengambil lebar penuh */
+            width: 100%; 
+            margin-bottom: 1rem; /* Jarak antar kolom dipindah ke sini */
         }
+
+        /* 3. Posisi Icon Mata: Gunakan teknik centering absolut */
         .password-toggle-icon { 
-            position: absolute; 
-            top: 13px !important; 
-            right: 15px; /* Jarak dari sisi kanan diperbesar agar tidak mepet garis */
+            position: absolute !important; 
+            top: 50% !important; 
+            right: 15px !important; 
+            transform: translateY(-50%) !important; /* Pastikan icon naik 50% dari ukurannya sendiri */
+            bottom: auto !important; /* Reset bottom jika ada gangguan */
             cursor: pointer; 
-            color: #FFD700; /* Ubah ke Emas agar sesuai tema, atau #bdc3c7 untuk abu-abu */
-            z-index: 100; 
-            font-size: 1.2rem; /* Ukuran icon diperbesar sedikit agar pas */
+            color: #FFD700; 
+            z-index: 99; 
+            font-size: 1.2rem; 
             line-height: 1;
+            display: block;
         }
+
+        /* 4. Padding kanan pada input agar teks panjang tidak menabrak icon */
         .input-wrapper input.form-control {
             padding-right: 45px !important; 
         }
@@ -1580,6 +1594,7 @@
         }
     });
 })();
+
 
 
 

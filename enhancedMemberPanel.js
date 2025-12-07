@@ -1,27 +1,23 @@
 (function() {
-    // ==========================================
-    // CSS PANEL MEMBER - TEMA DANANG (MERAH & KUNING)
-    // ==========================================
+    // CSS untuk styling panel member baru (Revisi Warna, Font, Spasi, Background)
     const panelStyles = `
         #member-status-panel.gavan-member-panel-enhanced {
-            /* === BACKGROUND GELAP (TEMA DANANG) === */
-            background: linear-gradient(135deg, #2b0b0b, #0f0000) !important; /* Merah Gelap ke Hitam */
-            border: 1px solid #b30000 !important; /* Border Merah Darah */
-            box-shadow: 0 0 15px rgba(179, 0, 0, 0.5) !important; /* Glow Merah */
+            /* === WARNA BACKGROUND LEBIH TERANG === */
+            background: linear-gradient(135deg, #f7dc6f, #f1c40f) !important; /* Pale Yellow ke Yellow */
+            border: 1px solid #f3d953 !important; /* Border kuning muda */
+            box-shadow: 0 0 12px rgba(241, 196, 15, 0.4) !important; /* Glow kuning lebih soft */
             /* ==================================== */
             border-radius: 10px !important;
             padding: 0.6rem 0.8rem !important;
-            color: #ecf0f1 !important; /* Text Putih */
+            color: #2c3e50 !important;
             display: flex;
             flex-direction: column;
-            gap: 0.4rem !important;
+            gap: 0.4rem !important; /* Jarak antara top-area dan buttons */
             transition: all 0.2s ease;
-            margin-bottom: 1rem; /* Tambahan jarak bawah */
         }
 
         #member-status-panel.gavan-member-panel-enhanced:hover {
-             box-shadow: 0 0 25px rgba(255, 51, 51, 0.6) !important; /* Glow Merah Terang saat hover */
-             border-color: #ff3333 !important;
+             box-shadow: 0 3px 18px rgba(241, 196, 15, 0.5) !important; /* Shadow kuning saat hover */
              transform: translateY(-1px);
         }
 
@@ -35,12 +31,11 @@
             column-gap: 0.5rem;
         }
 
-        /* LABEL (Kecil) */
         .gmp-balance-label {
             grid-column: 1; grid-row: 1;
-            font-size: 0.75em;
+            font-size: 0.8em;
             font-weight: 600;
-            color: #bdc3c7; /* Abu-abu terang */
+            color: #2c3e50;
             line-height: 1.1;
             text-transform: uppercase;
             text-align: left;
@@ -49,144 +44,160 @@
 
         .gmp-user-id-label {
             grid-column: 2; grid-row: 1;
-            font-size: 0.75em;
+            font-size: 0.8em;
             font-weight: 600;
-            color: #bdc3c7; /* Abu-abu terang */
+            color: #2c3e50;
             line-height: 1.1;
             text-transform: uppercase;
             text-align: right;
             align-self: end;
         }
 
-        /* NILAI SALDO (Kiri Bawah) */
+        /* Styling untuk Nilai Saldo (Kiri Bawah) - Font Size & Warna Disesuaikan */
         .gmp-balance-value {
             grid-column: 1; grid-row: 2;
-            font-size: 1.3em !important;
+            /* === PERUBAHAN FONT SIZE === */
+            font-size: 1.3em !important; /* Dari 1.4em */
+            /* ========================= */
             font-weight: 700 !important;
             line-height: 1 !important;
-            /* === WARNA SALDO === */
-            color: #ff3333 !important; /* Merah Neon */
-            text-shadow: 0 0 5px rgba(179, 0, 0, 0.5);
-            /* =================== */
+            /* === PERUBAHAN WARNA === */
+            color: #1a252f !important; /* Warna gelap sama dg username */
+            /* ======================= */
+            text-shadow: none; /* Hapus shadow jika warna sudah gelap */
             display: inline-flex;
             align-items: baseline;
             white-space: nowrap;
             text-align: left;
             align-self: start;
         }
+         /* === PERUBAHAN WARNA CURRENCY === */
+         .gmp-balance-value .currency-label {
+             font-size: 0.5em;
+             vertical-align: baseline;
+             margin-left: 4px;
+             font-weight: 600; /* Sedikit tebalkan */
+             color: #1a252f !important; /* Warna gelap sama dg username */
+             opacity: 0.9;
+         }
+         /* ============================== */
 
-        .gmp-balance-value .currency-label {
-            font-size: 0.5em;
-            vertical-align: baseline;
-            margin-left: 4px;
-            font-weight: 600;
-            color: #ecf0f1 !important; /* Putih */
-            opacity: 0.7;
-        }
-
-        /* ICON MATA (Toggle) */
+        /* Styling ikon mata (Toggle Saldo) - Warna Disesuaikan */
         .gmp-balance-value .balance-toggle-icon {
             font-size: 0.8em !important;
             margin-left: 6px !important;
             cursor: pointer;
-            color: #FFD700 !important; /* Kuning Emas */
+            color: #1a252f !important; /* Warna gelap sama dg username */
             vertical-align: middle;
-            transition: all 0.3s ease;
+            opacity: 0.8; /* Sedikit redupkan ikon */
         }
-        .gmp-balance-value .balance-toggle-icon:hover {
-            color: #fff !important;
-            text-shadow: 0 0 5px #FFD700;
-        }
+         .gmp-balance-value .balance-toggle-icon:hover {
+             color: #000 !important; /* Warna hover tetap hitam */
+             opacity: 1;
+         }
 
-        /* USERNAME (Kanan Bawah) */
+        /* Styling untuk Nama Username (Kanan Bawah) - Font Size Disesuaikan */
          .gmp-user-id-value {
              grid-column: 2; grid-row: 2;
-             font-size: 1.3em !important;
+             /* === PERUBAHAN FONT SIZE === */
+             font-size: 1.3em !important; /* Dari 1.4em */
+             /* ========================= */
              font-weight: 700 !important;
-             /* === WARNA USERNAME === */
-             color: #FFD700 !important; /* Emas */
-             text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
-             /* ====================== */
+             color: #1a252f !important;
              line-height: 1 !important;
              text-align: right;
              align-self: start;
              white-space: nowrap;
              overflow: hidden;
              text-overflow: ellipsis;
-             max-width: 160px;
+             max-width: 160px; /* Lebar maks sedikit dikurangi lagi */
         }
 
+         /* Kontainer untuk tombol - Margin Atas Dikurangi */
          .gmp-buttons-container {
              display: flex;
              justify-content: space-between;
              gap: 0.5rem !important;
              width: 100%;
-             margin-top: 0.5rem !important; 
+             /* === PERUBAHAN MARGIN ATAS === */
+             margin-top: 0.3rem !important; /* Jarak dari grid atas dikurangi */
+             /* =========================== */
          }
 
+         /* Styling tombol aksi (Deposit/Withdraw) - Kecil */
          .gmp-action-btn {
              flex: 1;
-             padding: 0.4rem 0.5rem !important;
-             font-size: 0.8em !important;
+             padding: 0.25rem 0.5rem !important;
+             font-size: 0.75em !important;
              display: flex;
              align-items: center;
              justify-content: center;
-             gap: 5px;
+             gap: 4px;
              border-radius: 5px !important;
              white-space: nowrap;
-             text-transform: uppercase;
-             font-weight: bold;
+             border: none !important;
              transition: all 0.2s ease !important;
          }
 
-         /* TOMBOL DEPOSIT (MERAH) */
+         /* Warna Tombol (Sama seperti sebelumnya) */
           .gmp-action-btn.btn-primary {
-             background: linear-gradient(45deg, #b30000, #ff3333) !important;
-             color: #fff !important;
-             border: 1px solid #ff3333 !important;
-             box-shadow: 0 0 5px rgba(255, 51, 51, 0.4);
+             background: linear-gradient(45deg, #1a252f, #2c3e50) !important;
+             color: #ecf0f1 !important;
+             border: 1px solid rgba(255, 255, 255, 0.3) !important;
+             box-shadow: 0 1px 3px rgba(0,0,0,0.3), inset 0 1px 0px rgba(255,255,255,0.1);
           }
           .gmp-action-btn.btn-primary:hover {
-              background: linear-gradient(45deg, #cc0000, #ff6666) !important;
-              box-shadow: 0 0 15px rgba(255, 51, 51, 0.6);
-              transform: translateY(-2px);
+              background: linear-gradient(45deg, #2c3e50, #34495e) !important;
+              border-color: rgba(255, 255, 255, 0.5) !important;
+              box-shadow: 0 2px 5px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.15);
+              transform: translateY(-1px);
           }
-
-          /* TOMBOL WITHDRAW (KUNING) */
            .gmp-action-btn.btn-secondary {
-             background: linear-gradient(45deg, #ffd700, #ffa500) !important;
-             color: #2b0b0b !important; /* Teks Gelap */
-             border: 1px solid #ffd700 !important;
-             box-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
+             background: linear-gradient(45deg, #465a70, #566573) !important;
+             color: #ecf0f1 !important;
+             border: 1px solid rgba(255, 255, 255, 0.2) !important;
+             box-shadow: 0 1px 3px rgba(0,0,0,0.2), inset 0 1px 0px rgba(255,255,255,0.05);
           }
            .gmp-action-btn.btn-secondary:hover {
-             background: linear-gradient(45deg, #ffdf33, #ffb01a) !important;
-             box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
-             transform: translateY(-2px);
+             background: linear-gradient(45deg, #566573, #6c757d) !important;
+             border-color: rgba(255, 255, 255, 0.3) !important;
+             box-shadow: 0 2px 5px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.1);
+             transform: translateY(-1px);
           }
 
-          .gmp-action-btn i.bi { font-size: 1.1em; }
+          .gmp-action-btn i.bi {
+              font-size: 1.1em;
+          }
+
     `;
 
-    // --- LOGIKA JAVASCRIPT ---
+    // Fungsi JS lainnya (styleEnhancedMemberPanel, formatNumberWithCommas, injectStyles, event listeners)
+    // tetap SAMA seperti skrip sebelumnya, tidak perlu diubah.
+    // ... (kode JS lengkapnya sama seperti jawaban sebelumnya) ...
+    // --- DI BAWAH INI ADALAH KODE JS LENGKAPNYA (TIDAK BERUBAH DARI SEBELUMNYA) ---
     function styleEnhancedMemberPanel() {
         const panel = document.getElementById('member-status-panel');
-        if (!panel || panel.dataset.enhanced === 'true') { return; }
+        if (!panel || panel.dataset.enhanced === 'true') {
+            return;
+        }
 
         const usernameElement = panel.querySelector('strong');
         const balanceSpan = panel.querySelector('.text-gradient');
         const originalBalanceValue = balanceSpan ? balanceSpan.textContent.trim() : '0';
         const toggleIconElement = panel.querySelector('.balance-toggle-icon');
 
-        let userId = usernameElement ? usernameElement.textContent.replace('Halo,', '').trim() : 'MEMBER';
+        let userId = usernameElement ? usernameElement.textContent.replace('Halo,', '').trim() : 'N/A';
+        let idLabelText = "";
 
         panel.innerHTML = '';
+
         panel.innerHTML = `
             <div class="gmp-top-area">
-                <div class="gmp-balance-label">SALDO IDR</div>
-                <div class="gmp-user-id-label">PENGGUNA</div>
+                <div class="gmp-balance-label">SALDO TERSEDIA</div>
+                <div class="gmp-user-id-label">USERNAME</div>
                 <div class="gmp-balance-value">
                     <span class="balance-value">${originalBalanceValue}</span>
+                    <span class="currency-label"> IDR</span>
                     </div>
                 <div class="gmp-user-id-value">${userId}</div>
             </div>
@@ -199,14 +210,14 @@
         const balanceValueContainer = panel.querySelector('.gmp-balance-value');
         if (balanceValueContainer) {
             const newToggleIcon = document.createElement('i');
-            // Pastikan class icon sesuai (mata terbuka/tertutup) berdasarkan state terakhir
-            const currentState = localStorage.getItem('balanceVisibility') || 'visible';
-            newToggleIcon.className = currentState === 'hidden' ? 'bi bi-eye-slash-fill balance-toggle-icon' : 'bi bi-eye-fill balance-toggle-icon';
-            
+            newToggleIcon.className = toggleIconElement ? toggleIconElement.className : 'bi bi-eye-fill balance-toggle-icon';
+            newToggleIcon.style.cursor = 'pointer';
+
             balanceValueContainer.appendChild(newToggleIcon);
 
             const valueSpan = balanceValueContainer.querySelector('.balance-value');
-            
+            const storedState = localStorage.getItem('balanceVisibility') || 'visible';
+
             const updateView = (state) => {
                  if (!valueSpan) return;
                  if (state === 'hidden') {
@@ -216,7 +227,6 @@
                     valueSpan.textContent = originalBalanceValue;
                     newToggleIcon.className = 'bi bi-eye-fill balance-toggle-icon';
                  }
-                 // Sinkronisasi dengan sidebar jika ada
                  const sidebarIcon = document.querySelector("#sidebar .balance-toggle-icon");
                  const sidebarValue = document.querySelector("#sidebar .balance-value");
                  if(sidebarIcon && sidebarValue){
@@ -230,43 +240,64 @@
             };
 
             newToggleIcon.addEventListener('click', (e) => {
-                 e.preventDefault(); e.stopPropagation();
+                 e.preventDefault();
+                 e.stopPropagation();
                  const currentState = (localStorage.getItem('balanceVisibility') || 'visible');
                  const newState = currentState === 'visible' ? 'hidden' : 'visible';
                  localStorage.setItem('balanceVisibility', newState);
                  updateView(newState);
             });
 
-             updateView(currentState);
+             updateView(storedState);
         }
 
         panel.classList.add('gavan-member-panel-enhanced');
         panel.classList.remove('glassmorphism', 'py-3', 'my-3', 'text-center');
         panel.dataset.enhanced = 'true';
+
+        console.log("Member status panel enhanced (Final Adjustments).");
     }
 
      function formatNumberWithCommas(val) {
         if (val === null || val === undefined) return '';
         let stringVal = val.toString().replace(/,/g, '');
         if (isNaN(stringVal) || stringVal.trim() === '') return '';
-        try { return Number(stringVal).toLocaleString('en-US'); } catch (e) { return stringVal; }
+        try {
+            return Number(stringVal).toLocaleString('en-US');
+        } catch (e) {
+            return stringVal;
+        }
     }
 
     function injectStyles() {
-        if (document.getElementById('gavan-panel-styles')) { return; }
+        if (document.getElementById('gavan-panel-styles')) {
+            return;
+        }
         const styleElement = document.createElement('style');
         styleElement.id = 'gavan-panel-styles';
         styleElement.innerHTML = panelStyles;
         document.head.appendChild(styleElement);
+        console.log("Panel styles injected.");
     }
 
     document.addEventListener('DOMContentLoaded', () => {
         injectStyles();
         styleEnhancedMemberPanel();
+
         const observer = new MutationObserver((mutations) => {
             const panel = document.getElementById('member-status-panel');
-            if (panel && !panel.dataset.enhanced) { styleEnhancedMemberPanel(); }
+            if (panel && !panel.dataset.enhanced) {
+                 styleEnhancedMemberPanel();
+            }
         });
+
         observer.observe(document.body, { childList: true, subtree: true });
+        styleEnhancedMemberPanel();
     });
+
+    if (document.readyState === 'complete') {
+         injectStyles();
+         styleEnhancedMemberPanel();
+    }
+
 })();

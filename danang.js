@@ -1,20 +1,21 @@
 (function() {
 
-    // BLOK CSS LENGKAP - TEMA DANANG (REVISI: BACKGROUND DARKER SERAGAM, SEGERA TUTUP HIJAU)
+    // --- BLOK CSS LENGKAP - TEMA PETER PAN (WARNA: #072712, #bff116, #fff927) ---
 
-    const danangThemeStyles = `
+    const peterPanThemeStyles = `
         @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
         
         /* --- UPDATE: Base Colors --- */
-        .input-group-text { background-color: #3e2c2c; border-color: #5e3434; color: #ff0000; }
+        /* Background input group gelap, border lime, text kuning */
+        .input-group-text { background-color: #0a2e15; border-color: #bff116; color: #bff116; }
         
-        /* --- UPDATE: Box Togel Background (Jauh Lebih Gelap) --- */
+        /* --- UPDATE: Box Togel Background (Dark Green Peter Pan) --- */
         #carousel-togel .card, .row.g-3 .card {
-            /* Gradasi dari Merah Sangat Gelap (#1f0a0a) ke Hitam (#000000) */
-            background: linear-gradient(160deg, #1f0a0a, #000000) !important;
-            border: 1px solid #800000 !important; /* Border merah marun agar tidak terlalu mencolok */
+            /* Gradasi dari Dark Green (#072712) ke Hitam Hijau */
+            background: linear-gradient(160deg, #072712, #001105) !important;
+            border: 1px solid #bff116 !important; /* Border Lime Green */
             border-radius: 15px !important;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3) !important; /* Shadow merah halus */
+            box-shadow: 0 0 15px rgba(191, 241, 22, 0.2) !important; /* Shadow Lime halus */
             transition: transform .3s ease, box-shadow .3s ease;
             width: 100%!important;
             font-family: 'Exo 2', sans-serif !important;
@@ -22,38 +23,38 @@
         }
         #carousel-togel .card:hover, .row.g-3 .card:hover {
             transform: translateY(-5px) scale(1.03);
-            box-shadow: 0 5px 25px rgba(255, 0, 0, 0.6) !important;
-            border-color: #ff0000 !important; /* Saat hover border jadi merah terang */
+            box-shadow: 0 5px 25px rgba(191, 241, 22, 0.5) !important;
+            border-color: #fff927 !important; /* Saat hover border jadi Kuning */
         }
 
-        /* --- UPDATE: Result Togel (Angka Besar) -> Kuning Glowing --- */
+        /* --- UPDATE: Result Togel (Angka Besar) -> Kuning Peter Pan --- */
         #carousel-togel .card h2, .row.g-3 .card h2 {
             background: 0 0!important;
             margin: 8px 0!important;
             font-size: 2.2em!important;
         }
         #carousel-togel .card h2 a, .row.g-3 .card h2 a {
-            color: #FFD700 !important; /* Warna Emas */
-            text-shadow: 0 0 10px #FFD700, 0 0 20px rgba(255, 215, 0, 0.6) !important; /* Glowing Emas */
+            color: #fff927 !important; /* Warna Kuning */
+            text-shadow: 0 0 10px #fff927, 0 0 20px rgba(255, 249, 39, 0.6) !important; /* Glowing Kuning */
             letter-spacing: 2px;
             text-decoration: none !important;
         }
 
-        /* --- UPDATE: Countdown Timer -> Putih --- */
+        /* --- UPDATE: Countdown Timer -> Putih/Lime --- */
         #carousel-togel .card .togel-countdown-timer, .row.g-3 .card .togel-countdown-timer {
-            color: #ffffff !important; /* Putih Polos */
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.4); /* Glow putih tipis */
+            color: #ffffff !important; 
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.4); 
             opacity: 1;
             font-weight: 500;
         }
         
-        /* --- REVISI: Logika 'SEGERA TUTUP' -> MENJADI WARNA HIJAU --- */
+        /* --- REVISI: Logika 'SEGERA TUTUP' -> Tetap Lime/Kuning agar kontras --- */
         .togel-countdown-timer.show-warning-text { position: relative; font-size: 0 !important; user-select: none; }
         .togel-countdown-timer.show-warning-text::before { 
             content: "SEGERA TUTUP"; 
             position: absolute; inset: 0; 
-            color: #00ff00 !important; /* REVISI: WARNA HIJAU */
-            text-shadow: 0 0 10px #00ff00; 
+            color: #fff927 !important; /* Kuning Peringatan */
+            text-shadow: 0 0 10px #fff927; 
             font-weight: bold; 
             white-space: nowrap; 
             font-size: 0.75rem; 
@@ -62,108 +63,120 @@
         }
 
         /* --- SISA CSS LAINNYA --- */
-        .alert.themed-alert-danger { background: linear-gradient(145deg, #a73c2e, #c0392b) !important; border: 1px solid #ff0000 !important; color: #fff !important; box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); border-radius: 8px; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
-        .alert.themed-alert-danger strong { color: #fff !important; }
-        .alert.themed-alert-danger a { color: #ffd700 !important; font-weight: bold; }
+        /* Alert Danger diganti tema Hijau Gelap dengan Border Lime */
+        .alert.themed-alert-danger { background: linear-gradient(145deg, #072712, #0f3d1f) !important; border: 1px solid #bff116 !important; color: #fff !important; box-shadow: 0 0 15px rgba(191, 241, 22, 0.4); border-radius: 8px; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+        .alert.themed-alert-danger strong { color: #fff927 !important; }
+        .alert.themed-alert-danger a { color: #bff116 !important; font-weight: bold; }
+        
         .custom-header-wrapper { display: flex; align-items: center; width: 100%; }
         .home-link-fixed { flex-shrink: 0; margin-right: 20px; }
         .scrollable-menu-container { flex-grow: 1; overflow: hidden; min-width: 0; }
         .scrollable-menu-container .other-items-carousel .item { width: auto; padding: 0 5px; }
-        .togel-countdown-timer.is-closed { color: #ff0000 !important; text-shadow: 0 0 5px rgba(255, 0, 0, 0.7); font-weight: bold; }
+        
+        .togel-countdown-timer.is-closed { color: #bff116 !important; text-shadow: 0 0 5px rgba(191, 241, 22, 0.7); font-weight: bold; }
+        
         #carousel-togel .owl-stage-outer { max-height: 495px; overflow: hidden; transition: max-height 0.5s ease-in-out; border-radius: 0 0 15px 15px; }
         @media (min-width: 768px) { #carousel-togel .owl-stage-outer { max-height: 315px; } }
         #carousel-togel.show-all .owl-stage-outer { max-height: 2500px; }
+        
         .show-more-wrapper { display: flex; justify-content: center; }
-        .show-more-button { background: none !important; border: none !important; box-shadow: none !important; color: #ff0000 !important; text-align: center; margin-top: 15px !important; padding: 5px !important; cursor: pointer; font-weight: 700; text-transform: uppercase; transition: all .3s ease; }
-        .show-more-button:hover { color: #fff !important; text-shadow: 0 0 10px #ff0000; }
-        #maincontent h1.text-center { color: #FFD700 !important; text-transform: uppercase !important; margin-top: 1.5rem !important; margin-bottom: 1rem !important; text-shadow: 0 0 10px rgba(255, 215, 0, 0.6); }
-        .togel-countdown-timer.closing-soon { color: #FFD700 !important; text-shadow: 0 0 5px #FFD700; font-weight: bold; }
+        .show-more-button { background: none !important; border: none !important; box-shadow: none !important; color: #bff116 !important; text-align: center; margin-top: 15px !important; padding: 5px !important; cursor: pointer; font-weight: 700; text-transform: uppercase; transition: all .3s ease; }
+        .show-more-button:hover { color: #fff !important; text-shadow: 0 0 10px #bff116; }
+        
+        /* H1 Headers jadi Kuning */
+        #maincontent h1.text-center { color: #fff927 !important; text-transform: uppercase !important; margin-top: 1.5rem !important; margin-bottom: 1rem !important; text-shadow: 0 0 10px rgba(255, 249, 39, 0.6); }
+        .togel-countdown-timer.closing-soon { color: #fff927 !important; text-shadow: 0 0 5px #fff927; font-weight: bold; }
         #maincontent .nav-tabs .nav-link { border-radius: 8px 8px 0 0 !important; } 
         
-        .copy-btn{background-color:rgba(255, 0, 0,.1)!important;color:#ff0000!important;border:1px solid #cc0000!important;padding:2px 10px!important;font-size:.8em!important;transition:all .3s ease}
-        .copy-btn:hover{background-color:rgba(255, 0, 0,.3)!important;color:#fff!important}
-        .copy-btn.copy-btn-success{background-color:rgba(46,204,113,.2)!important;color:#2ecc71!important;border-color:#27ae60!important}
+        .copy-btn{background-color:rgba(191, 241, 22, .1)!important;color:#bff116!important;border:1px solid #bff116!important;padding:2px 10px!important;font-size:.8em!important;transition:all .3s ease}
+        .copy-btn:hover{background-color:rgba(191, 241, 22,.3)!important;color:#fff!important}
+        .copy-btn.copy-btn-success{background-color:rgba(255, 249, 39,.2)!important;color:#fff927!important;border-color:#fff927!important}
         
         #receiver-bank-label i,#receiver-number-label i,#receiver-name-label i{margin-right:8px}
-        #maincontent .nav-tabs{border-bottom:1px solid #cc0000!important}
-        #maincontent .nav-tabs .nav-link{background-color:transparent!important;border:1px solid transparent!important;border-bottom:none!important;color:#bdc3c7!important}
-        #maincontent .nav-tabs .nav-link.active{background-color:#2f1a1a!important;border-color:#cc0000!important;color:#fff!important}
+        #maincontent .nav-tabs{border-bottom:1px solid #bff116!important}
+        #maincontent .nav-tabs .nav-link{background-color:transparent!important;border:1px solid transparent!important;border-bottom:none!important;color:#8ba390!important}
+        #maincontent .nav-tabs .nav-link.active{background-color:#0a2e15!important;border-color:#bff116!important;color:#fff!important}
         
-        body{background-color:#1a0505!important;font-family:'Exo 2',sans-serif!important}
+        /* Body Background Dark Green */
+        body{background-color:#072712!important;font-family:'Exo 2',sans-serif!important}
         
-        .form-label{color:#ecf0f1!important;text-shadow:0 0 5px #ff0000}
-        .form-control,.form-select{background-color:#2f1a1a!important;border:1px solid #5e3434!important;color:#fff!important;border-radius:5px;transition:all .3s ease}
-        .form-control:focus,.form-select:focus{border-color:#bdc3c7!important;box-shadow:0 0 10px rgba(189,195,199,.8)!important}
+        .form-label{color:#ecf0f1!important;text-shadow:0 0 5px #bff116}
+        .form-control,.form-select{background-color:#0a2e15!important;border:1px solid #2e5c3b!important;color:#fff!important;border-radius:5px;transition:all .3s ease}
+        .form-control:focus,.form-select:focus{border-color:#bff116!important;box-shadow:0 0 10px rgba(191, 241, 22,.6)!important}
         
-        .btn-primary{background:linear-gradient(45deg,#8b0000,#ff0000)!important;border:none!important;color:#fff!important;font-weight:700;text-transform:uppercase;box-shadow:0 0 10px #ff0000,inset 0 0 5px rgba(255,255,255,.4);transition:all .3s ease}
-        .btn-primary:hover{transform:scale(1.05);box-shadow:0 0 20px #ff0000,0 0 30px #8b0000,inset 0 0 5px rgba(255,255,255,.4)}
+        /* Btn Primary (Warna Lime) */
+        .btn-primary{background:linear-gradient(45deg,#8fa310,#bff116)!important;border:none!important;color:#072712!important;font-weight:700;text-transform:uppercase;box-shadow:0 0 10px #bff116,inset 0 0 5px rgba(255,255,255,.4);transition:all .3s ease}
+        .btn-primary:hover{transform:scale(1.05);box-shadow:0 0 20px #bff116,0 0 30px #8fa310,inset 0 0 5px rgba(255,255,255,.4)}
         
-        .btn-secondary{background:linear-gradient(45deg,#ffd700,#ffa500)!important;border-color:#ffd700!important;color:#3e2c2c!important;font-weight:700;text-transform:uppercase;box-shadow:0 0 10px #ffd700,inset 0 0 5px rgba(255,255,255,.7);transition:all .3s ease}
-        .btn-secondary:hover{transform:scale(1.05);background:linear-gradient(45deg,#ffdf33,#ffb01a)!important;box-shadow:0 0 20px #ffd700,0 0 30px #ffa500,inset 0 0 5px rgba(255,255,255,.8)}
+        /* Btn Secondary (Warna Kuning) */
+        .btn-secondary{background:linear-gradient(45deg,#fff927,#d4ce00)!important;border-color:#fff927!important;color:#072712!important;font-weight:700;text-transform:uppercase;box-shadow:0 0 10px #fff927,inset 0 0 5px rgba(255,255,255,.7);transition:all .3s ease}
+        .btn-secondary:hover{transform:scale(1.05);background:linear-gradient(45deg,#fff927,#e6e020)!important;box-shadow:0 0 20px #fff927,0 0 30px #d4ce00,inset 0 0 5px rgba(255,255,255,.8)}
         
-        .btn-danger{background:linear-gradient(45deg,#e74c3c,#c0392b)!important;border:none!important;color:#fff!important;font-weight:700;text-transform:uppercase;box-shadow:0 0 10px #e74c3c,inset 0 0 5px rgba(255,255,255,.4);transition:all .3s ease}
-        .btn-danger:hover{transform:scale(1.05);box-shadow:0 0 20px #e74c3c,0 0 30px #c0392b,inset 0 0 5px rgba(255,255,255,.4)}
+        /* Btn Danger (Rebrand jadi Lime Darker atau tetap kontras tapi tema hijau) - Kita pakai Green Strong */
+        .btn-danger{background:linear-gradient(45deg,#4e6b00,#7da100)!important;border:none!important;color:#fff!important;font-weight:700;text-transform:uppercase;box-shadow:0 0 10px #7da100,inset 0 0 5px rgba(255,255,255,.4);transition:all .3s ease}
+        .btn-danger:hover{transform:scale(1.05);box-shadow:0 0 20px #bff116,0 0 30px #7da100,inset 0 0 5px rgba(255,255,255,.4)}
         
-        nav#navbar-top.navbar.bg-dark{background-color:#2f1a1a!important;border-bottom:1px solid #cc0000!important;box-shadow:0 2px 10px rgba(255, 0, 0,.3)!important}
+        nav#navbar-top.navbar.bg-dark{background-color:#0a2e15!important;border-bottom:1px solid #bff116!important;box-shadow:0 2px 10px rgba(191, 241, 22,.3)!important}
         button#sidebarCollapse{background:0 0!important;border:none!important}
-        button#sidebarCollapse i{color:#ecf0f1!important;transition:all .3s ease}
-        button#sidebarCollapse:hover i{color:#ff0000!important;text-shadow:0 0 10px #ff0000}
+        button#sidebarCollapse i{color:#fff!important;transition:all .3s ease}
+        button#sidebarCollapse:hover i{color:#bff116!important;text-shadow:0 0 10px #bff116}
         
         /* --- REVISI: Sidebar Background Matches Result Box --- */
-        nav#sidebar{background: linear-gradient(160deg, #1f0a0a, #000000) !important; border-right:1px solid #cc0000!important;box-shadow:2px 0 10px rgba(255, 0, 0,.3)!important}
+        nav#sidebar{background: linear-gradient(160deg, #072712, #001105) !important; border-right:1px solid #bff116!important;box-shadow:2px 0 10px rgba(191, 241, 22,.3)!important}
         
-        #sidebar .d-flex[style*="background-image"]{background-image:none!important;background-color:#3e2c2c!important;border-bottom:2px solid #cc0000;box-shadow:0 2px 5px rgba(255, 0, 0,.2)}
+        #sidebar .d-flex[style*="background-image"]{background-image:none!important;background-color:#0a2e15!important;border-bottom:2px solid #bff116;box-shadow:0 2px 5px rgba(191, 241, 22,.2)}
         #sidebar .nav-link{color:#ecf0f1!important;border-radius:5px;transition:all .3s ease;border-left:3px solid transparent;margin:0;padding:.4rem 1rem!important}
-        #sidebar .nav-link:hover,#sidebar .nav-item.active .nav-link{background-color:rgba(255, 0, 0,.1)!important;color:#ff0000!important;border-left-color:#ff0000}
-        #sidebar hr{border-top:1px solid #5e3434;margin:.5rem 1rem}
+        #sidebar .nav-link:hover,#sidebar .nav-item.active .nav-link{background-color:rgba(191, 241, 22,.1)!important;color:#bff116!important;border-left-color:#bff116}
+        #sidebar hr{border-top:1px solid #2e5c3b;margin:.5rem 1rem}
         #sidebar > .d-flex.justify-content-between.p-3{display:none!important}
         .gaban-profile-icon{width:36px;height:36px}
         
-        #custom-sidebar-toggle{position:fixed!important;top:20px!important;left:255px!important;transform:none!important;z-index:99999!important;font-size:2.5rem!important;color:#ff0000!important;text-shadow:0 0 10px #ff0000!important;transition:all .4s ease!important;text-decoration:none!important;display:none}
+        #custom-sidebar-toggle{position:fixed!important;top:20px!important;left:255px!important;transform:none!important;z-index:99999!important;font-size:2.5rem!important;color:#bff116!important;text-shadow:0 0 10px #bff116!important;transition:all .4s ease!important;text-decoration:none!important;display:none}
         #custom-sidebar-toggle.show{display:block!important;opacity:1!important;visibility:visible!important}
         #custom-sidebar-toggle:hover{color:#fff!important;transform:scale(1.1)!important}
         
-        #gacor-game-sidebar h5{color:#ecf0f1;text-transform:uppercase;font-weight:700;text-shadow:0 0 8px rgba(255, 0, 0,.7);border-bottom:1px solid #5e3434;padding-bottom:10px;margin-bottom:15px;font-size:1rem}
-        #gacor-game-sidebar h5 i{color:#ff0000;margin-right:8px}
+        #gacor-game-sidebar h5{color:#ecf0f1;text-transform:uppercase;font-weight:700;text-shadow:0 0 8px rgba(191, 241, 22,.7);border-bottom:1px solid #2e5c3b;padding-bottom:10px;margin-bottom:15px;font-size:1rem}
+        #gacor-game-sidebar h5 i{color:#bff116;margin-right:8px}
         
         .gacor-card-container{display:grid;gap:10px}
-        .gacor-card{display:flex;align-items:center;text-decoration:none;background:linear-gradient(145deg,#3e2c2c,#2f1a1a);border:1px solid #cc0000;border-radius:10px;padding:10px;transition:all .3s ease}
-        .gacor-card:hover{transform:translateY(-3px);box-shadow:0 3px 15px rgba(255, 0, 0,.5)}
+        .gacor-card{display:flex;align-items:center;text-decoration:none;background:linear-gradient(145deg,#0a2e15,#072712);border:1px solid #bff116;border-radius:10px;padding:10px;transition:all .3s ease}
+        .gacor-card:hover{transform:translateY(-3px);box-shadow:0 3px 15px rgba(191, 241, 22,.5)}
         .gacor-card img{width:70px;height:70px;border-radius:8px;margin-right:10px;flex-shrink:0}
         .gacor-info{flex:1;min-width:0}
         .gacor-info strong{color:#fff;font-size:.9em;display:block}
         .gacor-time{font-size:.75em;color:#bdc3c7;opacity:.8}
-        .gacor-time i{color:#ff0000}
-        .gacor-card-placeholder{text-align:center;padding:20px;color:#bdc3c7;background:rgba(0,0,0,.2);border-radius:10px;border:1px dashed #5e3434}
+        .gacor-time i{color:#fff927}
+        .gacor-card-placeholder{text-align:center;padding:20px;color:#bdc3c7;background:rgba(0,0,0,.2);border-radius:10px;border:1px dashed #2e5c3b}
         
         /* --- REVISI: BOX LOGIN & BOX LAINNYA MATCHES RESULT BOX --- */
-        #row-quicklogin.card,#maincontent .card.shadow{background: linear-gradient(160deg, #1f0a0a, #000000) !important;border:1px solid #cc0000!important;box-shadow:0 0 20px rgba(255, 0, 0,.6)!important;border-radius:15px!important}
+        #row-quicklogin.card,#maincontent .card.shadow{background: linear-gradient(160deg, #072712, #001105) !important;border:1px solid #bff116!important;box-shadow:0 0 20px rgba(191, 241, 22,.4)!important;border-radius:15px!important}
         
-        #maincontent .card.shadow h1,#maincontent .card.shadow h3,#maincontent .card.shadow h4{color:#ecf0f1!important;text-shadow:0 0 8px rgba(255, 0, 0,.7)!important;text-transform:uppercase;font-weight:700}
-        #maincontent .card.shadow h3{border-bottom:1px solid #5e3434;padding-bottom:15px;margin-bottom:25px}
-        #maincontent .card.shadow a{color:#ff0000!important;text-decoration:none;transition:all .3s ease}
-        #maincontent .card.shadow a:hover{color:#fff!important;text-shadow:0 0 10px #ff0000}
+        #maincontent .card.shadow h1,#maincontent .card.shadow h3,#maincontent .card.shadow h4{color:#fff927!important;text-shadow:0 0 8px rgba(255, 249, 39,.7)!important;text-transform:uppercase;font-weight:700}
+        #maincontent .card.shadow h3{border-bottom:1px solid #2e5c3b;padding-bottom:15px;margin-bottom:25px}
+        #maincontent .card.shadow a{color:#bff116!important;text-decoration:none;transition:all .3s ease}
+        #maincontent .card.shadow a:hover{color:#fff!important;text-shadow:0 0 10px #bff116}
         .form-label i.bi{margin-right:8px;vertical-align:-2px}
         
-        .btn-custom-promo{display:flex!important;align-items:center!important;justify-content:center!important;padding:10px 15px!important;font-size:1em!important;font-weight:700!important;text-transform:uppercase!important;color:#fff!important;border:none!important;border-radius:8px!important;background:linear-gradient(90deg,#8b0000,#b22222)!important;box-shadow:0 0 15px rgba(139, 0, 0,.5),inset 0 0 5px rgba(255,255,255,.3);transition:all .3s ease;text-decoration:none}
-        .btn-custom-promo:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 5px 25px rgba(139, 0, 0,.7),0 0 30px rgba(255, 0, 0,.5),inset 0 0 8px rgba(255,255,255,.5);color:#fff!important;background:linear-gradient(90deg,#b22222,#ff0000)!important}
+        /* Promo Button -> Hijau Gradient */
+        .btn-custom-promo{display:flex!important;align-items:center!important;justify-content:center!important;padding:10px 15px!important;font-size:1em!important;font-weight:700!important;text-transform:uppercase!important;color:#072712!important;border:none!important;border-radius:8px!important;background:linear-gradient(90deg,#8fa310,#bff116)!important;box-shadow:0 0 15px rgba(191, 241, 22,.5),inset 0 0 5px rgba(255,255,255,.3);transition:all .3s ease;text-decoration:none}
+        .btn-custom-promo:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 5px 25px rgba(191, 241, 22,.7),0 0 30px rgba(191, 241, 22,.5),inset 0 0 8px rgba(255,255,255,.5);color:#072712!important;background:linear-gradient(90deg,#bff116,#d1ff33)!important}
         .btn-custom-promo i.bi{margin-right:10px;font-size:1.1em}
         
         #row-togel > .d-flex,.d-flex.justify-content-between{justify-content:center!important}
-        #row-togel h3,h3.my-2,.my_5 > h3.text-center{color:#ecf0f1!important;text-shadow:0 0 8px rgba(255, 0, 0,.7);text-transform:uppercase}
+        #row-togel h3,h3.my-2,.my_5 > h3.text-center{color:#fff927!important;text-shadow:0 0 8px rgba(255, 249, 39,.7);text-transform:uppercase}
         #row-togel h3 a,h3.my-2 a{color:inherit!important;text-decoration:none!important;transition:color .3s ease}
-        #row-togel h3 a:hover,h3.my-2 a:hover{color:#ff0000!important}.d-flex.justify-content-between > a{display:none!important}
+        #row-togel h3 a:hover,h3.my-2 a:hover{color:#bff116!important}.d-flex.justify-content-between > a{display:none!important}
         h3.my-2 i.bi,.my_5 > h3.text-center i.bi{margin-right:10px;vertical-align:-1px}
         
-        #maincontent .alert.alert-primary,.modal-body .alert.alert-warning{background:linear-gradient(160deg,#3e2c2c,#2f1a1a)!important;border:1px solid #cc0000!important;border-radius:10px!important;color:#ecf0f1!important;box-shadow:0 0 15px rgba(255, 0, 0,.5)}
+        #maincontent .alert.alert-primary,.modal-body .alert.alert-warning{background:linear-gradient(160deg,#0a2e15,#072712)!important;border:1px solid #bff116!important;border-radius:10px!important;color:#ecf0f1!important;box-shadow:0 0 15px rgba(191, 241, 22,.3)}
         #maincontent .alert.alert-primary h4,#maincontent .alert.alert-primary span,.modal-body .alert.alert-warning small,.modal-body .alert.alert-warning strong{color:#ecf0f1!important}
-        #maincontent .alert.alert-primary .fw-bold{color:#fff!important}
+        #maincontent .alert.alert-primary .fw-bold{color:#fff927!important}
         
-        .table{color:#ecf0f1!important;border-color:#5e3434!important}
-        .table th,.table td{background-color:transparent!important;border-color:#5e3434!important}
+        .table{color:#ecf0f1!important;border-color:#2e5c3b!important}
+        .table th,.table td{background-color:transparent!important;border-color:#2e5c3b!important}
         .table thead{border-color:inherit}
-        .table thead th{background-color:rgba(255, 0, 0,.1)!important;border-bottom:2px solid #cc0000!important}
-        .table a{color:#ff0000!important;text-decoration:none!important}
+        .table thead th{background-color:rgba(191, 241, 22,.1)!important;border-bottom:2px solid #bff116!important; color: #bff116 !important;}
+        .table a{color:#fff927!important;text-decoration:none!important}
         .table a:hover{color:#fff!important}
         
         #carousel-togel .owl-stage{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:15px;transform:none!important;width:100%!important}
@@ -174,89 +187,91 @@
         
         .owl-nav,.owl-dots{display:none!important}
         
-        .glassmorphism{background:linear-gradient(145deg,#3e2c2c,#2f1a1a)!important;border:1px solid #cc0000!important;box-shadow:0 0 10px rgba(255, 0, 0,.4)!important;backdrop-filter:none!important;transition:all .3s ease}
-        .glassmorphism:hover{transform:translateY(-5px);box-shadow:0 5px 20px rgba(255, 0, 0,.6)!important}
+        .glassmorphism{background:linear-gradient(145deg,#0a2e15,#072712)!important;border:1px solid #bff116!important;box-shadow:0 0 10px rgba(191, 241, 22,.4)!important;backdrop-filter:none!important;transition:all .3s ease}
+        .glassmorphism:hover{transform:translateY(-5px);box-shadow:0 5px 20px rgba(191, 241, 22,.6)!important}
         .glassmorphism a img{max-height:25px!important;width:auto!important;max-width:80%!important}
         
-        #selectProvider .btn-outline-primary{display:flex!important;align-items:center!important;justify-content:center!important;background-color:transparent;border:1px solid #cc0000;color:#ff0000;transition:all .3s ease;border-radius:8px}
-        #selectProvider .btn-outline-primary:hover{background-color:rgba(255, 0, 0,.2);color:#fff;box-shadow:0 0 10px rgba(255, 0, 0,.5)}
-        #selectProvider .btn-outline-primary.active{background:linear-gradient(45deg,#8b0000,#ff0000)!important;border-color:#ff0000!important;color:#fff!important;box-shadow:0 0 15px #ff0000}
+        #selectProvider .btn-outline-primary{display:flex!important;align-items:center!important;justify-content:center!important;background-color:transparent;border:1px solid #bff116;color:#bff116;transition:all .3s ease;border-radius:8px}
+        #selectProvider .btn-outline-primary:hover{background-color:rgba(191, 241, 22,.2);color:#fff;box-shadow:0 0 10px rgba(191, 241, 22,.5)}
+        #selectProvider .btn-outline-primary.active{background:linear-gradient(45deg,#8fa310,#bff116)!important;border-color:#bff116!important;color:#072712!important;box-shadow:0 0 15px #bff116}
         
         .row.g-1 [class*=col-] > a,.row.g-1 [class*=col-] > div > a{display:block;border-radius:8px!important;overflow:hidden;border:1px solid transparent;transition:all .3s ease;line-height:0}
-        .row.g-1 [class*=col-] > a:hover,.row.g-1 [class*=col-] > div > a:hover{border-color:#cc0000;box-shadow:0 0 15px rgba(255, 0, 0,.6);transform:scale(1.05);z-index:10;position:relative}
+        .row.g-1 [class*=col-] > a:hover,.row.g-1 [class*=col-] > div > a:hover{border-color:#bff116;box-shadow:0 0 15px rgba(191, 241, 22,.6);transform:scale(1.05);z-index:10;position:relative}
         .row.mb-3.g-1 [class*=col-] > a:hover,.row.mb-3.g-1 [class*=col-] > a:focus{border-color:transparent!important;box-shadow:none!important;outline:0!important}
         .glassmorphism a:hover,.glassmorphism a:focus{border-color:transparent!important;box-shadow:none!important;outline:0!important;transform:none!important;z-index:auto!important}
         
-        /* --- REVISI: MODAL BACKGROUND MATCHES RESULT BOX --- */
-        .modal-content{background: linear-gradient(160deg, #1f0a0a, #000000) !important;border:1px solid #cc0000!important;border-radius:15px!important}
-        .modal-header,.modal-header.bg-danger{background-color:#2f1a1a!important;border-bottom:1px solid #cc0000!important;border-top-left-radius:15px;border-top-right-radius:15px}
-        .modal-title{color:#ecf0f1!important;text-shadow:0 0 8px rgba(255, 0, 0,.7)!important;font-size:1rem!important;padding-right:1rem;text-transform:uppercase}
-        .modal-title i.bi{margin-right:8px;vertical-align:-2px;color:#ff0000;text-shadow:0 0 5px #ff0000}
+        /* --- REVISI: MODAL BACKGROUND --- */
+        .modal-content{background: linear-gradient(160deg, #072712, #001105) !important;border:1px solid #bff116!important;border-radius:15px!important}
+        .modal-header,.modal-header.bg-danger{background-color:#0a2e15!important;border-bottom:1px solid #bff116!important;border-top-left-radius:15px;border-top-right-radius:15px}
+        .modal-title{color:#fff927!important;text-shadow:0 0 8px rgba(255, 249, 39,.7)!important;font-size:1rem!important;padding-right:1rem;text-transform:uppercase}
+        .modal-title i.bi{margin-right:8px;vertical-align:-2px;color:#bff116;text-shadow:0 0 5px #bff116}
         
-        .modal-header .btn-close{background:transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ff0000'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat!important;opacity:.8!important;transition:all .3s ease}
+        .modal-header .btn-close{background:transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23bff116'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat!important;opacity:.8!important;transition:all .3s ease}
         .modal-header .btn-close:hover{opacity:1!important;transform:scale(1.2) rotate(90deg)}
         
         .modal-body .row,.modal-body .text-muted{color:#bdc3c7!important}
-        .modal-body .col-12.text-center > strong{color:#ffd700!important;text-shadow:0 0 8px #ffa500;font-size:1.1rem;line-height:1.2;display:block}
+        .modal-body .col-12.text-center > strong{color:#fff927!important;text-shadow:0 0 8px #fff927;font-size:1.1rem;line-height:1.2;display:block}
         .modal-body .col-12.text-center:first-of-type{padding-bottom:0!important}
         .modal-body .col-12.text-center:nth-of-type(2){padding-top:0!important;margin-bottom:1rem}
-        .modal-footer{border-top:1px solid #5e3434!important;background-color:#2f1a1a!important;border-bottom-left-radius:15px;border-bottom-right-radius:15px;padding-top:15px}
+        .modal-footer{border-top:1px solid #2e5c3b!important;background-color:#0a2e15!important;border-bottom-left-radius:15px;border-bottom-right-radius:15px;padding-top:15px}
         
         .list-group{border-radius:8px;overflow:hidden}
-        .list-group-item{background-color:rgba(0,0,0,.2)!important;border-color:#5e3434!important}
+        .list-group-item{background-color:rgba(0,0,0,.2)!important;border-color:#2e5c3b!important}
         .list-group-item .d-flex{align-items:center!important}
-        .list-group-item h6{font-size:2.8rem!important;line-height:1!important;font-weight:700!important;margin-right:.75rem!important;color:#ff0000!important;text-shadow:0 0 5px #ff0000}
+        .list-group-item h6{font-size:2.8rem!important;line-height:1!important;font-weight:700!important;margin-right:.75rem!important;color:#bff116!important;text-shadow:0 0 5px #bff116}
         .list-group-item strong.text-danger{color:#ecf0f1!important;text-shadow:none!important}
         
         @keyframes flowAnimation{0%{background-position:200% 0}100%{background-position:-200% 0}}
-        .progress{background-color:#2f1a1a!important;border:1px solid #5e3434;border-radius:8px!important;height:22px!important;padding:2px}
-        .progress-bar-rtp{border-radius:6px!important;animation:flowAnimation 2s linear infinite;background-size:200% 100%!important;color:#fff!important;font-weight:700;font-size:.8em;text-shadow:0 0 3px rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center}
-        .progress-bar-rtp.bg-success{background-image:linear-gradient(90deg,#2ecc71 25%,#27ae60 50%,#2ecc71 75%)!important;box-shadow:0 0 10px #2ecc71}
-        .progress-bar-rtp.bg-warning{background-image:linear-gradient(90deg,#f1c40f 25%,#f39c12 50%,#f1c40f 75%)!important;box-shadow:0 0 10px #f1c40f}
-        .progress-bar-rtp.bg-danger{background-image:linear-gradient(90deg,#e74c3c 25%,#c0392b 50%,#e74c3c 75%)!important;box-shadow:0 0 10px #e74c3c}
-        .progress-bar-rtp.bg-primary{background-image:linear-gradient(90deg,#ff4444 25%,#cc0000 50%,#ff4444 75%)!important;box-shadow:0 0 10px #ff0000}
+        .progress{background-color:#0a2e15!important;border:1px solid #2e5c3b;border-radius:8px!important;height:22px!important;padding:2px}
+        .progress-bar-rtp{border-radius:6px!important;animation:flowAnimation 2s linear infinite;background-size:200% 100%!important;color:#072712!important;font-weight:700;font-size:.8em;text-shadow:none;display:flex;align-items:center;justify-content:center}
+        
+        /* Progress bars tetap variatif tapi disesuaikan dikit */
+        .progress-bar-rtp.bg-success{background-image:linear-gradient(90deg,#bff116 25%,#a8d613 50%,#bff116 75%)!important;box-shadow:0 0 10px #bff116}
+        .progress-bar-rtp.bg-warning{background-image:linear-gradient(90deg,#fff927 25%,#e6e020 50%,#fff927 75%)!important;box-shadow:0 0 10px #fff927}
+        .progress-bar-rtp.bg-danger{background-image:linear-gradient(90deg,#7da100 25%,#4e6b00 50%,#7da100 75%)!important;box-shadow:0 0 10px #7da100; color: #fff!important;}
+        .progress-bar-rtp.bg-primary{background-image:linear-gradient(90deg,#bff116 25%,#8fa310 50%,#bff116 75%)!important;box-shadow:0 0 10px #bff116}
         
         .pagination{justify-content:center}
-        .pagination .page-link{background-color:transparent;border:1px solid #cc0000;color:#ff0000;margin:0 3px;border-radius:5px}
-        .pagination .page-item:not(.disabled) .page-link:hover{background-color:rgba(255, 0, 0,.2);color:#fff}
-        .pagination .page-item.active .page-link{background:linear-gradient(45deg,#8b0000,#ff0000);border-color:#ff0000;color:#fff}
-        .pagination .page-item.disabled .page-link{background-color:#3e2c2c;border-color:#5e3434;color:#566573}
+        .pagination .page-link{background-color:transparent;border:1px solid #bff116;color:#bff116;margin:0 3px;border-radius:5px}
+        .pagination .page-item:not(.disabled) .page-link:hover{background-color:rgba(191, 241, 22,.2);color:#fff}
+        .pagination .page-item.active .page-link{background:linear-gradient(45deg,#8fa310,#bff116);border-color:#bff116;color:#072712}
+        .pagination .page-item.disabled .page-link{background-color:#0a2e15;border-color:#2e5c3b;color:#566573}
         
         #deposit-form .alert .my-3, #deposit-form .alert .d-grid { margin-top: 0 !important; margin-bottom: 0 !important; padding-top: 0 !important; padding-bottom: 0 !important; }
-        #maincontent .border.border-top-0 { border-color: #cc0000 !important; }
-        #maincontent #withdraw-form h4 { text-align: center !important; color: #FFD700 !important; text-shadow: 0 0 8px rgba(255, 215, 0, 0.5); margin-bottom: 1.5rem !important; }
+        #maincontent .border.border-top-0 { border-color: #bff116 !important; }
+        #maincontent #withdraw-form h4 { text-align: center !important; color: #fff927 !important; text-shadow: 0 0 8px rgba(255, 249, 39, 0.5); margin-bottom: 1.5rem !important; }
         #withdraw-form .form-label { padding-left: 0.5rem !important; }
         .invalid-feedback { display: none !important; }
         .form-control.is-invalid { background-image: none !important; padding-right: 0.75rem !important; }
         .balance-toggle-icon { margin-left: 8px; cursor: pointer; vertical-align: middle; }
         #member-status-panel a { display: inline-flex; align-items: center; }
-        #member-status-panel .balance-toggle-icon { font-size: 24px; color: #FFD700; }
-        #member-status-panel.glassmorphism { border-color: #FFD700 !important; box-shadow: 0 0 20px rgba(255, 215, 0, 0.6) !important; }
-        #member-status-panel.glassmorphism:hover { box-shadow: 0 5px 25px rgba(255, 215, 0, 0.7) !important; }
-        #member-status-panel strong { color: #FFD700 !important; text-shadow: 0 0 5px rgba(255, 215, 0, 0.6) !important; }
+        #member-status-panel .balance-toggle-icon { font-size: 24px; color: #fff927; }
+        #member-status-panel.glassmorphism { border-color: #fff927 !important; box-shadow: 0 0 20px rgba(255, 249, 39, 0.6) !important; }
+        #member-status-panel.glassmorphism:hover { box-shadow: 0 5px 25px rgba(255, 249, 39, 0.7) !important; }
+        #member-status-panel strong { color: #fff927 !important; text-shadow: 0 0 5px rgba(255, 249, 39, 0.6) !important; }
         
         #nav-tab { flex-wrap: nowrap; overflow-x: auto; border-bottom: none !important; padding-bottom: 5px; margin-bottom: -1px; }
         #nav-tab::-webkit-scrollbar { display: none; }
         #nav-tab .nav-link { flex-shrink: 0; color: #bdc3c7 !important; background-color: transparent !important; border: 1px solid transparent !important; border-bottom: none !important; }
-        #nav-tab .nav-link.active { color: #fff !important; background-color: #2f1a1a !important; border-color: #cc0000 !important; border-radius: 8px 8px 0 0 !important; }
-        #nav-tabContent { background-color: #2f1a1a; border: 1px solid #cc0000; border-top: none; padding: 2rem !important; color: #ecf0f1; border-radius: 0 0 8px 8px; }
-        #nav-tabContent h3 { color: #FFD700 !important; }
+        #nav-tab .nav-link.active { color: #fff !important; background-color: #0a2e15 !important; border-color: #bff116 !important; border-radius: 8px 8px 0 0 !important; }
+        #nav-tabContent { background-color: #0a2e15; border: 1px solid #bff116; border-top: none; padding: 2rem !important; color: #ecf0f1; border-radius: 0 0 8px 8px; }
+        #nav-tabContent h3 { color: #fff927 !important; }
         
         /* --- REVISI: BOX BETTING MATCHES RESULT BOX --- */
-        #betting-page-container .card { background: linear-gradient(160deg, #1f0a0a, #000000) !important; border: 1px solid #cc0000 !important; box-shadow: 0 0 20px rgba(255, 0, 0, .6) !important; border-radius: 15px !important; color: #ecf0f1; }
+        #betting-page-container .card { background: linear-gradient(160deg, #072712, #001105) !important; border: 1px solid #bff116 !important; box-shadow: 0 0 20px rgba(191, 241, 22, .6) !important; border-radius: 15px !important; color: #ecf0f1; }
         
-        #betting-page-container .card-header { background-color: rgba(255, 0, 0, .1); border-bottom: 1px solid #cc0000; color: #ffd700; font-weight: bold; text-transform: uppercase; font-size: 1.1rem; padding: .75rem 1.25rem; }
+        #betting-page-container .card-header { background-color: rgba(191, 241, 22, .1); border-bottom: 1px solid #bff116; color: #fff927; font-weight: bold; text-transform: uppercase; font-size: 1.1rem; padding: .75rem 1.25rem; }
         #betting-page-container .card-header i { margin-right: 8px; }
         #betting-page-container .info-description { font-size: 0.85em; color: #bdc3c7; background-color: transparent; padding: 10px; border-radius: 0; border-left: none; margin-bottom: 0 !important; }
-        #betting-page-container .category-buttons .btn, #betting-page-container .bet-type-toggle .btn { border-color: #cc0000 !important; color: #ff0000 !important; background-color: transparent !important; text-transform: none !important; font-weight: normal; }
-        #betting-page-container .category-buttons .btn:hover, #betting-page-container .bet-type-toggle .btn:hover { background-color: rgba(255, 0, 0, .2) !important; color: #fff !important; }
-        #betting-page-container .category-buttons .btn.active, #betting-page-container .btn-check:checked + .btn { background: linear-gradient(45deg, #8b0000, #ff0000) !important; border-color: #ff0000 !important; color: #fff !important; font-weight: bold; box-shadow: 0 0 15px #ff0000; }
+        #betting-page-container .category-buttons .btn, #betting-page-container .bet-type-toggle .btn { border-color: #bff116 !important; color: #bff116 !important; background-color: transparent !important; text-transform: none !important; font-weight: normal; }
+        #betting-page-container .category-buttons .btn:hover, #betting-page-container .bet-type-toggle .btn:hover { background-color: rgba(191, 241, 22, .2) !important; color: #fff !important; }
+        #betting-page-container .category-buttons .btn.active, #betting-page-container .btn-check:checked + .btn { background: linear-gradient(45deg, #8fa310, #bff116) !important; border-color: #bff116 !important; color: #072712 !important; font-weight: bold; box-shadow: 0 0 15px #bff116; }
         #betting-page-container .table-input { background-color: rgba(0,0,0,0.15); }
-        #betting-page-container .table-input thead th { background-color: rgba(255, 0, 0, .1) !important; border-bottom: 2px solid #cc0000 !important; color: #ecf0f1; }
-        #betting-page-container .form-check-input { background-color: #2f1a1a; border-color: #5e3434; }
-        #betting-page-container .form-check-input:checked { background-color: #ff0000; border-color: #ff0000; box-shadow: 0 0 10px #ff0000; }
+        #betting-page-container .table-input thead th { background-color: rgba(191, 241, 22, .1) !important; border-bottom: 2px solid #bff116 !important; color: #bff116; }
+        #betting-page-container .form-check-input { background-color: #0a2e15; border-color: #2e5c3b; }
+        #betting-page-container .form-check-input:checked { background-color: #bff116; border-color: #bff116; box-shadow: 0 0 10px #bff116; }
         
-        #panel-closed.panel-closed-themed { background: linear-gradient(45deg, #c0392b, #e74c3c) !important; border: 1px solid #e74c3c !important; box-shadow: 0 0 20px rgba(231, 76, 60, 0.6) !important; border-radius: 15px !important; padding: 5rem 1rem !important; }
+        #panel-closed.panel-closed-themed { background: linear-gradient(45deg, #4e6b00, #7da100) !important; border: 1px solid #7da100 !important; box-shadow: 0 0 20px rgba(125, 161, 0, 0.6) !important; border-radius: 15px !important; padding: 5rem 1rem !important; }
         #panel-closed.panel-closed-themed strong { font-size: 1.5rem; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
         
         #betting-page-container .card-body { padding: 1.25rem; padding-top: 0 !important; }
@@ -264,44 +279,44 @@
         #betting-page-container .table-input { margin-left: -1.25rem !important; margin-right: -1.25rem !important; width: calc(100% + 2.5rem) !important; margin-bottom: 1rem !important; }
         #betting-page-container .table-input td.td-input { padding: 0 !important; vertical-align: middle; }
         #betting-page-container .table-input td.td-input .form-control { border: none !important; border-radius: 0 !important; background-color: transparent !important; text-align: center; height: 100%; }
-        #betting-page-container .table-input td.td-input .form-control:focus { box-shadow: inset 0 0 0 2px #ff0000 !important; }
-        #betting-page-container button[onclick="addRow(event)"] { border-color: #ffd700 !important; color: #ffd700 !important; background-color: transparent !important; }
-        #betting-page-container button[onclick="addRow(event)"]:hover { background-color: rgba(255, 215, 0, 0.2) !important; color: #fff !important; }
-        #betting-page-container select#select-market { border-color: #ffd700 !important; }
-        #betting-page-container select#select-market:focus { border-color: #ffd700 !important; box-shadow: 0 0 10px rgba(255, 215, 0, 0.6) !important; }
+        #betting-page-container .table-input td.td-input .form-control:focus { box-shadow: inset 0 0 0 2px #bff116 !important; }
+        #betting-page-container button[onclick="addRow(event)"] { border-color: #fff927 !important; color: #fff927 !important; background-color: transparent !important; }
+        #betting-page-container button[onclick="addRow(event)"]:hover { background-color: rgba(255, 249, 39, 0.2) !important; color: #fff !important; }
+        #betting-page-container select#select-market { border-color: #fff927 !important; }
+        #betting-page-container select#select-market:focus { border-color: #fff927 !important; box-shadow: 0 0 10px rgba(255, 249, 39, 0.6) !important; }
 
-        #profile-page-container .profile-row { display: flex; align-items: center; background-color: #2f1a1a; padding: 12px 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #5e3434; }
+        #profile-page-container .profile-row { display: flex; align-items: center; background-color: #0a2e15; padding: 12px 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #2e5c3b; }
         #profile-page-container .profile-row-stacked { flex-direction: column; align-items: flex-start; }
         #profile-page-container .profile-label { display: flex; align-items: center; color: #bdc3c7; flex-basis: 35%; flex-shrink: 0; font-weight: 500; }
         #profile-page-container .profile-row-stacked .profile-label { margin-bottom: 8px; }
-        #profile-page-container .profile-label i { margin-right: 12px; color: #ff0000; font-size: 1.2em; }
+        #profile-page-container .profile-label i { margin-right: 12px; color: #bff116; font-size: 1.2em; }
         #profile-page-container .profile-value { color: #fff; font-weight: 700; word-break: break-all; text-align: right; flex-grow: 1; }
         #profile-page-container .profile-row-stacked .profile-value { text-align: left; background-color: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 5px; width: 100%; }
 
-        #confirmModal .modal-header .modal-title { color: #ff0000 !important; text-shadow: 0 0 5px #ff0000; }
+        #confirmModal .modal-header .modal-title { color: #bff116 !important; text-shadow: 0 0 5px #bff116; }
         #confirmModal #invoice-content .text-center .display-6,
-        #confirmModal #invoice-content .text-center small { color: #ffd700 !important; }
-        #confirmModal #invoice-content .badge { background-color: #ffd700 !important; color: #2f1a1a !important; font-weight: bold; }
-        #confirmModal #invoice-content tfoot { background-color: rgba(255, 0, 0, .1) !important; color: #ecf0f1 !important; }
+        #confirmModal #invoice-content .text-center small { color: #fff927 !important; }
+        #confirmModal #invoice-content .badge { background-color: #fff927 !important; color: #072712 !important; font-weight: bold; }
+        #confirmModal #invoice-content tfoot { background-color: rgba(191, 241, 22, .1) !important; color: #ecf0f1 !important; }
         #confirmModal #invoice-content tfoot th { font-weight: 700; }
         #confirmModal .modal-footer .btn-outline-primary {
-            background: linear-gradient(45deg, #c0392b, #e74c3c) !important;
+            background: linear-gradient(45deg, #4e6b00, #7da100) !important;
             border: none !important;
             color: #fff !important;
-            box-shadow: 0 0 10px #e74c3c, inset 0 0 5px rgba(255, 255, 255, .4);
+            box-shadow: 0 0 10px #7da100, inset 0 0 5px rgba(255, 255, 255, .4);
         }
         #confirmModal .modal-footer .btn-outline-primary:hover {
-            box-shadow: 0 0 20px #e74c3c, 0 0 30px #c0392b, inset 0 0 5px rgba(255, 255, 255, .4) !important;
+            box-shadow: 0 0 20px #7da100, 0 0 30px #4e6b00, inset 0 0 5px rgba(255, 255, 255, .4) !important;
             transform: scale(1.05);
         }
         #confirmModal .modal-footer .btn-danger {
-            background: linear-gradient(45deg, #8b0000, #ff0000) !important;
+            background: linear-gradient(45deg, #8fa310, #bff116) !important;
             border: none !important;
-            color: #fff !important;
-            box-shadow: 0 0 10px #ff0000, inset 0 0 5px rgba(255,255,255,.4) !important;
+            color: #072712 !important;
+            box-shadow: 0 0 10px #bff116, inset 0 0 5px rgba(255,255,255,.4) !important;
         }
         #confirmModal .modal-footer .btn-danger:hover {
-             box-shadow: 0 0 20px #ff0000, 0 0 30px #8b0000, inset 0 0 5px rgba(255,255,255,.4) !important;
+             box-shadow: 0 0 20px #bff116, 0 0 30px #8fa310, inset 0 0 5px rgba(255,255,255,.4) !important;
              transform: scale(1.05);
         }
         
@@ -314,7 +329,7 @@
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
-            color: #e74c3c; 
+            color: #7da100; 
             display: none; 
             font-size: 1.1rem;
             z-index: 5;
@@ -322,7 +337,7 @@
             transition: color 0.2s ease;
         }
         .promo-clear-btn:hover {
-            color: #f5b7b1; 
+            color: #bff116; 
         }
         
         .promo-clear-btn.visible {
@@ -334,8 +349,8 @@
         }
         
         .promo-choice-box {
-            background-color: #2f1a1a; 
-            border: 2px solid #5e3434; 
+            background-color: #0a2e15; 
+            border: 2px solid #2e5c3b; 
             border-radius: 8px;
             padding: 1rem;
             margin-bottom: 0.5rem;
@@ -347,11 +362,11 @@
             border-color: #bdc3c7; 
         }
         .promo-choice-box.selected {
-            border-color: #FFD700; 
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.6); 
+            border-color: #fff927; 
+            box-shadow: 0 0 10px rgba(255, 249, 39, 0.6); 
         }
         .promo-choice-box h5 {
-            color: #FFD700; 
+            color: #fff927; 
             margin-bottom: 0.5rem;
         }
         .promo-choice-box small {
@@ -360,11 +375,11 @@
         }
         
         #maincontent .container .text-center h3 {
-            color: #FFD700 !important;
+            color: #fff927 !important;
             text-transform: uppercase !important;
             margin-top: 1.5rem !important;
             margin-bottom: 1rem !important;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+            text-shadow: 0 0 10px rgba(255, 249, 39, 0.6);
         }
         
         #maincontent .table-bordered tbody td {
@@ -387,10 +402,10 @@
         }
         
         #maincontent .card.text-center.border-danger {
-            background: linear-gradient(145deg, #a73c2e, #c0392b) !important;
-            border: 1px solid #e74c3c !important;
+            background: linear-gradient(145deg, #072712, #0a2e15) !important;
+            border: 1px solid #bff116 !important;
             color: #fff !important;
-            box-shadow: 0 0 15px rgba(231, 76, 60, 0.6);
+            box-shadow: 0 0 15px rgba(191, 241, 22, 0.6);
             border-radius: 15px !important;
         }
         
@@ -401,14 +416,14 @@
         }
         
         #maincontent .card.text-center.border-danger .card-title i {
-            color: #FFD700 !important; 
-            text-shadow: 0 0 5px #FFD700;
+            color: #fff927 !important; 
+            text-shadow: 0 0 5px #fff927;
         }
         
         #maincontent .card.text-center.border-danger span.countdown.badge.bg-danger {
             background: none !important;
-            color: #FFD700 !important;
-            text-shadow: 0 0 8px rgba(255, 215, 0, 0.7);
+            color: #fff927 !important;
+            text-shadow: 0 0 8px rgba(255, 249, 39, 0.7);
             font-size: 1.5rem !important; 
             font-weight: 700;
             padding: 0 !important;
@@ -425,55 +440,55 @@
         
         #maincontent .alert.alert-primary a.btn-secondary[href="/deposit-qris"] span,
         #maincontent .alert.alert-primary a.btn-secondary[href="/deposit-qris"] strong {
-            color: #3e2c2c !important;
+            color: #072712 !important;
         }
         
         #maincontent .badge.bg-danger {
-            background: linear-gradient(45deg, #e74c3c, #c0392b) !important;
+            background: linear-gradient(45deg, #4e6b00, #7da100) !important;
             color: #fff !important;
-            box-shadow: 0 0 5px rgba(231, 76, 60, 0.5);
-            border: 1px solid #e74c3c;
+            box-shadow: 0 0 5px rgba(125, 161, 0, 0.5);
+            border: 1px solid #7da100;
             text-shadow: 0 1px 2px rgba(0,0,0,0.3);
             font-weight: 600;
         }
 
         #maincontent .badge.bg-success {
-            background: linear-gradient(45deg, #2ecc71, #27ae60) !important;
-            color: #fff !important;
-            box-shadow: 0 0 5px rgba(46, 204, 113, 0.5);
-            border: 1px solid #2ecc71;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #8fa310, #bff116) !important;
+            color: #072712 !important;
+            box-shadow: 0 0 5px rgba(191, 241, 22, 0.5);
+            border: 1px solid #bff116;
+            text-shadow: none;
             font-weight: 600;
         }
         
         #maincontent .badge.bg-warning {
-            background: linear-gradient(45deg, #ffd700, #ffa500) !important;
-            color: #3e2c2c !important; 
-            box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
-            border: 1px solid #ffd700;
+            background: linear-gradient(45deg, #fff927, #e6e020) !important;
+            color: #072712 !important; 
+            box-shadow: 0 0 5px rgba(255, 249, 39, 0.5);
+            border: 1px solid #fff927;
             text-shadow: 0 1px 1px rgba(255,255,255,0.2);
             font-weight: 600;
         }
         
         #maincontent .badge.bg-primary {
-            background: linear-gradient(45deg, #8b0000, #ff0000) !important;
-            color: #fff !important;
-            box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
-            border: 1px solid #ff0000;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #8fa310, #bff116) !important;
+            color: #072712 !important;
+            box-shadow: 0 0 5px rgba(191, 241, 22, 0.5);
+            border: 1px solid #bff116;
+            text-shadow: none;
             font-weight: 600;
         }
         
         #maincontent tbody tr.table-warning th {
             color: #fff !important; 
-            background-color: #3e2c2c !important; 
-            border-color: #5e3434 !important; 
+            background-color: #0a2e15 !important; 
+            border-color: #2e5c3b !important; 
         }
         
         #maincontent .td-input textarea.form-control {
-            background-color: #3e2c2c !important; 
+            background-color: #0a2e15 !important; 
             color: #ecf0f1 !important; 
-            border: 1px solid #5e3434 !important; 
+            border: 1px solid #2e5c3b !important; 
             box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
             resize: vertical; 
         }
@@ -485,9 +500,9 @@
 
     const styleElement = document.createElement('style');
     document.head.appendChild(styleElement);
-    styleElement.innerHTML = danangThemeStyles;
+    styleElement.innerHTML = peterPanThemeStyles;
 
-    // --- KUMPULAN FUNGSI ---
+    // --- KUMPULAN FUNGSI (LOGIC TETAP SAMA) ---
     let intervalsInitialized = false;
 
     function formatNumberWithCommas(val) {
@@ -500,8 +515,8 @@
             return stringVal;
         }
     }
-    
-    function initializeBetFormatting() {
+
+ function initializeBetFormatting() {
         document.querySelectorAll('#betting-page-container td.td-input > input.form-control[name^="bet"]:not(.display-input), #betting-page-container td.td-input > input.form-control[id^="bet-"]:not(.display-input)').forEach(originalInput => {
             if (originalInput.dataset.betFormatted === 'true' || originalInput.offsetParent === null || originalInput.type === 'hidden') return;
             
@@ -579,11 +594,11 @@
 
     function styleRtpModal() { const rtpModalLabel = document.querySelector('#rtpModalLabel'); if (!rtpModalLabel || rtpModalLabel.closest('.modal-content').dataset.styled === 'true') return; const modalContent = rtpModalLabel.closest('.modal-content'); modalContent.querySelectorAll(".list-group-item small > strong").forEach(title => { if (title.textContent.includes("Step")) title.textContent = title.textContent.replace(/Step \d+:\s*/, "").trim(); }); ["Provider Name", "Slot Game"].forEach(labelText => { const labelDiv = Array.from(modalContent.querySelectorAll(".modal-body .row .col-6")).find(el => el.textContent.trim() === labelText); if (labelDiv) { const row = labelDiv.closest(".row"); if (row) { const valueDiv = row.querySelector(".col-6.text-end"); if (valueDiv) { valueDiv.classList.remove("col-6", "text-end"); valueDiv.classList.add("col-12", "text-center"); if (labelText === "Provider Name") valueDiv.style.paddingBottom = "0rem"; if (labelText === "Slot Game") valueDiv.style.marginBottom = "1rem"; } labelDiv.remove(); } } }); const modalTitle = modalContent.querySelector(".modal-title"); if (modalTitle && !modalTitle.querySelector("i")) modalTitle.innerHTML = `<i class="bi bi-controller"></i> TIPS BERMAIN`; const noteElement = modalContent.querySelector(".text-muted.text-center"); if (noteElement && noteElement.textContent.includes("Lakukan Pola diatas Sebanyak 2x")) noteElement.innerHTML = "<small><strong>Note : </strong> Jika Tersedia / Ingin Membeli Fitur Spin, Lakukan Pola diatas Sebanyak 2x Terlebih Dahulu</small>"; modalContent.dataset.styled = "true"; }
 
-    function runAllOtherScripts() { [{selector:"h3.my-2:not(#row-togel h3)",oldText:"Terbaru",newText:"GAME TERBARU",icon:"bi-stars"},{selector:"h3.my-2:not(#row-togel h3)",oldText:"100 RP",newText:"GAME RP 100",icon:"bi-coin"},{selector:"h3.my-2:not(#row-togel h3)",oldText:"Populer",newText:"GAME POPULER",icon:"bi-fire"},{selector:"h3.my-2:not(#row-togel h3)",oldText:"Terakhir Dimainkan",newText:"TERAKHIR DIMAINKAN",icon:"bi-clock-history"},{selector:"h3.text-center",oldText:"Provider Kami",newText:"PROVIDER KAMI",icon:"bi-puzzle-fill"},{selector:"h3.text-center",oldText:"Cara Pembayaran",newText:"CARA PEMBAYARAN",icon:"bi-wallet-fill"},{selector:"h3.text-center",oldText:"Temui Kami",newText:"TEMUI KAMI",icon:"bi-people-fill"}].forEach(e=>{document.querySelectorAll(e.selector).forEach(t=>{if(t.textContent.trim().includes(e.oldText)&&!t.querySelector("i"))t.innerHTML=`<i class="bi ${e.icon}"></i> ${e.newText}`})}); const e=document.querySelector("#row-togel h3"),t=document.querySelector("#row-togel > .d-flex > a");if(e&&t&&!e.querySelector("a")){var o=t.href,l="PASARAN TOGEL";const n=document.createElement("a");n.href=o;const c=document.createElement("i");c.className="bi bi-bullseye",n.appendChild(c),n.appendChild(document.createTextNode(` ${l}`)),e.innerHTML="",e.appendChild(n)} document.querySelectorAll(".progress-bar-rtp").forEach(e=>{let t=e.textContent.trim();t.includes("[RTP]")&&(e.textContent=t.replace(/\s*\[RTP\]\s*/,""))}); const r=document.querySelector("#row-quicklogin .card-body");if(r&&!document.querySelector(".custom-promo-buttons-container")){const e=[{text:"WHATSAPP GABANTOTO",link:"https://wa.me/6282312056017",icon:"bi-whatsapp"},{text:"GROUP FACEBOOK",link:"https://www.facebook.com/groups/1633061267257649",icon:"bi-facebook"}],t=document.createElement("div");t.className="custom-promo-buttons-container mt-4 d-grid gap-2",e.forEach(e=>{const o=document.createElement("a");o.href=e.link,o.target="_blank",o.className="btn btn-custom-promo",o.innerHTML=`<i class="bi ${e.icon}"></i> ${e.text}`,t.appendChild(o)});const o=r.lastElementChild;o&&o.parentNode.insertBefore(t,o.nextSibling)} const i={username:"bi-person-fill",password:"bi-key-fill",confirmpassword:"bi-shield-lock-fill",email:"bi-envelope-fill",phone:"bi-phone-fill",agentbankid:"bi-bank",bankAccountNumber:"bi-credit-card-2-front-fill",bankaccountname:"bi-person-vcard-fill"};for(const[e,t]of Object.entries(i)){const o=document.querySelector(`label[for="${e}"]`);o&&!o.querySelector("i")&&(o.innerHTML=`<i class="bi ${t}"></i> ${o.innerText}`)} }
+    function runAllOtherScripts() { [{selector:"h3.my-2:not(#row-togel h3)",oldText:"Terbaru",newText:"GAME TERBARU",icon:"bi-stars"},{selector:"h3.my-2:not(#row-togel h3)",oldText:"100 RP",newText:"GAME RP 100",icon:"bi-coin"},{selector:"h3.my-2:not(#row-togel h3)",oldText:"Populer",newText:"GAME POPULER",icon:"bi-fire"},{selector:"h3.my-2:not(#row-togel h3)",oldText:"Terakhir Dimainkan",newText:"TERAKHIR DIMAINKAN",icon:"bi-clock-history"},{selector:"h3.text-center",oldText:"Provider Kami",newText:"PROVIDER KAMI",icon:"bi-puzzle-fill"},{selector:"h3.text-center",oldText:"Cara Pembayaran",newText:"CARA PEMBAYARAN",icon:"bi-wallet-fill"},{selector:"h3.text-center",oldText:"Temui Kami",newText:"TEMUI KAMI",icon:"bi-people-fill"}].forEach(e=>{document.querySelectorAll(e.selector).forEach(t=>{if(t.textContent.trim().includes(e.oldText)&&!t.querySelector("i"))t.innerHTML=`<i class="bi ${e.icon}"></i> ${e.newText}`})}); const e=document.querySelector("#row-togel h3"),t=document.querySelector("#row-togel > .d-flex > a");if(e&&t&&!e.querySelector("a")){var o=t.href,l="PASARAN TOGEL";const n=document.createElement("a");n.href=o;const c=document.createElement("i");c.className="bi bi-bullseye",n.appendChild(c),n.appendChild(document.createTextNode(` ${l}`)),e.innerHTML="",e.appendChild(n)} document.querySelectorAll(".progress-bar-rtp").forEach(e=>{let t=e.textContent.trim();t.includes("[RTP]")&&(e.textContent=t.replace(/\s*\[RTP\]\s*/,""))}); const r=document.querySelector("#row-quicklogin .card-body");if(r&&!document.querySelector(".custom-promo-buttons-container")){const e=[{text:"WHATSAPP OFFICIAL",link:"#",icon:"bi-whatsapp"},{text:"GROUP FACEBOOK",link:"#",icon:"bi-facebook"}],t=document.createElement("div");t.className="custom-promo-buttons-container mt-4 d-grid gap-2",e.forEach(e=>{const o=document.createElement("a");o.href=e.link,o.target="_blank",o.className="btn btn-custom-promo",o.innerHTML=`<i class="bi ${e.icon}"></i> ${e.text}`,t.appendChild(o)});const o=r.lastElementChild;o&&o.parentNode.insertBefore(t,o.nextSibling)} const i={username:"bi-person-fill",password:"bi-key-fill",confirmpassword:"bi-shield-lock-fill",email:"bi-envelope-fill",phone:"bi-phone-fill",agentbankid:"bi-bank",bankAccountNumber:"bi-credit-card-2-front-fill",bankaccountname:"bi-person-vcard-fill"};for(const[e,t]of Object.entries(i)){const o=document.querySelector(`label[for="${e}"]`);o&&!o.querySelector("i")&&(o.innerHTML=`<i class="bi ${t}"></i> ${o.innerText}`)} }
 
     function createSidebarToggleButton(){if(document.getElementById("custom-sidebar-toggle"))return;const e=document.createElement("a");e.id="custom-sidebar-toggle",e.href="#",e.innerHTML='<i class="bi bi-arrow-left-circle-fill"></i>',document.body.appendChild(e),e.addEventListener("click",function(e){e.preventDefault(),document.getElementById("sidebar").classList.remove("active"),document.querySelector(".overlay").classList.remove("active")})}
 
-    function updateProfileElements(){const e=document.querySelector("#sidebar .bi-person-circle");if(e){const t=document.createElement("img");t.src="https://raw.githubusercontent.com/dewasijicare/images/main/icon_gaban_36x36.png",t.className="gaban-profile-icon",e.parentNode.replaceChild(t,e)}const t=Array.from(document.querySelectorAll("#sidebar span")).find(e=>e.textContent.includes("CREDIT:"));t&&(t.style.color="#FFD700")}
+    function updateProfileElements(){const e=document.querySelector("#sidebar .bi-person-circle");if(e){const t=document.createElement("img");t.src="https://raw.githubusercontent.com/dewasijicare/images/main/icon_gaban_36x36.png",t.className="gaban-profile-icon",e.parentNode.replaceChild(t,e)}const t=Array.from(document.querySelectorAll("#sidebar span")).find(e=>e.textContent.includes("CREDIT:"));t&&(t.style.color="#fff927")}
 
     const BANK_ICONS = {'DANA':'https://adiltoto.org/images/dana_ok.png','OVO':'https://adiltoto.org/images/ovo_ok.png','GOPAY':'https://adiltoto.org/images/gopay_ok.png','LINKAJA':'https://adiltoto.org/images/link_ok.png','BCA':'https://adiltoto.org/images/bca_ok.png','BNI':'https://adiltoto.org/images/bni_ok.png','BRI':'https://adiltoto.org/images/bri_ok.png','MANDIRI':'https://adiltoto.org/images/mandiri_ok.png','SEABANK':'https://adiltoto.org/images/seabank_ok.png','JAGO':'https://adiltoto.org/images/jago_ok.png'};
 
@@ -615,6 +630,7 @@
                 newCopyButton.innerHTML='<i class="bi bi-copy"></i> Copy';
                 newCopyButton.addEventListener('click',e=>{
                     e.preventDefault();
+                    e.stopPropagation();
                     navigator.clipboard.writeText(numberSpan.textContent.trim()).then(()=>{
                         newCopyButton.innerHTML='<i class="bi bi-check-lg"></i> Copied';
                         newCopyButton.classList.add('copy-btn-success');
@@ -645,7 +661,7 @@
         depositForm.dataset.initialized='true' 
     }
     
-    function updateDepositFormUI(depositForm) { if(!depositForm)return;const receiverBankSpan=document.getElementById('receiver-bank');if(receiverBankSpan&&!receiverBankSpan.dataset.iconApplied){const bankName=receiverBankSpan.textContent.trim().toUpperCase();if(BANK_ICONS[bankName]){receiverBankSpan.innerHTML=`<img src="${BANK_ICONS[bankName]}" alt="${bankName}" style="height: 40px; vertical-align: middle;">`}receiverBankSpan.dataset.iconApplied='true'}for(const[key,iconClass]of Object.entries(ICON_MAPPINGS)){const isLabelForInput=!key.includes('receiver');const element=isLabelForInput?depositForm.querySelector(`label[for="${key}"]`):document.getElementById(key);if(element&&!element.querySelector('i.bi')){const iconEl=document.createElement('i');iconEl.className=`bi ${iconClass}`;element.prepend(iconEl,document.createTextNode(' '))}}const qrCodeImg=document.getElementById('receiver-qrcode');if(qrCodeImg){qrCodeImg.classList.remove('bg-white');qrCodeImg.style.setProperty('border-color','#cc0000','important');qrCodeImg.style.setProperty('background-color','transparent','important')} }
+    function updateDepositFormUI(depositForm) { if(!depositForm)return;const receiverBankSpan=document.getElementById('receiver-bank');if(receiverBankSpan&&!receiverBankSpan.dataset.iconApplied){const bankName=receiverBankSpan.textContent.trim().toUpperCase();if(BANK_ICONS[bankName]){receiverBankSpan.innerHTML=`<img src="${BANK_ICONS[bankName]}" alt="${bankName}" style="height: 40px; vertical-align: middle;">`}receiverBankSpan.dataset.iconApplied='true'}for(const[key,iconClass]of Object.entries(ICON_MAPPINGS)){const isLabelForInput=!key.includes('receiver');const element=isLabelForInput?depositForm.querySelector(`label[for="${key}"]`):document.getElementById(key);if(element&&!element.querySelector('i.bi')){const iconEl=document.createElement('i');iconEl.className=`bi ${iconClass}`;element.prepend(iconEl,document.createTextNode(' '))}}const qrCodeImg=document.getElementById('receiver-qrcode');if(qrCodeImg){qrCodeImg.classList.remove('bg-white');qrCodeImg.style.setProperty('border-color','#bff116','important');qrCodeImg.style.setProperty('background-color','transparent','important')} }
 
     function styleWithdrawForm() { const withdrawCard=document.querySelector('#withdraw-form')?.closest('.card.shadow');if(!withdrawCard||withdrawCard.dataset.tabsApplied==='true')return;const mainTitle=withdrawCard.querySelector('h1.text-center');const historyTitle=Array.from(withdrawCard.querySelectorAll('h1, h2, h3')).find(el=>el.textContent.includes('RIWAYAT WITHDRAW'));if(mainTitle&&historyTitle){const navTabs=document.createElement('ul');navTabs.className='nav nav-tabs';navTabs.innerHTML=`<li class="nav-item"><a class="nav-link active" href="#">Withdraw</a></li><li class="nav-item"><a class="nav-link" href="#">Riwayat</a></li>`;const contentWrapper=document.createElement('div');contentWrapper.className='border border-top-0 px-3 pb-3 pt-2';Array.from(withdrawCard.children).forEach(child=>{if(child!==mainTitle){contentWrapper.appendChild(child.cloneNode(true))}});while(withdrawCard.firstChild){withdrawCard.removeChild(withdrawCard.firstChild)}withdrawCard.appendChild(mainTitle);withdrawCard.appendChild(navTabs);withdrawCard.appendChild(contentWrapper);const newHistoryTitle=contentWrapper.querySelector('h1, h2, h3');if(newHistoryTitle&&newHistoryTitle.textContent.includes('RIWAYAT WITHDRAW')){newHistoryTitle.style.display='none'}withdrawCard.dataset.tabsApplied='true'}const withdrawForm=withdrawCard.querySelector('#withdraw-form');if(withdrawForm){const bankLabel=withdrawForm.querySelector('label[for="agentmemberbankid"]');if(bankLabel&&!bankLabel.querySelector('i.bi')){bankLabel.innerHTML='<i class="bi bi-wallet2"></i> Bank / e-Wallet'}const amountLabel=withdrawForm.querySelector('label[for="amount"]');if(amountLabel&&!amountLabel.querySelector('i.bi')){amountLabel.innerHTML='<i class="bi bi-cash-coin"></i> '+amountLabel.textContent}} }
 
@@ -812,9 +828,9 @@
                     toggleBtn.style.cursor = 'pointer';
                     toggleBtn.style.display = 'block';
 
-                    // Ubah warna icon mata jadi Emas
+                    // Ubah warna icon mata jadi Kuning
                     const eyeIcon = toggleBtn.querySelector('i');
-                    if(eyeIcon) eyeIcon.style.color = '#FFD700';
+                    if(eyeIcon) eyeIcon.style.color = '#fff927';
 
                     newGroup.appendChild(toggleBtn);
                 }
@@ -900,10 +916,10 @@
                 toggleBtn.style.cursor = 'pointer';
                 toggleBtn.style.display = 'block';
                 
-                // Pastikan icon mata berwarna Emas (sesuai tema)
+                // Pastikan icon mata berwarna Kuning (sesuai tema)
                 const eyeIcon = toggleBtn.querySelector('i');
                 if (eyeIcon) {
-                    eyeIcon.style.color = '#FFD700'; 
+                    eyeIcon.style.color = '#fff927'; 
                 }
 
                 // Masukkan tombol ke dalam group baru
@@ -933,7 +949,7 @@
                 /* 1. Tampilkan pesan error hanya teks merah kecil di bawah */
                 .has-validation-error .invalid-feedback {
                     display: block !important;
-                    color: #ff4444 !important; /* Merah cerah */
+                    color: #bff116 !important; /* Hijau Terang */
                     font-size: 0.8em;
                     margin-top: 4px;
                     text-align: left;
@@ -942,7 +958,7 @@
                 
                 /* 2. Border Input saat Error: Tipis saja (1px), jangan tebal */
                 .form-control.is-invalid {
-                    border-color: #ff4444 !important;
+                    border-color: #bff116 !important;
                     background-image: none !important; /* Hapus icon pentung bawaan bootstrap */
                     box-shadow: none !important; /* Hapus shadow tebal */
                 }
@@ -1098,7 +1114,7 @@
                     // Perbaiki warna mata
                     const eyeIcon = toggle.querySelector('i');
                     if(eyeIcon) {
-                        eyeIcon.style.color = '#FFD700';
+                        eyeIcon.style.color = '#fff927';
                         eyeIcon.className = 'fas fa-eye'; // Reset icon class jika perlu
                     }
                 }
@@ -1555,7 +1571,7 @@
             oldSelect.className = 'form-select'; 
             oldSelect.style = ''; 
 
-            oldSelect.style.setProperty('border-color', '#ffd700', 'important');
+            oldSelect.style.setProperty('border-color', '#fff927', 'important');
             
             const newBtn = document.createElement('a');
             newBtn.className = 'btn btn-secondary'; 
@@ -1570,7 +1586,7 @@
                 <strong style="color: #fff; font-size: 0.9em; display: block; text-align: center; margin-bottom: 5px;">
                     ${hariText}
                 </strong>
-                <div style="font-size: 0.9em; text-align: center; border-top: 1px solid #5e3434; padding-top: 5px;">
+                <div style="font-size: 0.9em; text-align: center; border-top: 1px solid #2e5c3b; padding-top: 5px;">
                     <span>${tutup}</span> &nbsp;&nbsp;|&nbsp;&nbsp; <span>${hasil}</span>
                 </div>
             `;
@@ -1583,7 +1599,7 @@
             modal.remove();
 
         } else {
-            oldSelect.style.setProperty('border-color', '#ffd700', 'important');
+            oldSelect.style.setProperty('border-color', '#fff927', 'important');
             oldSelect.style.width = '100%'; 
             
             if (urlLink) urlLink.parentElement.remove();
@@ -1638,7 +1654,7 @@
             row.style.fontWeight = '';
 
             if (index === 0 && isPageOne) {
-                row.style.color = '#FFD700';
+                row.style.color = '#fff927';
                 row.style.fontWeight = 'bold';
             }
         });
@@ -1729,16 +1745,3 @@
         }
     });
 })();
-
-
-
-
-
-
-
-
-
-
-
-
-

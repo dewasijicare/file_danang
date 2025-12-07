@@ -112,9 +112,9 @@
         .btn-secondary{background:linear-gradient(45deg,#fff927,#d4ce00)!important;border-color:#fff927!important;color:#072712!important;font-weight:700;text-transform:uppercase;box-shadow:0 0 10px #fff927,inset 0 0 5px rgba(255,255,255,.7);transition:all .3s ease}
         .btn-secondary:hover{transform:scale(1.05);background:linear-gradient(45deg,#fff927,#e6e020)!important;box-shadow:0 0 20px #fff927,0 0 30px #d4ce00,inset 0 0 5px rgba(255,255,255,.8)}
         
-        /* Btn Danger (Rebrand jadi Lime Darker atau tetap kontras tapi tema hijau) - Kita pakai Green Strong */
-        .btn-danger{background:linear-gradient(45deg,#4e6b00,#7da100)!important;border:none!important;color:#fff!important;font-weight:700;text-transform:uppercase;box-shadow:0 0 10px #7da100,inset 0 0 5px rgba(255,255,255,.4);transition:all .3s ease}
-        .btn-danger:hover{transform:scale(1.05);box-shadow:0 0 20px #bff116,0 0 30px #7da100,inset 0 0 5px rgba(255,255,255,.4)}
+        /* Btn Danger - KEMBALI KE MERAH (Logout/Reset) */
+        .btn-danger{background:linear-gradient(45deg,#e74c3c,#c0392b)!important;border:none!important;color:#fff!important;font-weight:700;text-transform:uppercase;box-shadow:0 0 10px #e74c3c,inset 0 0 5px rgba(255,255,255,.4);transition:all .3s ease}
+        .btn-danger:hover{transform:scale(1.05);box-shadow:0 0 20px #e74c3c,0 0 30px #c0392b,inset 0 0 5px rgba(255,255,255,.4)}
         
         nav#navbar-top.navbar.bg-dark{background-color:#0a2e15!important;border-bottom:1px solid #bff116!important;box-shadow:0 2px 10px rgba(191, 241, 22,.3)!important}
         button#sidebarCollapse{background:0 0!important;border:none!important}
@@ -717,7 +717,7 @@
 
     function createSidebarToggleButton(){if(document.getElementById("custom-sidebar-toggle"))return;const e=document.createElement("a");e.id="custom-sidebar-toggle",e.href="#",e.innerHTML='<i class="bi bi-arrow-left-circle-fill"></i>',document.body.appendChild(e),e.addEventListener("click",function(e){e.preventDefault(),document.getElementById("sidebar").classList.remove("active"),document.querySelector(".overlay").classList.remove("active")})}
 
-    function updateProfileElements(){const e=document.querySelector("#sidebar .bi-person-circle");if(e){const t=document.createElement("img");t.src="https://raw.githubusercontent.com/dewasijicare/images/main/icon_gaban_36x36.png",t.className="gaban-profile-icon",e.parentNode.replaceChild(t,e)}const t=Array.from(document.querySelectorAll("#sidebar span")).find(e=>e.textContent.includes("CREDIT:"));t&&(t.style.color="#fff927")}
+    function updateProfileElements(){const e=document.querySelector("#sidebar .bi-person-circle");if(e){const t=document.createElement("img");t.src="https://raw.githubusercontent.com/dewasijicare/images/main/icon_danang_36x36.png",t.className="gaban-profile-icon",e.parentNode.replaceChild(t,e)}const t=Array.from(document.querySelectorAll("#sidebar span")).find(e=>e.textContent.includes("CREDIT:"));t&&(t.style.color="#fff927")}
 
     const BANK_ICONS = {'DANA':'https://adiltoto.org/images/dana_ok.png','OVO':'https://adiltoto.org/images/ovo_ok.png','GOPAY':'https://adiltoto.org/images/gopay_ok.png','LINKAJA':'https://adiltoto.org/images/link_ok.png','BCA':'https://adiltoto.org/images/bca_ok.png','BNI':'https://adiltoto.org/images/bni_ok.png','BRI':'https://adiltoto.org/images/bri_ok.png','MANDIRI':'https://adiltoto.org/images/mandiri_ok.png','SEABANK':'https://adiltoto.org/images/seabank_ok.png','JAGO':'https://adiltoto.org/images/jago_ok.png'};
 
@@ -1864,5 +1864,6 @@
         }
     });
 })();
+
 
 

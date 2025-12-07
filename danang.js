@@ -586,11 +586,87 @@
 
     function addMainBalanceToggle(forceUpdate = false) { const panel = document.querySelector('#member-status-panel'); if (!panel) return; const balanceSpan = panel.querySelector('.text-gradient'); const link = panel.querySelector('a'); if (!balanceSpan || !link) return; if (panel.dataset.toggleAdded === 'true' && !forceUpdate) return; const originalValue = (forceUpdate && link.dataset.originalBalance) ? link.dataset.originalBalance : balanceSpan.textContent.trim(); if(!link.dataset.originalBalance) link.dataset.originalBalance = originalValue; const updateView = (state) => { if (state === 'hidden') { balanceSpan.textContent = '•••••'; if (link.querySelector('.balance-toggle-icon')) link.querySelector('.balance-toggle-icon').className = 'bi bi-eye-slash-fill balance-toggle-icon'; } else { balanceSpan.textContent = originalValue; if (link.querySelector('.balance-toggle-icon')) link.querySelector('.balance-toggle-icon').className = 'bi bi-eye-fill balance-toggle-icon'; } }; if (panel.dataset.toggleAdded !== 'true') { const toggleIcon = document.createElement('i'); toggleIcon.className = 'bi bi-eye-fill balance-toggle-icon'; toggleIcon.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); const newState = (localStorage.getItem('balanceVisibility') || 'visible') === 'visible' ? 'hidden' : 'visible'; localStorage.setItem('balanceVisibility', newState); updateView(newState); addSidebarBalanceToggle(); }); link.appendChild(toggleIcon); panel.dataset.toggleAdded = 'true'; } const savedState = localStorage.getItem('balanceVisibility'); if (savedState) updateView(savedState); }
 
-    function fetchRtpWithIframe() { return new Promise((e,t)=>{const o=document.createElement("iframe");o.src="/rtp",o.style.display="none",o.onload=function(){try{const a=o.contentDocument||o.contentWindow.document,n=a.querySelectorAll('.row.mb-3.g-1 > div[class*="col-"]');if(0===n.length)return t(new Error("No games found"));const l=Array.from(n).filter(e=>{const t=e.querySelector(".progress-bar-rtp");return t&&parseInt(t.textContent)>=75});if(0===l.length)return t(new Error("No games with RTP >= 75%"));const c=l.map(e=>{const t=e.querySelector("a"),o=e.querySelector(".progress-bar-rtp");return{link:t.dataset.playurl,image:t.querySelector("img").src,name:t.dataset.gamename,percentage:parseInt(o.textContent),colorClass:Array.from(o.classList).find(e=>e.startsWith("bg-"))}});e(c)}catch(e){t(e)}finally{document.body.removeChild(o)}},o.onerror=function(){t(new Error("Failed to load RTP iframe")),document.body.removeChild(o)},document.body.appendChild(o)})}
+    /* --- REVISI LOGIKA RTP: PAKSA WARNA BERDASARKAN ANGKA --- */
+    function fetchRtpWithIframe() { 
+        return new Promise((e,t)=>{
+            const o=document.createElement("iframe");
+            o.src="/rtp",o.style.display="none";
+            o.onload=function(){
+                try{
+                    const a=o.contentDocument||o.contentWindow.document,
+                    n=a.querySelectorAll('.row.mb-3.g-1 > div[class*="col-"]');
+                    if(0===n.length)return t(new Error("No games found"));
+                    
+                    // Filter: Hanya ambil yang di atas 40% (agar merah/kuning/hijau masuk semua dulu)
+                    const l=Array.from(n).filter(e=>{
+                        const t=e.querySelector(".progress-bar-rtp");
+                        return t&&parseInt(t.textContent)>=40
+                    });
+                    
+                    if(0===l.length) return t(new Error("No games found"));
+                    
+                    const c=l.map(e=>{
+                        const t=e.querySelector("a");
+                        const bar=e.querySelector(".progress-bar-rtp");
+                        const pct=parseInt(bar.textContent);
+                        
+                        // LOGIKA BARU: Tentukan Warna Sendiri (Smart Fix)
+                        let manualClass = 'bg-danger'; // Default Merah
+                        if (pct >= 70) manualClass = 'bg-success'; // Hijau jika >= 70
+                        else if (pct >= 40) manualClass = 'bg-warning'; // Kuning jika >= 40
+                        
+                        return {
+                            link: t.dataset.playurl,
+                            image: t.querySelector("img").src,
+                            name: t.dataset.gamename,
+                            percentage: pct,
+                            colorClass: manualClass // Pakai kelas manual kita, bukan bawaan web
+                        }
+                    });
+                    e(c)
+                }catch(e){t(e)}finally{document.body.removeChild(o)}
+            },
+            o.onerror=function(){
+                t(new Error("Failed to load RTP iframe")),document.body.removeChild(o)
+            },
+            document.body.appendChild(o)
+        })
+    }
 
     function displayGacorGames(container, games) { let e="";games.forEach(t=>{const o=new Date;let a=o.getHours();const n=o.getMinutes();let l=5*Math.ceil((n+1)/5),r=[];l>=60&&(a=(a+1)%24,l=0);for(let e=l;e<60;e+=5)r.push(`${String(a).padStart(2,"0")}:${String(e).padStart(2,"0")}`);0===r.length&&(a=(a+1)%24,r.push(`${String(a).padStart(2,"0")}:00`));const c=r[Math.floor(Math.random()*r.length)];e+=`<a href="${t.link}" target="_blank" class="gacor-card"><img src="${t.image}" alt="${t.name}"><div class="gacor-info"><strong title="${t.name}">${t.name}</strong><div class="gacor-time"><i class="bi bi-clock-fill"></i> Pola Berlaku Jam: ${c}</div><div class="progress mt-2"><div class="progress-bar-rtp ${t.colorClass}" role="progressbar" style="width: ${t.percentage}%">${t.percentage}%</div></div></div></a>`}),container.innerHTML=`<h5><i class="bi bi-stars"></i> GAME GACOR SAAT INI</h5><div class="gacor-card-container">${e}</div>`;const t=container.querySelectorAll(".gacor-info strong");t.forEach(e=>{const t=20;e.textContent.length>t&&(e.textContent=e.textContent.substring(0,t-3)+"...")})}
 
-    async function injectGacorGame() { if(document.getElementById("gacor-game-sidebar"))return;const e=document.getElementById("sidebar");if(!e)return;const t=document.createElement("div");t.id="gacor-game-sidebar",t.className="m-3",t.innerHTML='<h5><i class="bi bi-stars"></i> GAME GACOR SAAT INI</h5><div class="gacor-card-placeholder">Mencari sinyal gacor...</div>',e.appendChild(t);const o=!!document.querySelector('#sidebar .d-flex[style*="background-image"]'),a=o?1:3;try{const e=await fetchRtpWithIframe(),o=e.sort(()=>.5-Math.random()).slice(0,a);displayGacorGames(t,o)}catch(e){console.error("Gagal memuat game gacor, menggunakan fallback:",e);const o={link:"/launch-pragmatic/vs20olympgold",image:"https://4n76bph80j.gbgfstie.biz/game_pic/square/200/vs20olympgold.png",name:"Gates of Olympus",percentage:96,colorClass:"bg-primary"};displayGacorGames(t,[o].slice(0,a))}}
+    async function injectGacorGame() { 
+        if(document.getElementById("gacor-game-sidebar"))return;
+        const e=document.getElementById("sidebar");
+        if(!e)return;
+        const t=document.createElement("div");
+        t.id="gacor-game-sidebar",t.className="m-3",
+        t.innerHTML='<h5><i class="bi bi-stars"></i> GAME GACOR SAAT INI</h5><div class="gacor-card-placeholder">Mencari sinyal gacor...</div>',
+        e.appendChild(t);
+        
+        const o=!!document.querySelector('#sidebar .d-flex[style*="background-image"]'),a=o?1:3;
+        try{
+            const e=await fetchRtpWithIframe();
+            // Filter lagi di sini untuk Tampilan Sidebar: Hanya yang HIJAU (>=70) yang dianggap 'Gacor'
+            // Kalau mau semua tampil, hapus .filter ini.
+            const gacorOnly = e.filter(g => g.percentage >= 70);
+            
+            // Tampilkan acak
+            const final = gacorOnly.sort(()=>.5-Math.random()).slice(0,a);
+            
+            // Jika tidak ada yang hijau, ambil yang tertinggi yang ada
+            if(final.length === 0 && e.length > 0) {
+                 const bestFallback = e.sort((a,b) => b.percentage - a.percentage).slice(0, a);
+                 displayGacorGames(t, bestFallback);
+            } else {
+                 displayGacorGames(t, final);
+            }
+        }catch(e){
+            console.error("Gagal memuat game gacor, menggunakan fallback:",e);
+            const o={link:"/launch-pragmatic/vs20olympgold",image:"https://4n76bph80j.gbgfstie.biz/game_pic/square/200/vs20olympgold.png",name:"Gates of Olympus",percentage:96,colorClass:"bg-success"};
+            displayGacorGames(t,[o].slice(0,a))
+        }
+    }
 
     function styleRtpModal() { const rtpModalLabel = document.querySelector('#rtpModalLabel'); if (!rtpModalLabel || rtpModalLabel.closest('.modal-content').dataset.styled === 'true') return; const modalContent = rtpModalLabel.closest('.modal-content'); modalContent.querySelectorAll(".list-group-item small > strong").forEach(title => { if (title.textContent.includes("Step")) title.textContent = title.textContent.replace(/Step \d+:\s*/, "").trim(); }); ["Provider Name", "Slot Game"].forEach(labelText => { const labelDiv = Array.from(modalContent.querySelectorAll(".modal-body .row .col-6")).find(el => el.textContent.trim() === labelText); if (labelDiv) { const row = labelDiv.closest(".row"); if (row) { const valueDiv = row.querySelector(".col-6.text-end"); if (valueDiv) { valueDiv.classList.remove("col-6", "text-end"); valueDiv.classList.add("col-12", "text-center"); if (labelText === "Provider Name") valueDiv.style.paddingBottom = "0rem"; if (labelText === "Slot Game") valueDiv.style.marginBottom = "1rem"; } labelDiv.remove(); } } }); const modalTitle = modalContent.querySelector(".modal-title"); if (modalTitle && !modalTitle.querySelector("i")) modalTitle.innerHTML = `<i class="bi bi-controller"></i> TIPS BERMAIN`; const noteElement = modalContent.querySelector(".text-muted.text-center"); if (noteElement && noteElement.textContent.includes("Lakukan Pola diatas Sebanyak 2x")) noteElement.innerHTML = "<small><strong>Note : </strong> Jika Tersedia / Ingin Membeli Fitur Spin, Lakukan Pola diatas Sebanyak 2x Terlebih Dahulu</small>"; modalContent.dataset.styled = "true"; }
 

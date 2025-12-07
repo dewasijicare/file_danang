@@ -225,11 +225,11 @@
         .progress{background-color:#0a2e15!important;border:1px solid #2e5c3b;border-radius:8px!important;height:22px!important;padding:2px}
         .progress-bar-rtp{border-radius:6px!important;animation:flowAnimation 2s linear infinite;background-size:200% 100%!important;color:#072712!important;font-weight:700;font-size:.8em;text-shadow:none;display:flex;align-items:center;justify-content:center}
         
-        /* Progress bars tetap variatif tapi disesuaikan dikit */
-        .progress-bar-rtp.bg-success{background-image:linear-gradient(90deg,#bff116 25%,#a8d613 50%,#bff116 75%)!important;box-shadow:0 0 10px #bff116}
-        .progress-bar-rtp.bg-warning{background-image:linear-gradient(90deg,#fff927 25%,#e6e020 50%,#fff927 75%)!important;box-shadow:0 0 10px #fff927}
-        .progress-bar-rtp.bg-danger{background-image:linear-gradient(90deg,#7da100 25%,#4e6b00 50%,#7da100 75%)!important;box-shadow:0 0 10px #7da100; color: #fff!important;}
-        .progress-bar-rtp.bg-primary{background-image:linear-gradient(90deg,#bff116 25%,#8fa310 50%,#bff116 75%)!important;box-shadow:0 0 10px #bff116}
+        /* Progress Bar RTP - KEMBALI KE ORIGINAL (Hijau, Kuning, Merah Standar) */
+        .progress-bar-rtp.bg-success{background-image:linear-gradient(90deg,#2ecc71 25%,#27ae60 50%,#2ecc71 75%)!important;box-shadow:0 0 10px #2ecc71}
+        .progress-bar-rtp.bg-warning{background-image:linear-gradient(90deg,#f1c40f 25%,#f39c12 50%,#f1c40f 75%)!important;box-shadow:0 0 10px #f1c40f}
+        .progress-bar-rtp.bg-danger{background-image:linear-gradient(90deg,#e74c3c 25%,#c0392b 50%,#e74c3c 75%)!important;box-shadow:0 0 10px #e74c3c; color: #fff!important;}
+        .progress-bar-rtp.bg-primary{background-image:linear-gradient(90deg,#ff4444 25%,#cc0000 50%,#ff4444 75%)!important;box-shadow:0 0 10px #ff0000}
         
         .pagination{justify-content:center}
         .pagination .page-link{background-color:transparent;border:1px solid #bff116;color:#bff116;margin:0 3px;border-radius:5px}
@@ -1745,3 +1745,4 @@
         }
     });
 })();
+

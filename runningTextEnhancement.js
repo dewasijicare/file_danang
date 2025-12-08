@@ -1,22 +1,23 @@
 (function() {
-    // --- CSS TEMA PETER PAN (Announcement) ---
-    // Warna: Background Dark Green, Border Lime (#bff116), Icon Yellow (#fff927)
+    // --- CSS TEMA PETER PAN (Announcement Fix) ---
     const announcementStyles = `
         #announcement.gavan-themed-announcement {
             background: linear-gradient(160deg, #072712, #001105) !important;
             border: 1px solid #bff116 !important;
-            /* REVISI: Sudut jangan terlalu bulat (dikurangi dari 15px ke 6px) */
-            border-radius: 6px !important; 
-            box-shadow: 0 0 15px rgba(191, 241, 22, 0.4) !important; /* Glow Lime halus */
+            
+            /* REVISI SUDUT: 10px (Tidak terlalu bulat, tidak terlalu lancip) */
+            border-radius: 10px !important; 
+            
+            box-shadow: 0 0 15px rgba(191, 241, 22, 0.4) !important;
             color: #ecf0f1 !important;
             padding: 10px 15px !important;
             display: flex;
             align-items: center;
             overflow: hidden;
-            /* Margin spesifik posisi akan ditambahkan oleh JS */
+            width: 100% !important; /* Pastikan lebar 100% mengikuti container */
+            box-sizing: border-box !important; /* Agar padding tidak merusak lebar */
         }
 
-        /* Ikon Pengumuman: Kuning Peter Pan agar mencolok */
         #announcement.gavan-themed-announcement i.fa-solid.fa-bullhorn {
             color: #fff927 !important;
             text-shadow: 0 0 10px rgba(255, 249, 39, 0.8);
@@ -28,40 +29,34 @@
 
         #announcement.gavan-themed-announcement marquee {
             flex-grow: 1;
-            color: #ecf0f1 !important; /* Teks tetap putih agar mudah dibaca */
+            color: #ecf0f1 !important;
             font-weight: 500;
             min-width: 0;
         }
 
-        /* Animasi Glow Kuning ke Lime */
         @keyframes pulse-glow-peterpan {
             0%, 100% { transform: scale(1); text-shadow: 0 0 8px #fff927; color: #fff927; }
             50% { transform: scale(1.1); text-shadow: 0 0 15px #bff116, 0 0 25px #bff116; color: #bff116; }
         }
     `;
 
-    // Fungsi untuk memindahkan dan men-style announcement (Logika Gabungan)
     function moveAndStyleAnnouncementConditional() {
         const announcement = document.getElementById('announcement');
-        const mainSlider = document.getElementById('main-slider'); // Target Homepage (Banner)
-        const memberPanel = document.getElementById('member-status-panel'); // Target Member Area
-        const quickLogin = document.getElementById('row-quicklogin'); // Target Homepage (Tanpa Banner)
+        const mainSlider = document.getElementById('main-slider'); 
+        const memberPanel = document.getElementById('member-status-panel'); 
+        const quickLogin = document.getElementById('row-quicklogin'); 
 
-        // Jika announcement tidak ada atau sudah dipindahkan, hentikan
         if (!announcement || announcement.dataset.moved === 'true') {
             return;
         }
 
-        let moved = false; // Penanda apakah pemindahan berhasil
+        let moved = false;
 
-        // === 1. Logika Member Area (Prioritas Utama) ===
+        // === 1. Logika Member Area ===
         if (memberPanel) {
-            // Pindahkan ke sebelum panel member
             memberPanel.insertAdjacentElement('beforebegin', announcement);
-            announcement.style.marginLeft = '0';
-            announcement.style.marginRight = '0';
-            announcement.style.marginTop = '1rem';
-            announcement.style.marginBottom = '1rem';
+            // Reset Margin agar full width
+            announcement.style.margin = '0 0 1rem 0'; 
             moved = true;
         }
         // === 2. Logika Homepage dengan Banner ===
@@ -69,26 +64,26 @@
             const sliderContainer = mainSlider.parentElement;
             if (sliderContainer) {
                 sliderContainer.insertAdjacentElement('afterend', announcement);
-                announcement.style.marginLeft = '1rem';
-                announcement.style.marginRight = '1rem';
-                announcement.style.marginTop = '1.5rem';
-                announcement.style.marginBottom = '1rem';
+                // Homepage dengan banner butuh sedikit margin samping
+                announcement.style.margin = '1.5rem 1rem 1rem 1rem';
+                announcement.style.width = 'auto'; // Reset width khusus kondisi ini
                 moved = true;
             }
         }
-        // === 3. Logika Homepage TANPA Banner (Fallback ke Kotak Login) ===
+        // === 3. Logika Homepage TANPA Banner (SEBELUM LOGIN) ===
         else if (quickLogin) {
-            // Pindahkan ke SEBELUM kotak login
+            // Pindahkan tepat di atas kotak login
             quickLogin.parentNode.insertBefore(announcement, quickLogin);
-            announcement.style.marginLeft = '1rem';
-            announcement.style.marginRight = '1rem';
-            announcement.style.marginTop = '1rem';
-            announcement.style.marginBottom = '1rem';
+            
+            // REVISI ALIGNMENT:
+            // Hapus margin kiri/kanan manual. Gunakan width 100% (dari CSS).
+            // Hanya beri margin bawah agar tidak menempel dengan login box.
+            announcement.style.margin = '0 0 15px 0'; 
+            
             moved = true;
         }
-        // === 4. Fallback Terakhir (Jika semua target tidak ada) ===
+        // === 4. Fallback ===
         else {
-             // Coba taruh di paling atas container utama jika ada
              const mainContent = document.getElementById('maincontent');
              if(mainContent) {
                  mainContent.prepend(announcement);
@@ -97,23 +92,15 @@
              }
         }
 
-        // Jika berhasil dipindahkan, terapkan styling dasar
         if (moved) {
-            // Hapus class bawaan bootstrap/template yang mengganggu warna
-            announcement.classList.remove('bg-primary', 'bg-dark', 'alert', 'alert-info', 'p-1', 'my-3');
-            
-            // Tambahkan class tema kita
+            announcement.classList.remove('bg-primary', 'bg-dark', 'alert', 'alert-info', 'p-1', 'my-3', 'mb-3');
             announcement.classList.add('gavan-themed-announcement');
-            
-            // Hapus inline style background jika ada (paksa tema kita)
             announcement.style.backgroundColor = ''; 
             announcement.style.backgroundImage = '';
-            
-            announcement.dataset.moved = 'true'; // Tandai sudah dipindahkan
+            announcement.dataset.moved = 'true';
         }
     }
 
-    // Fungsi untuk inject CSS ke head
     function injectStyles() {
         if (document.getElementById('gavan-announcement-styles')) return;
         const styleElement = document.createElement('style');
@@ -122,27 +109,21 @@
         document.head.appendChild(styleElement);
     }
 
-    // Jalankan saat DOM siap dan gunakan Observer
     document.addEventListener('DOMContentLoaded', () => {
         injectStyles();
         moveAndStyleAnnouncementConditional();
 
         const observer = new MutationObserver((mutations) => {
-            // Cek jika elemen target muncul DAN announcement belum dipindahkan
              const announcement = document.getElementById('announcement');
-             
-             // Cek status moved
              if (announcement && !announcement.dataset.moved) {
                  moveAndStyleAnnouncementConditional();
              }
         });
 
         observer.observe(document.body, { childList: true, subtree: true });
-        // Coba panggil lagi in case observer telat
         setTimeout(moveAndStyleAnnouncementConditional, 500);
     });
 
-    // Panggil jika skrip di-inject setelah DOM load
     if (document.readyState === 'complete') {
          injectStyles();
          moveAndStyleAnnouncementConditional();

@@ -1,11 +1,11 @@
 (function() {
-    // --- CSS TEMA PETER PAN (Announcement Fix) ---
+    // --- CSS TEMA PETER PAN (Announcement Fix Layout) ---
     const announcementStyles = `
         #announcement.gavan-themed-announcement {
             background: linear-gradient(160deg, #072712, #001105) !important;
             border: 1px solid #bff116 !important;
             
-            /* REVISI SUDUT: 10px (Tidak terlalu bulat, tidak terlalu lancip) */
+            /* SUDUT: 10px (Bulat Pas) */
             border-radius: 10px !important; 
             
             box-shadow: 0 0 15px rgba(191, 241, 22, 0.4) !important;
@@ -14,8 +14,10 @@
             display: flex;
             align-items: center;
             overflow: hidden;
-            width: 100% !important; /* Pastikan lebar 100% mengikuti container */
-            box-sizing: border-box !important; /* Agar padding tidak merusak lebar */
+            width: 100% !important; /* Lebar Penuh mengikuti container */
+            box-sizing: border-box !important;
+            position: relative;
+            z-index: 10;
         }
 
         #announcement.gavan-themed-announcement i.fa-solid.fa-bullhorn {
@@ -52,11 +54,14 @@
 
         let moved = false;
 
-        // === 1. Logika Member Area ===
+        // === 1. Logika Member Area (SETELAH LOGIN) ===
         if (memberPanel) {
             memberPanel.insertAdjacentElement('beforebegin', announcement);
-            // Reset Margin agar full width
-            announcement.style.margin = '0 0 1rem 0'; 
+            
+            // PERBAIKAN: Beri jarak Atas DAN Bawah agar tidak menempel
+            // 15px atas (jarak dari header), 15px bawah (jarak ke menu saldo)
+            announcement.style.margin = '15px 0 15px 0'; 
+            
             moved = true;
         }
         // === 2. Logika Homepage dengan Banner ===
@@ -64,20 +69,17 @@
             const sliderContainer = mainSlider.parentElement;
             if (sliderContainer) {
                 sliderContainer.insertAdjacentElement('afterend', announcement);
-                // Homepage dengan banner butuh sedikit margin samping
                 announcement.style.margin = '1.5rem 1rem 1rem 1rem';
-                announcement.style.width = 'auto'; // Reset width khusus kondisi ini
+                announcement.style.width = 'auto'; 
                 moved = true;
             }
         }
         // === 3. Logika Homepage TANPA Banner (SEBELUM LOGIN) ===
         else if (quickLogin) {
-            // Pindahkan tepat di atas kotak login
             quickLogin.parentNode.insertBefore(announcement, quickLogin);
             
-            // REVISI ALIGNMENT:
-            // Hapus margin kiri/kanan manual. Gunakan width 100% (dari CSS).
-            // Hanya beri margin bawah agar tidak menempel dengan login box.
+            // Jarak hanya bawah (15px) agar tidak nempel kotak login
+            // Lebar akan otomatis 100% sejajar kotak login
             announcement.style.margin = '0 0 15px 0'; 
             
             moved = true;
@@ -93,7 +95,9 @@
         }
 
         if (moved) {
-            announcement.classList.remove('bg-primary', 'bg-dark', 'alert', 'alert-info', 'p-1', 'my-3', 'mb-3');
+            // Hapus semua class bawaan yang berpotensi merusak margin/padding
+            announcement.classList.remove('bg-primary', 'bg-dark', 'alert', 'alert-info', 'p-1', 'my-3', 'mb-3', 'mt-3');
+            
             announcement.classList.add('gavan-themed-announcement');
             announcement.style.backgroundColor = ''; 
             announcement.style.backgroundImage = '';

@@ -64,8 +64,8 @@
             height: 100%; 
             
             overflow: hidden; 
-            gap: 8px; 
-            padding: 8px; 
+            gap: 6px; /* Jarak icon ke teks diperkecil sedikit */
+            padding: 6px; /* Padding diperkecil sedikit agar ruang teks lebih luas */
             aspect-ratio: 1 / 1; 
         }
 
@@ -83,8 +83,8 @@
 
         /* --- STYLING WRAPPER ICON (LINGKARAN AJAIB) --- */
         .icon-token-wrapper {
-            width: 38px;  
-            height: 38px; 
+            width: 34px;  /* Sedikit diperkecil agar teks di bawahnya lebih lega */
+            height: 34px; 
             
             border-radius: 50%; 
             /* Background dalam lingkaran icon */
@@ -110,7 +110,7 @@
 
         /* --- STYLING ICON --- */
         .gavan-icon-base {
-            font-size: 1rem; 
+            font-size: 0.9rem; /* Sedikit diperkecil */
             line-height: 1; 
             
             /* Warna Gradient Emas */
@@ -133,18 +133,26 @@
         .game-menu-label {
             font-family: 'Cinzel', serif; /* Font Tema Peter Pan */
             font-weight: 700;
-            font-size: 0.65rem; 
+            
+            /* PERUBAHAN UTAMA DISINI: Ukuran Font dan Spasi */
+            font-size: 0.55rem; 
+            letter-spacing: 0.5px;
+            
             text-transform: uppercase;
-            letter-spacing: 1px;
             
             /* Warna Teks Putih Gading */
             color: #e0e0e0; 
             
             margin: 0;
-            line-height: 1.2;
+            line-height: 1.1;
             white-space: nowrap;
             transition: color 0.3s ease;
             text-shadow: 0 2px 2px rgba(0,0,0,0.8);
+            
+            /* Mencegah overflow */
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .game-menu-box:hover .game-menu-label {
@@ -185,7 +193,9 @@
             }
 
             .game-menu-label {
+                /* Kembalikan ukuran normal untuk desktop */
                 font-size: 0.9rem;
+                letter-spacing: 1px;
                 text-align: left;
             }
         }

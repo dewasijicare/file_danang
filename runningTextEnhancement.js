@@ -5,7 +5,8 @@
         #announcement.gavan-themed-announcement {
             background: linear-gradient(160deg, #072712, #001105) !important;
             border: 1px solid #bff116 !important;
-            border-radius: 15px !important; /* Radius 15px agar sama dengan card lain */
+            /* REVISI: Sudut jangan terlalu bulat (dikurangi dari 15px ke 6px) */
+            border-radius: 6px !important; 
             box-shadow: 0 0 15px rgba(191, 241, 22, 0.4) !important; /* Glow Lime halus */
             color: #ecf0f1 !important;
             padding: 10px 15px !important;
@@ -42,8 +43,9 @@
     // Fungsi untuk memindahkan dan men-style announcement (Logika Gabungan)
     function moveAndStyleAnnouncementConditional() {
         const announcement = document.getElementById('announcement');
-        const mainSlider = document.getElementById('main-slider'); // Target homepage
-        const memberPanel = document.getElementById('member-status-panel'); // Target member area
+        const mainSlider = document.getElementById('main-slider'); // Target Homepage (Banner)
+        const memberPanel = document.getElementById('member-status-panel'); // Target Member Area
+        const quickLogin = document.getElementById('row-quicklogin'); // Target Homepage (Tanpa Banner)
 
         // Jika announcement tidak ada atau sudah dipindahkan, hentikan
         if (!announcement || announcement.dataset.moved === 'true') {
@@ -52,32 +54,47 @@
 
         let moved = false; // Penanda apakah pemindahan berhasil
 
-        // === Logika untuk Homepage (ada #main-slider) ===
-        if (mainSlider) {
-            const sliderContainer = mainSlider.parentElement;
-            if (sliderContainer) {
-                // Pindahkan ke setelah container slider
-                sliderContainer.insertAdjacentElement('afterend', announcement);
-                // Atur margin spesifik homepage
-                announcement.style.marginLeft = '1rem';
-                announcement.style.marginRight = '1rem';
-                announcement.style.marginTop = '1.5rem';
-                announcement.style.marginBottom = '1rem';
-                moved = true;
-                // console.log("Announcement moved for homepage (Peter Pan Theme).");
-            }
-        }
-        // === Logika untuk Member Area (ada #member-status-panel) ===
-        else if (memberPanel) {
+        // === 1. Logika Member Area (Prioritas Utama) ===
+        if (memberPanel) {
             // Pindahkan ke sebelum panel member
             memberPanel.insertAdjacentElement('beforebegin', announcement);
-            // Atur margin spesifik member area
             announcement.style.marginLeft = '0';
             announcement.style.marginRight = '0';
             announcement.style.marginTop = '1rem';
             announcement.style.marginBottom = '1rem';
             moved = true;
-            // console.log("Announcement moved for member area (Peter Pan Theme).");
+        }
+        // === 2. Logika Homepage dengan Banner ===
+        else if (mainSlider) {
+            const sliderContainer = mainSlider.parentElement;
+            if (sliderContainer) {
+                sliderContainer.insertAdjacentElement('afterend', announcement);
+                announcement.style.marginLeft = '1rem';
+                announcement.style.marginRight = '1rem';
+                announcement.style.marginTop = '1.5rem';
+                announcement.style.marginBottom = '1rem';
+                moved = true;
+            }
+        }
+        // === 3. Logika Homepage TANPA Banner (Fallback ke Kotak Login) ===
+        else if (quickLogin) {
+            // Pindahkan ke SEBELUM kotak login
+            quickLogin.parentNode.insertBefore(announcement, quickLogin);
+            announcement.style.marginLeft = '1rem';
+            announcement.style.marginRight = '1rem';
+            announcement.style.marginTop = '1rem';
+            announcement.style.marginBottom = '1rem';
+            moved = true;
+        }
+        // === 4. Fallback Terakhir (Jika semua target tidak ada) ===
+        else {
+             // Coba taruh di paling atas container utama jika ada
+             const mainContent = document.getElementById('maincontent');
+             if(mainContent) {
+                 mainContent.prepend(announcement);
+                 announcement.style.margin = '1rem';
+                 moved = true;
+             }
         }
 
         // Jika berhasil dipindahkan, terapkan styling dasar
@@ -113,11 +130,10 @@
         const observer = new MutationObserver((mutations) => {
             // Cek jika elemen target muncul DAN announcement belum dipindahkan
              const announcement = document.getElementById('announcement');
-             const mainSlider = document.getElementById('main-slider');
-             const memberPanel = document.getElementById('member-status-panel');
              
-             if (announcement && !announcement.dataset.moved && (mainSlider || memberPanel)) {
-                moveAndStyleAnnouncementConditional();
+             // Cek status moved
+             if (announcement && !announcement.dataset.moved) {
+                 moveAndStyleAnnouncementConditional();
              }
         });
 

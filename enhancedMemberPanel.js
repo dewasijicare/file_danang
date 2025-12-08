@@ -77,7 +77,7 @@
         .gmp-balance-value .currency-label {
              font-size: 0.5em;
              vertical-align: baseline;
-             margin-left: 4px;
+             margin-left: 6px; /* Jarak antara angka dan IDR */
              font-weight: 600;
              color: #ecf0f1 !important; /* Putih */
              opacity: 0.8;
@@ -184,11 +184,8 @@
         panel.innerHTML = `
             <div class="gmp-top-area">
                 <div class="gmp-balance-label">SALDO ANDA</div>
-                <div class="gmp-user-id-label">ID PENGGUNA</div>
-                <div class="gmp-balance-value">
-                    <span class="currency-label">IDR </span>
-                    <span class="balance-value">${originalBalanceValue}</span>
-                </div>
+                <div class="gmp-user-id-label">USERNAME</div> <div class="gmp-balance-value">
+                    <span class="balance-value">${originalBalanceValue}</span> <span class="currency-label"> IDR</span> </div>
                 <div class="gmp-user-id-value">${userId}</div>
             </div>
             <div class="gmp-buttons-container">

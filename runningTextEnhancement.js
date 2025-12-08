@@ -1,131 +1,148 @@
 (function() {
-    // CSS untuk styling announcement - TEMA PETER PAN (Hijau Tua, Lime, Kuning)
-    const announcementStyles = `
-        #announcement.gavan-themed-announcement {
-            /* === BACKGROUND: Hijau Tua Gelap === */
-            background: linear-gradient(145deg, #072712, #001105) !important;
-            /* === BORDER: Lime Green === */
-            border: 1px solid #bff116 !important;
-            border-radius: 8px !important;
-            /* === SHADOW: Glow Lime Halus === */
-            box-shadow: 0 0 15px rgba(191, 241, 22, 0.3) !important;
-            color: #ecf0f1 !important;
-            padding: 10px 15px !important;
+    // --- 1. CSS TEMA PETER PAN (Hijau Hutan & Emas) ---
+    const announcementStylesPeterPan = `
+        /* Hapus style bawaan bootstrap/tema asli jika ada */
+        #announcement {
+            background-color: transparent !important;
+            border: none !important;
+        }
+
+        /* Style Baru Peter Pan */
+        #announcement.peterpan-themed-announcement {
+            /* Background Hijau Hutan Gelap dengan Gradasi */
+            background: linear-gradient(90deg, #021a0f, #0a4525, #021a0f) !important;
+            
+            /* Border Emas Pixie Dust */
+            border-top: 2px solid #FFD700 !important;
+            border-bottom: 2px solid #FFD700 !important;
+            border-left: none !important;
+            border-right: none !important;
+            
+            border-radius: 0 !important; /* Flat full width looks better sometimes, or keeping consistent */
+            box-shadow: 0 0 15px rgba(46, 139, 87, 0.4) !important;
+            
+            color: #fffacd !important; /* Putih Gading (Pixie Dust) */
+            padding: 8px 15px !important;
             display: flex;
             align-items: center;
             overflow: hidden;
-            /* Margin spesifik posisi akan ditambahkan oleh JS */
+            position: relative;
+            z-index: 10;
         }
 
-        /* Ikon Toa/Pengumuman */
-        #announcement.gavan-themed-announcement i.fa-solid.fa-bullhorn {
-            /* === ICON COLOR: Kuning Emas === */
-            color: #fff927 !important;
-            text-shadow: 0 0 8px rgba(255, 249, 39, 0.6);
-            margin-right: 12px;
-            font-size: 1.2em;
-            animation: pulse-glow 2s infinite ease-in-out;
+        /* Icon Pengumuman */
+        #announcement.peterpan-themed-announcement i.fa-solid.fa-bullhorn {
+            color: #FFD700 !important; /* Warna Emas */
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+            margin-right: 15px;
+            font-size: 1.3em;
+            animation: magicPulse 2s infinite ease-in-out;
             flex-shrink: 0;
         }
 
-        #announcement.gavan-themed-announcement marquee {
+        /* Teks Berjalan */
+        #announcement.peterpan-themed-announcement marquee {
             flex-grow: 1;
-            color: #ecf0f1 !important; /* Teks berjalan warna putih agar terbaca */
+            color: #fff !important;
+            font-family: 'Segoe UI', sans-serif; /* Font bersih agar terbaca */
+            letter-spacing: 0.5px;
             min-width: 0;
-            font-weight: 500;
         }
 
-        /* Animasi Denyut Cahaya (Kuning ke Lime) */
-        @keyframes pulse-glow {
-            0%, 100% { transform: scale(1); text-shadow: 0 0 8px #fff927; }
-            50% { transform: scale(1.1); text-shadow: 0 0 15px #fff927, 0 0 25px #bff116; }
+        @keyframes magicPulse {
+            0%, 100% { transform: scale(1); text-shadow: 0 0 5px #FFD700; }
+            50% { transform: scale(1.15); text-shadow: 0 0 20px #FFD700, 0 0 30px #2e8b57; }
         }
     `;
 
-    // Fungsi untuk memindahkan dan men-style announcement (Logika Gabungan)
+    // --- 2. FUNGSI LOGIKA UTAMA ---
     function moveAndStyleAnnouncementConditional() {
         const announcement = document.getElementById('announcement');
-        const mainSlider = document.getElementById('main-slider'); // Target homepage
+        const mainSlider = document.getElementById('main-slider'); // Target homepage (biasanya slider gambar)
         const memberPanel = document.getElementById('member-status-panel'); // Target member area
+        
+        // Cek Navbar jika main-slider tidak ketemu (Fallback untuk Homepage)
+        const navbar = document.querySelector('.navbar') || document.querySelector('header');
 
-        // Jika announcement tidak ada atau sudah dipindahkan, hentikan
-        if (!announcement || announcement.dataset.moved === 'true') {
-            return;
+        if (!announcement) return;
+
+        // --- PERBAIKAN 1: TERAPKAN STYLE TERLEBIH DAHULU (Tanpa Syarat Pindah) ---
+        // Kita paksa style berubah dulu, jadi warnanya pasti ganti.
+        if (!announcement.classList.contains('peterpan-themed-announcement')) {
+            announcement.classList.remove('bg-primary', 'p-1', 'my-3', 'alert', 'alert-info'); // Hapus class bawaan umum
+            announcement.classList.add('peterpan-themed-announcement');
+            console.log("Announcement style applied!");
         }
 
-        let moved = false; // Penanda apakah pemindahan berhasil
+        // Jika sudah pernah dipindahkan, hentikan proses pemindahan
+        if (announcement.dataset.moved === 'true') return;
 
-        // === Logika untuk Homepage (ada #main-slider) ===
+        let moved = false;
+
+        // === Logika Pindah: HOMEPAGE (Prioritas Slider) ===
         if (mainSlider) {
             const sliderContainer = mainSlider.parentElement;
             if (sliderContainer) {
-                // Pindahkan ke setelah container slider
                 sliderContainer.insertAdjacentElement('afterend', announcement);
-                // Atur margin spesifik homepage
-                announcement.style.marginLeft = '1rem';
-                announcement.style.marginRight = '1rem';
-                announcement.style.marginTop = '1.5rem';
-                announcement.style.marginBottom = '1rem';
+                // Style Margin Homepage
+                announcement.style.marginTop = '10px';
+                announcement.style.marginBottom = '10px';
+                announcement.style.borderRadius = '8px'; // Rounded di homepage
                 moved = true;
-                console.log("Announcement moved for homepage.");
             }
         }
-        // === Logika untuk Member Area (ada #member-status-panel) ===
+        // === Logika Pindah: MEMBER AREA ===
         else if (memberPanel) {
-            // Pindahkan ke sebelum panel member
             memberPanel.insertAdjacentElement('beforebegin', announcement);
-            // Atur margin spesifik member area
-            announcement.style.marginLeft = '0';
-            announcement.style.marginRight = '0';
+            // Style Margin Member Area
             announcement.style.marginTop = '1rem';
             announcement.style.marginBottom = '1rem';
+            announcement.style.borderRadius = '8px';
             moved = true;
-            console.log("Announcement moved for member area.");
+        }
+        // === Logika Pindah: HOMEPAGE FALLBACK (Jika Slider tidak ada, taruh bawah navbar) ===
+        else if (navbar && !memberPanel) {
+            navbar.insertAdjacentElement('afterend', announcement);
+            announcement.style.marginTop = '0';
+            announcement.style.marginBottom = '0';
+            moved = true;
         }
 
-        // Jika berhasil dipindahkan, terapkan styling dasar
         if (moved) {
-            announcement.classList.remove('bg-primary', 'p-1', 'my-3');
-            announcement.classList.add('gavan-themed-announcement');
-            announcement.dataset.moved = 'true'; // Tandai sudah dipindahkan
-        } else {
-             console.log("Could not find appropriate anchor point for announcement.");
+            announcement.dataset.moved = 'true';
+            console.log("Announcement moved successfully.");
         }
     }
 
-    // Fungsi untuk inject CSS ke head
+    // --- 3. INJECT CSS ---
     function injectStyles() {
-        if (document.getElementById('gavan-announcement-styles')) return;
+        if (document.getElementById('peterpan-announcement-styles')) return;
         const styleElement = document.createElement('style');
-        styleElement.id = 'gavan-announcement-styles';
-        styleElement.innerHTML = announcementStyles;
+        styleElement.id = 'peterpan-announcement-styles';
+        styleElement.innerHTML = announcementStylesPeterPan;
         document.head.appendChild(styleElement);
-        console.log("Announcement styles injected.");
     }
 
-    // Jalankan saat DOM siap dan gunakan Observer
+    // --- 4. EKSEKUSI DENGAN OBSERVER (Agar tahan banting) ---
     document.addEventListener('DOMContentLoaded', () => {
         injectStyles();
         moveAndStyleAnnouncementConditional();
 
+        // Pantau perubahan halaman (cegah script gagal load karena internet lambat)
         const observer = new MutationObserver((mutations) => {
-            // Cek jika elemen target muncul DAN announcement belum dipindahkan
-             const announcement = document.getElementById('announcement');
-             const mainSlider = document.getElementById('main-slider');
-             const memberPanel = document.getElementById('member-status-panel');
-             if (announcement && !announcement.dataset.moved && (mainSlider || memberPanel)) {
+            const announcement = document.getElementById('announcement');
+            if (announcement) {
                 moveAndStyleAnnouncementConditional();
-             }
+            }
         });
 
         observer.observe(document.body, { childList: true, subtree: true });
-        moveAndStyleAnnouncementConditional(); // Panggil lagi
     });
 
-    // Panggil jika skrip di-inject setelah DOM load
-    if (document.readyState === 'complete') {
-         injectStyles();
-         moveAndStyleAnnouncementConditional();
+    // Fallback eksekusi langsung
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        injectStyles();
+        moveAndStyleAnnouncementConditional();
     }
 
 })();

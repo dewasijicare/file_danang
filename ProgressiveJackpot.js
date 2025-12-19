@@ -206,7 +206,7 @@
                     <div class="jackpot-display-box-content">
                         <div class="jackpot-main-title">
                             <i class="bi bi-stars"></i>
-                            <span class="jackpot-animated-text">NEVERLAND JACKPOT</span>
+                            <span class="jackpot-animated-text">PROGRESSIVE JACKPOT</span>
                             <i class="bi bi-stars"></i>
                         </div>
                         <div id="dynamic-jackpot-value-final" class="jackpot-value-final">IDR 32.462.646.763</div>
@@ -221,4 +221,5 @@
 
     // --- 4. EKSEKUSI ---
     document.addEventListener('DOMContentLoaded', injectJackpotHTMLFinal);
+
 })();

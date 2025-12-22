@@ -78,7 +78,6 @@
                         flex-direction: column;
                         justify-content: center;
                         text-align: left;
-                        /* FIX: Jika ruang sangat sempit, biarkan text mengecil, bukan icon */
                         min-width: 0; 
                     }
                     
@@ -87,7 +86,7 @@
                         font-size: 0.7rem;
                         color: #fff927; /* Kuning */
                         font-weight: 700;
-                        letter-spacing: 1px;
+                        letter-spacing: 0.5px; /* Sedikit dirapatkan */
                         text-transform: uppercase;
                         text-shadow: 0 0 5px rgba(255, 249, 39, 0.5);
                         margin-bottom: 2px; 
@@ -114,40 +113,39 @@
                         50% { transform: translate(3px, -3px) rotate(5deg); }
                     }
 
-                    /* --- RESPONSIF DEVICE (Media Queries) --- */
+                    /* --- RESPONSIF DEVICE (Media Queries) - DIPERBESAR SEDIKIT --- */
                     
                     /* Untuk HP Standar (Lebar di bawah 480px) */
                     @media (max-width: 480px) {
                         .pintas-neon-bar.gavan-peterpan-theme {
-                            padding: 8px 15px; /* Kurangi padding agar lebih luas */
+                            padding: 8px 12px; /* Padding samping dikurangi sedikit */
                         }
                         .pintas-icon {
-                            font-size: 1.8rem; /* Kecilkan roket */
-                            margin-right: 10px; /* Kurangi jarak */
+                            font-size: 1.8rem; 
+                            margin-right: 10px;
                         }
                         .pintas-title {
-                            font-size: 1.0rem; /* Kecilkan font judul utama */
+                            font-size: 1.15rem; /* DIPERBESAR (dari 1.0rem) */
                         }
                         .pintas-sub {
-                            font-size: 0.6rem; /* Kecilkan font subjudul */
-                            letter-spacing: 0.5px;
+                            font-size: 0.65rem; /* DIPERBESAR (dari 0.6rem) */
                         }
                     }
 
                     /* Untuk HP Sangat Kecil (Galaxy Fold / iPhone SE Lama / Lebar < 360px) */
                     @media (max-width: 360px) {
                         .pintas-neon-bar.gavan-peterpan-theme {
-                            padding: 6px 10px;
+                            padding: 6px 8px; /* Padding samping lebih tipis */
                         }
                         .pintas-icon {
-                            font-size: 1.5rem;
+                            font-size: 1.6rem; /* Sedikit lebih besar */
                             margin-right: 8px;
                         }
                         .pintas-title {
-                            font-size: 0.85rem; /* Font makin kecil agar tetap 1 baris */
+                            font-size: 1.0rem; /* DIPERBESAR (dari 0.85rem) */
                         }
                         .pintas-sub {
-                            font-size: 0.55rem;
+                            font-size: 0.6rem; /* DIPERBESAR (dari 0.55rem) */
                         }
                     }
                 </style>

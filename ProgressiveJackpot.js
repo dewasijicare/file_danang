@@ -1,16 +1,15 @@
 (function() {
-    // --- 1. BLOK CSS KHUSUS JACKPOT (TEMA PETER PAN - NEVERLAND) ---
+    // --- 1. BLOK CSS KHUSUS JACKPOT (TEMA PETER PAN - FIX LAYOUT) ---
     const jackpotStylesPeterPan = `
         /* CSS untuk Progressive Jackpot - Tema Peter Pan */
-        /* Menggunakan Font 'Cinzel' untuk nuansa Fantasi/Klasik */
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap');
         
         :root {
-            --neverland-green: #0a4525; /* Hijau Hutan Gelap */
-            --neverland-light: #2e8b57; /* Hijau Daun */
-            --pixie-gold: #ffd700;      /* Emas Tinkerbell */
-            --pixie-dust: #fffacd;      /* Putih Kekuningan */
-            --dark-forest: #021a0f;     /* Background Gelap */
+            --neverland-green: #0a4525; 
+            --neverland-light: #2e8b57; 
+            --pixie-gold: #ffd700;      
+            --pixie-dust: #fffacd;      
+            --dark-forest: #021a0f;     
         }
 
         .jackpot-container-main {
@@ -25,18 +24,17 @@
             max-width: 650px; 
             margin-left: auto;
             margin-right: auto;
+            /* FIX: Pastikan container tidak melebihi lebar layar */
+            width: 100%;
         }
 
-        /* Border Animasi (Kilauan Emas Pixie Dust) */
+        /* Border Animasi */
         .jackpot-animated-border {
             position: relative;
-            border-radius: 15px; /* Lebih membulat */
+            border-radius: 15px; 
             padding: 5px; 
-            
             background: var(--dark-forest);
             border: 2px solid var(--neverland-light);
-            
-            /* Shadow emas yang magis */
             box-shadow: 0 0 15px rgba(46, 139, 87, 0.5);
             animation: borderMagicPulse 3s ease-in-out infinite alternate;
         }
@@ -58,20 +56,20 @@
             flex-direction: column; 
             justify-content: center;
             align-items: center;
-            /* Gradasi Hijau Hutan Mewah */
             background: linear-gradient(180deg, var(--neverland-green) 0%, var(--dark-forest) 100%);
             border-radius: 10px; 
             min-height: 90px;
             position: relative;
             padding: 15px; 
             z-index: 2;
-            border: 1px solid rgba(255, 215, 0, 0.2); /* Garis tipis emas */
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            overflow: hidden; /* Mencegah overflow */
         }
         
         /* Judul Jackpot */
         .jackpot-main-title {
             color: var(--pixie-gold); 
-            font-size: 1.2rem;
+            font-size: 1.2rem; /* Ukuran Default Desktop */
             font-weight: 900;
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -80,12 +78,16 @@
             align-items: center;
             justify-content: center;
             text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            
+            /* KUNCI PERBAIKAN: Paksa satu baris */
+            white-space: nowrap; 
+            width: 100%;
         }
 
-        /* Ikon Bintang/Pixie (Warna Emas) */
+        /* Ikon Bintang */
         .jackpot-main-title i {
             font-size: 1.3rem;
-            margin-right: 10px;
+            margin: 0 10px; /* Kiri kanan 10px */
             color: var(--pixie-gold); 
             animation: starTwinkle 1.5s infinite alternate;
         }
@@ -95,7 +97,6 @@
             100% { opacity: 1; transform: scale(1.2); text-shadow: 0 0 20px var(--pixie-gold); }
         }
 
-        /* Teks Judul yang Berjalan (Emas dan Putih) */
         .jackpot-animated-text {
             background: linear-gradient(90deg, var(--pixie-gold), #fff, var(--pixie-gold));
             background-size: 200% auto;
@@ -109,23 +110,17 @@
             to { background-position: 200% center; }
         }
 
-        /* --- ANGKA JACKPOT (Style Baru) --- */
+        /* Angka Jackpot */
         .jackpot-value-final {
-            font-family: 'Cinzel', serif !important; /* Font Fantasi */
+            font-family: 'Cinzel', serif !important; 
             color: #fff; 
             font-size: 2.6rem; 
             font-weight: 700; 
             line-height: 1.2;
             letter-spacing: 3px; 
             margin-top: 5px;
-            
-            /* Efek Glow Emas Magis */
-            text-shadow: 
-                0 0 2px #000,
-                0 0 10px var(--pixie-gold), 
-                0 0 20px var(--neverland-light); 
-            
-            white-space: nowrap;
+            text-shadow: 0 0 2px #000, 0 0 10px var(--pixie-gold), 0 0 20px var(--neverland-light); 
+            white-space: nowrap; /* Angka juga jangan sampai turun */
         }
 
         /* Responsive Desktop */
@@ -139,17 +134,44 @@
             }
         }
 
-        /* Responsive Mobile */
+        /* --- RESPONSIF MOBILE DIPERBAIKI (Agar 1 Baris) --- */
         @media (max-width: 768px) {
+            .jackpot-container-main {
+                margin-top: 1.5rem;
+                width: 95%; /* Beri sedikit jarak kiri kanan layar */
+            }
+            
+            .jackpot-display-box-content {
+                padding: 10px; /* Kurangi padding box utama */
+            }
+
+            /* 1. Atur Ukuran Judul di HP */
+            .jackpot-main-title {
+                font-size: 4vw; /* Gunakan Viewport Width agar dinamis */
+                letter-spacing: 1px; /* Rapatkan huruf */
+            }
+
+            /* 2. Atur Ikon Bintang di HP */
+            .jackpot-main-title i {
+                font-size: 4vw; 
+                margin: 0 5px; /* Kurangi jarak bintang ke teks */
+            }
+
+            /* 3. Atur Angka Jackpot di HP */
             .jackpot-value-final {
                 font-size: 7vw; 
                 letter-spacing: 1px;
             }
+        }
+
+        /* Tambahan untuk HP Layar Sangat Sempit (Galaxy Fold/iPhone SE) */
+        @media (max-width: 360px) {
             .jackpot-main-title {
-                font-size: 0.9rem;
+                font-size: 0.75rem; /* Font statis kecil untuk layar super kecil */
+                letter-spacing: 0.5px;
             }
-            .jackpot-container-main {
-                margin-top: 1.5rem;
+            .jackpot-value-final {
+                font-size: 1.5rem;
             }
         }
     `;
@@ -160,7 +182,7 @@
     document.head.appendChild(styleElement);
 
 
-    // --- 2. FUNGSI LOGIKA COUNTER DINAMIS (Tidak Berubah) ---
+    // --- 2. FUNGSI LOGIKA COUNTER DINAMIS ---
     function startDynamicJackpotCounterFinal() {
         const element = document.getElementById('dynamic-jackpot-value-final');
         if (!element) return;
@@ -186,7 +208,7 @@
         setInterval(updateJackpotValue, updateInterval);
     }
 
-    // --- 3. FUNGSI UNTUK MENYISIPKAN HTML ---
+    // --- 3. FUNGSI INJECT HTML ---
     function injectJackpotHTMLFinal() {
         const targetElement = document.getElementById('row-togel');
         
@@ -199,7 +221,6 @@
             return;
         }
 
-        // HTML struktur sama, tapi ikon diganti jadi Stars (bi-stars) agar lebih magis
         const jackpotHTMLFinal = `
             <div class="jackpot-container-main">
                 <div class="jackpot-animated-border">

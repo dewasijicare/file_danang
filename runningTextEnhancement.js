@@ -1,23 +1,23 @@
 (function() {
-    // --- CSS TEMA PETER PAN (Announcement Fix Layout) ---
+    // --- CSS TEMA PETER PAN (Hijau Neon) dengan STRUKTUR LAYOUT YANG DIPERBAIKI ---
     const announcementStyles = `
         #announcement.gavan-themed-announcement {
+            /* VISUAL: Tetap Hijau Neon Peter Pan */
             background: linear-gradient(160deg, #072712, #001105) !important;
             border: 1px solid #bff116 !important;
-            
-            /* SUDUT: 10px (Bulat Pas) */
             border-radius: 10px !important; 
-            
             box-shadow: 0 0 15px rgba(191, 241, 22, 0.4) !important;
             color: #ecf0f1 !important;
-            padding: 10px 15px !important;
+            
+            /* LAYOUT FIX: Hapus width 100%, ganti jadi auto */
+            width: auto !important; 
             display: flex;
             align-items: center;
             overflow: hidden;
-            width: 100% !important; /* Lebar Penuh mengikuti container */
+            padding: 10px 15px !important;
             box-sizing: border-box !important;
-            position: relative;
-            z-index: 10;
+            
+            /* Margin akan diatur oleh Javascript agar responsif */
         }
 
         #announcement.gavan-themed-announcement i.fa-solid.fa-bullhorn {
@@ -42,66 +42,82 @@
         }
     `;
 
+    // --- LOGIKA PEMINDAHAN POSISI (Mengadaptasi Logika Gabantoto yang Rapi) ---
     function moveAndStyleAnnouncementConditional() {
         const announcement = document.getElementById('announcement');
-        const mainSlider = document.getElementById('main-slider'); 
-        const memberPanel = document.getElementById('member-status-panel'); 
-        const quickLogin = document.getElementById('row-quicklogin'); 
+        const mainSlider = document.getElementById('main-slider'); // Target Homepage Banner
+        const memberPanel = document.getElementById('member-status-panel'); // Target Setelah Login
+        const quickLogin = document.getElementById('row-quicklogin'); // Target Homepage Tanpa Banner
 
+        // Jika announcement tidak ada atau sudah dipindahkan, stop.
         if (!announcement || announcement.dataset.moved === 'true') {
             return;
         }
 
         let moved = false;
 
-        // === 1. Logika Member Area (SETELAH LOGIN) ===
+        // === KONDISI 1: MEMBER AREA (Setelah Login) ===
         if (memberPanel) {
+            // Taruh SEBELUM panel member
             memberPanel.insertAdjacentElement('beforebegin', announcement);
             
-            // PERBAIKAN: Beri jarak Atas DAN Bawah agar tidak menempel
-            // 15px atas (jarak dari header), 15px bawah (jarak ke menu saldo)
-            announcement.style.margin = '15px 0 15px 0'; 
+            // Setting Margin Rapi
+            announcement.style.marginTop = '15px';
+            announcement.style.marginBottom = '15px';
+            announcement.style.marginLeft = '0px'; // Di dalam container biasanya sudah ada padding
+            announcement.style.marginRight = '0px';
             
             moved = true;
         }
-        // === 2. Logika Homepage dengan Banner ===
+        
+        // === KONDISI 2: HOMEPAGE (Ada Slider/Banner) ===
         else if (mainSlider) {
             const sliderContainer = mainSlider.parentElement;
             if (sliderContainer) {
+                // Taruh SETELAH slider
                 sliderContainer.insertAdjacentElement('afterend', announcement);
-                announcement.style.margin = '1.5rem 1rem 1rem 1rem';
-                announcement.style.width = 'auto'; 
+                
+                // Setting Margin Kanan-Kiri (Sesuai request seperti Gabantoto)
+                announcement.style.marginTop = '20px'; // Jarak dari banner
+                announcement.style.marginBottom = '10px';
+                announcement.style.marginLeft = '10px'; // Jarak dari sisi kiri layar
+                announcement.style.marginRight = '10px'; // Jarak dari sisi kanan layar
+                
                 moved = true;
             }
         }
-        // === 3. Logika Homepage TANPA Banner (SEBELUM LOGIN) ===
+
+        // === KONDISI 3: HOMEPAGE (Tanpa Banner / Tampilan Login Saja) ===
         else if (quickLogin) {
             quickLogin.parentNode.insertBefore(announcement, quickLogin);
             
-            // Jarak hanya bawah (15px) agar tidak nempel kotak login
-            // Lebar akan otomatis 100% sejajar kotak login
-            announcement.style.margin = '0 0 15px 0'; 
-            
+            announcement.style.margin = '0 0 15px 0';
             moved = true;
         }
-        // === 4. Fallback ===
+        
+        // === KONDISI 4: Fallback (Jaga-jaga) ===
         else {
              const mainContent = document.getElementById('maincontent');
              if(mainContent) {
                  mainContent.prepend(announcement);
-                 announcement.style.margin = '1rem';
+                 announcement.style.margin = '10px';
                  moved = true;
              }
         }
 
+        // Jika berhasil dipindahkan, terapkan class tema hijau
         if (moved) {
-            // Hapus semua class bawaan yang berpotensi merusak margin/padding
+            // Bersihkan class bawaan bootstrap yang mengganggu
             announcement.classList.remove('bg-primary', 'bg-dark', 'alert', 'alert-info', 'p-1', 'my-3', 'mb-3', 'mt-3');
             
             announcement.classList.add('gavan-themed-announcement');
+            
+            // Reset style inline yang mungkin nempel
             announcement.style.backgroundColor = ''; 
             announcement.style.backgroundImage = '';
-            announcement.dataset.moved = 'true';
+            
+            // Tandai sudah dipindahkan
+            announcement.dataset.moved = 'true'; 
         }
     }
 
@@ -113,24 +129,29 @@
         document.head.appendChild(styleElement);
     }
 
+    // --- EKSEKUSI ---
     document.addEventListener('DOMContentLoaded', () => {
         injectStyles();
         moveAndStyleAnnouncementConditional();
 
+        // Observer untuk memantau perubahan halaman (SPA/Loading lambat)
         const observer = new MutationObserver((mutations) => {
              const announcement = document.getElementById('announcement');
+             // Cek ulang jika elemen target baru muncul
              if (announcement && !announcement.dataset.moved) {
                  moveAndStyleAnnouncementConditional();
              }
         });
 
         observer.observe(document.body, { childList: true, subtree: true });
+        
+        // Double check setelah delay sebentar
         setTimeout(moveAndStyleAnnouncementConditional, 500);
     });
 
     if (document.readyState === 'complete') {
-         injectStyles();
-         moveAndStyleAnnouncementConditional();
+          injectStyles();
+          moveAndStyleAnnouncementConditional();
     }
 
 })();
